@@ -17,3 +17,13 @@ export const decrement = () => {
   };
   return action;
 };
+
+// toggleCell
+export const toggleCell = index => {
+  const TOGGLE_CELL = 'TOGGLE_CELL';
+  const action = {
+    type: TOGGLE_CELL,
+    index: index
+  };
+  return action;
+};

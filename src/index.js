@@ -12,8 +12,9 @@ import { createStore } from 'redux';
 import reducer from './reducers/index';
 const store = createStore(reducer);
 
-console.log('State:', store.getState());
-console.log('Counter state:', store.getState().counter);
+// console.log('State:', store.getState());
+// console.log('Counter state:', store.getState().counter);
+// console.log('Grid state:', store.getState().grid);
 
 render(
   <Provider store={store}>

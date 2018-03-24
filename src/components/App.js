@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import ConnectedCounter from '../containers/CounterContainer';
-import GameWindow from '../containers/GameWindow';
+import Grid from '../containers/GridContainer';
 
 const App = ({ decrement, increment, value }) => {
   return (
@@ -16,7 +16,7 @@ const App = ({ decrement, increment, value }) => {
         <ConnectedCounter />
       </div>
       <div className="container">
-        <GameWindow />
+        <Grid />
       </div>
     </div>
   );
