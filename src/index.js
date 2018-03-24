@@ -1,8 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+
 import './index.css';
-import App from './App';
+import App from './presentations/App';
+
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { Provider } from 'react-redux';
+
+import { createStore } from 'redux';
+import reducer from './reducers/index';
+const store = createStore(reducer);
+
+console.log('State:', store.getState());
+console.log('Counter state:', store.getState().counter);
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
+
 registerServiceWorker();
