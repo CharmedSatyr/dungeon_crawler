@@ -1,4 +1,5 @@
 import { /* GRID_HEIGHT, */ GRID_WIDTH, TOTAL_CELLS } from '../constants/settings';
+import * as t from '../constants/action-types';
 
 // Create a grid
 export const gridData = [];
@@ -16,7 +17,7 @@ populate(TOTAL_CELLS);
 // Grid reducers
 const grid = (state = gridData, action) => {
   switch (action.type) {
-    case 'TOGGLE_CELL':
+    case t.TOGGLE_CELL:
       return state.map((cell, index) => {
         // Activate cell on click
         if (index === action.index) {
@@ -32,7 +33,7 @@ const grid = (state = gridData, action) => {
         }
         return cell;
       });
-    case 'MOVE_EAST':
+    case t.MOVE_EAST:
       return state.map((cell, index) => {
         // Deactivate the current cell if the next cell isn't on another line.
         if (index === action.position && (index + 1) % GRID_WIDTH !== 0) {
@@ -48,7 +49,7 @@ const grid = (state = gridData, action) => {
         }
         return cell;
       });
-    case 'MOVE_SOUTH':
+    case t.MOVE_SOUTH:
       return state.map((cell, index) => {
         // Deactivate the current cell if the cell below exists
         if (index === action.position && index + GRID_WIDTH <= TOTAL_CELLS) {
@@ -64,7 +65,7 @@ const grid = (state = gridData, action) => {
         }
         return cell;
       });
-    case 'MOVE_WEST':
+    case t.MOVE_WEST:
       return state.map((cell, index) => {
         // Deactivate the current cell if it's not the first on the row
         if (index === action.position && index % GRID_WIDTH !== 0) {
@@ -80,7 +81,7 @@ const grid = (state = gridData, action) => {
         }
         return cell;
       });
-    case 'MOVE_NORTH':
+    case t.MOVE_NORTH:
       return state.map((cell, index) => {
         // Deactivate the current cell if the cell above exists
         if (index === action.position && index - GRID_WIDTH >= 0) {
