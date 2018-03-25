@@ -1,7 +1,4 @@
-import { GRID_HEIGHT, GRID_WIDTH, TOTAL_CELLS } from '../constants/settings';
-
-console.log(GRID_HEIGHT);
-console.log(GRID_WIDTH);
+import { /* GRID_HEIGHT, */ GRID_WIDTH, TOTAL_CELLS } from '../constants/settings';
 
 // Create a grid
 const gridData = [];
@@ -51,6 +48,22 @@ const grid = (state = gridData, action) => {
         }
         return cell;
       });
+    case 'MOVE_SOUTH':
+      return state.map((cell, index) => {
+        // Deactivate the current cell if the cell below exists
+        if (index === action.position && index + GRID_WIDTH <= TOTAL_CELLS) {
+          return Object.assign({}, cell, {
+            alive: false
+          });
+        }
+        // Activate the cell below if it exists
+        if (index === action.position + GRID_WIDTH) {
+          return Object.assign({}, cell, {
+            alive: true
+          });
+        }
+        return cell;
+      });
     case 'MOVE_WEST':
       return state.map((cell, index) => {
         // Deactivate the current cell if it's not the first on the row
@@ -61,6 +74,22 @@ const grid = (state = gridData, action) => {
         }
         // Activate the previous cell if the current cell isn't the first on the row
         if (index === action.position - 1 && action.position % GRID_WIDTH !== 0) {
+          return Object.assign({}, cell, {
+            alive: true
+          });
+        }
+        return cell;
+      });
+    case 'MOVE_NORTH':
+      return state.map((cell, index) => {
+        // Deactivate the current cell if the cell above exists
+        if (index === action.position && index - GRID_WIDTH >= 0) {
+          return Object.assign({}, cell, {
+            alive: false
+          });
+        }
+        // Activate the cell above if it exists
+        if (index === action.position - GRID_WIDTH) {
           return Object.assign({}, cell, {
             alive: true
           });

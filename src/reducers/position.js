@@ -1,4 +1,4 @@
-import { GRID_HEIGHT, GRID_WIDTH, TOTAL_CELLS } from '../constants/settings';
+import { /* GRID_HEIGHT,*/ GRID_WIDTH, TOTAL_CELLS } from '../constants/settings';
 
 // Position reducers
 const position = (state = 21, action) => {
@@ -13,9 +13,21 @@ const position = (state = 21, action) => {
       } else {
         return state;
       }
+    case 'MOVE_SOUTH':
+      if (state + GRID_WIDTH <= TOTAL_CELLS) {
+        return state + GRID_WIDTH;
+      } else {
+        return state;
+      }
     case 'MOVE_WEST':
       if (state % GRID_WIDTH !== 0) {
         return state - 1;
+      } else {
+        return state;
+      }
+    case 'MOVE_NORTH':
+      if (state - GRID_WIDTH >= 0) {
+        return state - GRID_WIDTH;
       } else {
         return state;
       }

@@ -49,3 +49,25 @@ export const moveWest = position => {
   };
   return action;
 };
+
+// move player one square up
+// Used by both grid and position reducers
+export const moveNorth = position => {
+  const MOVE_NORTH = 'MOVE_NORTH';
+  const action = {
+    type: MOVE_NORTH,
+    position: position
+  };
+  return action;
+};
+
+// move player one square down
+// Used by both grid and position reducers
+export const moveSouth = position => {
+  const MOVE_SOUTH = 'MOVE_SOUTH';
+  const action = {
+    type: MOVE_SOUTH,
+    position: position
+  };
+  return action;
+};

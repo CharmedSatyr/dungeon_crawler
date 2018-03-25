@@ -9,13 +9,13 @@ export default class Grid extends Component {
   }
 
   handleKeyPress(e) {
-    const { moveEast, moveWest, position } = this.props;
+    const { moveEast, moveSouth, moveWest, moveNorth, position } = this.props;
     // console.log('e:', e);
     switch (e.keyCode) {
       // North
       case 38:
       case 87:
-        alert('Going North!');
+        moveNorth(position);
         break;
       // East
       case 39:
@@ -25,7 +25,7 @@ export default class Grid extends Component {
       // South
       case 40:
       case 83:
-        alert('Going South!');
+        moveSouth(position);
         break;
       // West
       case 37:
