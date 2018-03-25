@@ -27,3 +27,25 @@ export const toggleCell = index => {
   };
   return action;
 };
+
+// move player one square to the right
+// Used by both grid and position reducers
+export const moveEast = position => {
+  const MOVE_EAST = 'MOVE_EAST';
+  const action = {
+    type: MOVE_EAST,
+    position: position
+  };
+  return action;
+};
+
+// move player one square to the left
+// Used by both grid and position reducers
+export const moveWest = position => {
+  const MOVE_WEST = 'MOVE_WEST';
+  const action = {
+    type: MOVE_WEST,
+    position: position
+  };
+  return action;
+};

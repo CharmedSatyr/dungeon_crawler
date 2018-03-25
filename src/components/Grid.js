@@ -3,9 +3,49 @@ import Cell from './Cell';
 import './Grid.css';
 
 export default class Grid extends Component {
-  render() {
-    const { gridData, toggleCell } = this.props;
+  constructor(props) {
+    super(props);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
 
+  handleKeyPress(e) {
+    const { moveEast, moveWest, position } = this.props;
+    // console.log('e:', e);
+    switch (e.keyCode) {
+      // North
+      case 38:
+      case 87:
+        alert('Going North!');
+        break;
+      // East
+      case 39:
+      case 68:
+        moveEast(position);
+        break;
+      // South
+      case 40:
+      case 83:
+        alert('Going South!');
+        break;
+      // West
+      case 37:
+      case 65:
+        moveWest(position);
+        break;
+      default:
+        return;
+    }
+  }
+  componentWillMount() {
+    window.addEventListener('keydown', e => this.handleKeyPress(e));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', e => this.handleKeyPress(e));
+  }
+  render() {
+    const { gridData, toggleCell, updatePosition } = this.props;
+
+    // Populate Grid with cells from store
     const cells = gridData.map((item, index) => {
       return (
         <Cell
@@ -14,6 +54,7 @@ export default class Grid extends Component {
           index={index}
           fn={() => {
             toggleCell(index);
+            updatePosition(index);
           }}
         />
       );
