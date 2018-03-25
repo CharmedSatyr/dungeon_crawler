@@ -1,7 +1,7 @@
 import * as actions from './movement';
 
 describe('moveEast', () => {
-  it('should create an action to move player right within the grid', () => {
+  it('should create an action to move player right if not at a boundary', () => {
     const position = 0;
     const expectedAction = {
       type: 'MOVE_EAST',
@@ -13,7 +13,7 @@ describe('moveEast', () => {
 });
 
 describe('moveNorth', () => {
-  it('should create an action to move player up within the grid', () => {
+  it('should create an action to move player up if not at a boundary', () => {
     const position = 0;
     const expectedAction = {
       type: 'MOVE_NORTH',
@@ -25,7 +25,7 @@ describe('moveNorth', () => {
 });
 
 describe('moveSouth', () => {
-  it('should create an action to move player down within the grid', () => {
+  it('should create an action to move player down if not at a boundary', () => {
     const position = 0;
     const expectedAction = {
       type: 'MOVE_SOUTH',
@@ -37,7 +37,7 @@ describe('moveSouth', () => {
 });
 
 describe('moveWest', () => {
-  it('should create an action to move player left within the grid', () => {
+  it('should create an action to move player left if not at a boundary', () => {
     const position = 0;
     const expectedAction = {
       type: 'MOVE_WEST',

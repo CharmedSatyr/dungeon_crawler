@@ -1,7 +1,7 @@
 import { /* GRID_HEIGHT, */ GRID_WIDTH, TOTAL_CELLS } from '../constants/settings';
 
 // Create a grid
-const gridData = [];
+export const gridData = [];
 const populate = number => {
   for (let i = 0; i < number; i++) {
     gridData.push({

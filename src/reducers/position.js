@@ -5,7 +5,6 @@ const position = (state = 21, action) => {
   // Current player position
   switch (action.type) {
     case 'UPDATE_POSITION':
-      console.log('New Position:', action.index);
       return action.index;
     case 'MOVE_EAST':
       if ((state + 1) % GRID_WIDTH !== 0) {

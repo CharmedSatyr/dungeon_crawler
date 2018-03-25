@@ -27,3 +27,13 @@ export const toggleCell = index => {
   };
   return action;
 };
+
+// updatePosition
+export const updatePosition = index => {
+  const UPDATE_POSITION = 'UPDATE_POSITION';
+  const action = {
+    type: UPDATE_POSITION,
+    index
+  };
+  return action;
+};

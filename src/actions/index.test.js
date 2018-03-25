@@ -23,8 +23,19 @@ describe('toggleCell', () => {
     const index = 0;
     const expectedAction = {
       type: 'TOGGLE_CELL',
-      index: index
+      index
     };
     expect(actions.toggleCell(index)).toEqual(expectedAction);
+  });
+});
+
+describe('updatePosition', () => {
+  it("should create an action to return a cell's index", () => {
+    const index = 0;
+    const expectedAction = {
+      type: 'UPDATE_POSITION',
+      index
+    };
+    expect(actions.updatePosition(index)).toEqual(expectedAction);
   });
 });
