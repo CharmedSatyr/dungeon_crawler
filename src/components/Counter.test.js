@@ -1,9 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { ShowCount, Buttons } from './Counter';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import Counter from './Counter';
+import Counter, { ShowCount, Buttons } from './Counter';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -14,18 +12,38 @@ const setup = (count = 0) => {
     count
   };
 
-  const wrapper = shallow(<Counter {...props} />);
-  const enzymeWrapper = mount(<Counter {...props} />);
+  const counter = mount(<Counter {...props} />);
+  const showcount = shallow(<ShowCount count={props.count} />);
+  const buttons = shallow(
+    <Buttons onIncrement={props.onIncrement} onDecrement={props.onDecrement} />
+  );
 
-  const showcount = shallow(<ShowCount count={count} />);
   return {
+    buttons,
+    counter,
     props,
-    wrapper,
     showcount
   };
 };
 
 describe('Counter component', () => {
+  it('should render without crashing', () => {
+    const { counter } = setup();
+    expect(counter).toHaveLength(1);
+  });
+
+  it('should render ShowCount and Buttons without crashing', () => {
+    const { counter, props } = setup();
+    expect(
+      counter.contains(
+        <div>
+          <ShowCount count={props.count} />
+          <Buttons onIncrement={props.onIncrement} onDecrement={props.onDecrement} />
+        </div>
+      )
+    );
+  });
+
   describe('ShowCount', () => {
     it('should render without crashing', () => {
       const { showcount } = setup();
@@ -35,6 +53,43 @@ describe('Counter component', () => {
     it('should display count from props', () => {
       const { showcount, props } = setup(7);
       expect(showcount.find('h1').text()).toMatch('Count: ' + props.count);
+    });
+  });
+
+  describe('Buttons', () => {
+    it('should render without crashing', () => {
+      const { buttons } = setup();
+      expect(buttons).toHaveLength(1);
+    });
+
+    it('first button (+) should call onIncrement', () => {
+      const { buttons, props } = setup();
+      buttons
+        .find('button')
+        .at(0)
+        .simulate('click');
+      expect(
+        buttons
+          .find('button')
+          .at(0)
+          .text()
+      ).toMatch('+');
+      expect(props.onIncrement.mock.calls.length).toEqual(1);
+    });
+
+    it('second button (-) should call onDecrement', () => {
+      const { buttons, props } = setup();
+      buttons
+        .find('button')
+        .at(1)
+        .simulate('click');
+      expect(
+        buttons
+          .find('button')
+          .at(1)
+          .text()
+      ).toMatch('-');
+      expect(props.onDecrement.mock.calls.length).toEqual(1);
     });
   });
 });
