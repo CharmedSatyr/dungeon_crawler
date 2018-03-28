@@ -1,9 +1,14 @@
 .Cell {
   align-items: center;
+  background: lightblue;
   box-shadow: inset 1px 1px 1px black;
   display: flex;
   justify-content: center;
   height: 40px;
   user-select: none;
   width: 40px;
+}
+
+.Cell.alive {
+background: gold;
 }

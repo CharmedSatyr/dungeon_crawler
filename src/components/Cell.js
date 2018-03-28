@@ -2,7 +2,7 @@ import React from 'react';
 import './Cell.css';
 
 const Cell = ({ alive, fn, index }) => (
-  <div className="Cell" onClick={fn} style={{ backgroundColor: alive ? 'gold' : 'lightblue' }}>
+  <div className={alive ? 'Cell alive' : 'Cell'} onClick={fn}>
     {index}
     {alive ? 'a' : 'd'}
   </div>
