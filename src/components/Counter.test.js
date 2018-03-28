@@ -1,9 +1,6 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { shallow, mount } from 'enzyme';
 import Counter, { ShowCount, Buttons } from './Counter';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const setup = (count = 0) => {
   const props = {
