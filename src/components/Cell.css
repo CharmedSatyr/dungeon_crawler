@@ -9,6 +9,6 @@
   width: 40px;
 }
 
-.Cell.alive {
+.Cell.player {
 background: gold;
 }

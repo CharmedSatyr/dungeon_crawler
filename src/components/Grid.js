@@ -10,7 +10,6 @@ export default class Grid extends Component {
 
   handleKeyPress(e) {
     const { moveEast, moveSouth, moveWest, moveNorth, position } = this.props;
-    // console.log('e:', e);
     switch (e.keyCode) {
       // North
       case 38:
@@ -50,7 +49,7 @@ export default class Grid extends Component {
       return (
         <Cell
           key={index}
-          alive={item.alive}
+          player={item.player}
           index={index}
           fn={() => {
             toggleCell(index);

@@ -1,10 +1,10 @@
 import React from 'react';
 import './Cell.css';
 
-const Cell = ({ alive, fn, index }) => (
-  <div className={alive ? 'Cell alive' : 'Cell'} onClick={fn}>
+const Cell = ({ player, fn, index }) => (
+  <div className={player ? 'Cell player' : 'Cell'} onClick={fn}>
     {index}
-    {alive ? 'a' : 'd'}
+    {player ? 'a' : 'd'}
   </div>
 );
 

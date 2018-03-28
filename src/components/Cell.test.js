@@ -4,7 +4,7 @@ import Cell from './Cell';
 
 const setup = () => {
   const props = {
-    alive: true,
+    player: true,
     fn: jest.fn(),
     index: 0
   };
@@ -32,10 +32,10 @@ describe('Cell component', () => {
     expect(props.fn.mock.calls.length).toEqual(1);
   });
 
-  it('should toggle `.alive` class based on `props.alive` value', () => {
+  it('should toggle `.player` class based on `props.player` value', () => {
     const { cell, props } = setup();
-    props.alive
-      ? expect(cell.find('.alive')).toHaveLength(1)
-      : expect(cell.find('.alive')).toHaveLength(0);
+    props.player
+      ? expect(cell.find('.player')).toHaveLength(1)
+      : expect(cell.find('.player')).toHaveLength(0);
   });
 });
