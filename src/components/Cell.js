@@ -1,10 +1,11 @@
 import React from 'react';
 import './Cell.css';
 
-const Cell = ({ player, fn, index }) => (
+const Cell = ({ explored, fn, index, nearby, player }) => (
   <div className={player ? 'Cell player' : 'Cell'} onClick={fn}>
     {index}
-    {player ? 'a' : 'd'}
+    {nearby ? 'n' : ''}
+    {explored ? '!' : ''}
   </div>
 );
 

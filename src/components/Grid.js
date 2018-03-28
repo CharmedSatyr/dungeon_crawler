@@ -49,8 +49,10 @@ export default class Grid extends Component {
       return (
         <Cell
           key={index}
-          player={item.player}
           index={index}
+          player={item.player}
+          nearby={item.nearby}
+          explored={item.explored}
           fn={() => {
             toggleCell(index);
             updatePosition(index);
