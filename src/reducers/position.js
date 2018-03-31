@@ -14,7 +14,7 @@ const position = (state = 21, action) => {
         return state;
       }
     case t.MOVE_SOUTH:
-      if (state + GRID_WIDTH <= TOTAL_CELLS) {
+      if (state + GRID_WIDTH < TOTAL_CELLS) {
         return state + GRID_WIDTH;
       } else {
         return state;
