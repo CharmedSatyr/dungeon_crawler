@@ -19,15 +19,6 @@ export const decrement = () => {
   return action;
 };
 
-// toggleCell
-export const toggleCell = index => {
-  const action = {
-    type: t.TOGGLE_CELL,
-    index
-  };
-  return action;
-};
-
 // updatePosition
 export const updatePosition = index => {
   const action = {

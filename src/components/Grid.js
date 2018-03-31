@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Cell from './Cell';
 import './Grid.css';
 
+// import { GRID_WIDTH } from '../constants/settings';
+
 export default class Grid extends Component {
   constructor(props) {
     super(props);
@@ -37,29 +39,30 @@ export default class Grid extends Component {
   }
   componentWillMount() {
     window.addEventListener('keydown', e => this.handleKeyPress(e));
+    this.props.updatePosition(72);
   }
   componentWillUnmount() {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
   }
   render() {
-    const { gridData, toggleCell, updatePosition } = this.props;
+    const { gridData, updatePosition } = this.props;
 
     // Populate Grid with cells from store
-    const cells = gridData.map((item, index) => {
-      return (
+    const cells = gridData
+      .map((item, index) => (
         <Cell
+          fn={() => {
+            updatePosition(index); // Testing function
+          }}
           key={index}
           index={index}
           player={item.player}
-          nearby={item.nearby}
-          explored={item.explored}
-          fn={() => {
-            toggleCell(index);
-            updatePosition(index);
-          }}
         />
-      );
-    });
+      ))
+      // Filter to include only certain values
+      .filter(item => {
+        return item;
+      });
 
     return <div className="Grid">{cells}</div>;
   }

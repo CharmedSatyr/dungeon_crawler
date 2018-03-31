@@ -18,7 +18,7 @@ populate(TOTAL_CELLS);
 const grid = (state = gridData, action) => {
   switch (action.type) {
     // Toggle whether cell is player
-    case t.TOGGLE_CELL:
+    case t.UPDATE_POSITION:
       return state.map((cell, index) => {
         // Activate cell as player
         if (index === action.index) {
