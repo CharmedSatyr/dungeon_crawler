@@ -6,9 +6,7 @@ export const gridData = [];
 const populate = number => {
   for (let i = 0; i < number; i++) {
     gridData.push({
-      player: false, // designated player character
-      nearby: false, // within player character's view
-      explored: false // player has been nearby
+      player: false // designated player character
     });
   }
 };
