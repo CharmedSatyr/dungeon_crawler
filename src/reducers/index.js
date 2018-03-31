@@ -1,10 +1,8 @@
 import { combineReducers } from 'redux';
-import counter from './counter';
 import grid from './grid';
-import position from './position';
+import coordinates from './coordinates';
 
 export default combineReducers({
-  counter,
-  grid,
-  position
+  coordinates,
+  grid
 });

@@ -1,20 +1,18 @@
 import { connect } from 'react-redux';
 import Grid from '../components/Grid.js';
-import { updatePosition } from '../actions/index';
-import { moveEast, moveSouth, moveNorth, moveWest } from '../actions/movement';
-// import * as position from '../actions/position';
+import { moveEast, moveSouth, moveNorth, moveWest, setCoordinates } from '../actions/movement';
 
 const mapStateToProps = state => ({
   gridData: state.grid,
-  position: state.position
+  coordinates: state.coordinates
 });
 
 const mapDispatchToProps = dispatch => ({
-  updatePosition: index => dispatch(updatePosition(index)),
-  moveEast: position => dispatch(moveEast(position)),
-  moveSouth: position => dispatch(moveSouth(position)),
-  moveWest: position => dispatch(moveWest(position)),
-  moveNorth: position => dispatch(moveNorth(position))
+  setCoordinates: c => dispatch(setCoordinates(c)),
+  moveEast: c => dispatch(moveEast(c)),
+  moveNorth: c => dispatch(moveNorth(c)),
+  moveSouth: c => dispatch(moveSouth(c)),
+  moveWest: c => dispatch(moveWest(c))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Grid);

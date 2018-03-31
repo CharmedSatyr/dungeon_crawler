@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Cell from './Cell';
 import './Grid.css';
 
-// import { GRID_WIDTH } from '../constants/settings';
-
 export default class Grid extends Component {
   constructor(props) {
     super(props);
@@ -11,27 +9,27 @@ export default class Grid extends Component {
   }
 
   handleKeyPress(e) {
-    const { moveEast, moveSouth, moveWest, moveNorth, position } = this.props;
+    const { coordinates, moveEast, moveSouth, moveWest, moveNorth } = this.props;
     switch (e.keyCode) {
       // North
       case 38:
       case 87:
-        moveNorth(position);
+        moveNorth(coordinates);
         break;
       // East
       case 39:
       case 68:
-        moveEast(position);
+        moveEast(coordinates);
         break;
       // South
       case 40:
       case 83:
-        moveSouth(position);
+        moveSouth(coordinates);
         break;
       // West
       case 37:
       case 65:
-        moveWest(position);
+        moveWest(coordinates);
         break;
       default:
         return;
@@ -39,23 +37,26 @@ export default class Grid extends Component {
   }
   componentWillMount() {
     window.addEventListener('keydown', e => this.handleKeyPress(e));
-    this.props.updatePosition(72);
+
+    // Initialize the starting cell from state
+    const { coordinates, setCoordinates } = this.props;
+    setCoordinates(coordinates);
   }
   componentWillUnmount() {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
   }
   render() {
-    const { gridData, updatePosition } = this.props;
+    const { gridData, setCoordinates } = this.props;
 
     // Populate Grid with cells from store
     const cells = gridData
       .map((item, index) => (
         <Cell
+          coordinates={item.coordinates}
           fn={() => {
-            updatePosition(index); // Testing function
+            setCoordinates(item.coordinates); // Testing function
           }}
           key={index}
-          index={index}
           player={item.player}
         />
       ))
