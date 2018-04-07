@@ -59,11 +59,10 @@ class Grid extends Component {
       .map((item, index) => (
         <Cell
           coordinates={item.coordinates}
-          fn={() => {
-            setCoordinates(item.coordinates); // Testing function
-          }}
+          fn={() => setCoordinates(item.coordinates)} // Testing function
           key={index}
           player={item.player}
+          opacity={item.opacity}
         />
       ));
 
