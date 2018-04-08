@@ -63,6 +63,7 @@ class Grid extends Component {
           key={index}
           player={item.player}
           opacity={item.opacity}
+          type={item.type}
         />
       ));
 

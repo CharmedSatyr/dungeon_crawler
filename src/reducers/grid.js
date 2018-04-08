@@ -21,19 +21,21 @@ for (let i = 0; i < c.GRID_HEIGHT; i++) {
 
 // 2. Random values for the first room
 const [min, max] = c.ROOM_SIZE_RANGE;
+console.log('min, max:', '[' + min + ', ' + max + ']');
 
 const firstRoom = {
-  x: _.random(1, c.GRID_WIDTH),
-  y: _.random(1, c.GRID_HEIGHT),
-  height: _.random(min, max),
-  width: _.random(min, max)
+  // x: _.random(1, c.GRID_WIDTH - max),
+  // y: _.random(1, c.GRID_HEIGHT - max),
+  height: _.random(min, max), // height of first room
+  width: _.random(min, max) // width of first room
 };
+console.log('firstRoom Dimensions: ', '[' + firstRoom.height + ', ' + firstRoom.width + ']');
 
 // 3. place the first room onto the grid
-const placeCells = (gridData, { x, y, width = 1, height = 1 }, type = 'floor') => {
-  for (let i = y; i < y + height; i++) {
-    for (let j = x; j < x + width; j++) {
-      gridData[i][j] = { type };
+const placeCells = (gridData, { height = 1, width = 1 }, type = 'floor') => {
+  for (let i in gridData) {
+    if (gridData[i].coordinates.x <= height && gridData[i].coordinates.y <= width) {
+      gridData[i].type = type;
     }
   }
   return gridData;
