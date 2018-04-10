@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import Grid from '../containers/GridContainer';
+import Grid from '../containers/Grid';
 
 const App = ({ decrement, increment, value }) => {
   return (
