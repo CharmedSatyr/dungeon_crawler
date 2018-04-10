@@ -13,7 +13,6 @@ for (let i = 0; i < c.GRID_HEIGHT; i++) {
     gridData.push({
       coordinates: { x, y },
       player: false, // designated player character
-      opacity: 1, // _.random(0.4, 0.9), // Opacity for styling
       type: 0
     });
   }
@@ -24,8 +23,8 @@ const [min, max] = c.ROOM_SIZE_RANGE;
 console.log('min, max:', '[' + min + ', ' + max + ']');
 
 const firstRoom = {
-  x: _.random(1, c.GRID_WIDTH - max), // x top corner placement
-  y: _.random(1, c.GRID_HEIGHT - max), // y top corner placement
+  x: _.random(min + 1, c.GRID_WIDTH - max), // x top corner placement
+  y: _.random(min + 1, c.GRID_HEIGHT - max), // y top corner placement
   height: _.random(min, max), // height of first room
   width: _.random(min, max) // width of first room
 };
@@ -46,15 +45,17 @@ const placeCells = (gridData, { x = 0, y = 0, height = 1, width = 1 }, type = 'f
   }
   return gridData;
 };
-gridData = placeCells(gridData, firstRoom);
+// gridData = placeCells(gridData, firstRoom);
 
 // 4. place additional rooms based on that seed.
 const isValidRoomPlacement = (gridData, { x, y, width = 1, height = 1 }) => {
   // check if on the edge of or outside of the grid
   if (y < 1 || y + height > c.GRID_HEIGHT) {
+    console.log('y PLACEMENT REJECTED!');
     return false;
   }
   if (x < 1 || x + width > c.GRID_WIDTH) {
+    console.log('x PLACEMENT REJECTED!');
     return false;
   }
 
@@ -64,9 +65,10 @@ const isValidRoomPlacement = (gridData, { x, y, width = 1, height = 1 }) => {
       gridData[i].coordinates.x >= x - 1 &&
       gridData[i].coordinates.x <= x + width &&
       gridData[i].coordinates.y >= y - 1 &&
-      gridData[i].coordinates.y <= y + height
+      gridData[i].coordinates.y <= y + height &&
+      gridData[i].type === 'floor'
     ) {
-      console.log('ROOM PLACEMENT REJECTED!');
+      console.log('adjacent or existing ROOM PLACEMENT REJECTED!');
       return false;
     }
   }
@@ -84,14 +86,18 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
   // Make rooms north of the seed
   const north = {
     x: _.random(x, x + width - 1),
+    get y() {
+      return y - this.height - 1; // This getter is a fancy way of assigning a property to y that's based on x
+    },
     height: _.random(min, max),
     width: _.random(min, max),
     door: {
+      get x() {
+        return _.random(north.x, Math.min(north.x + north.width + x + width) - 1); // Note that this nested getter doesn't use `this`
+      },
       y: y - 1
     }
   };
-  north.y = y - north.height - 1;
-  north.door.x = _.random(north.x, Math.min(north.x + north.width + x + width) - 1);
   roomValues.push(north);
 
   roomValues.forEach(room => {
@@ -110,14 +116,19 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
     }
   });
 };
-// const growMap = (gridData, seedRooms, counter = 1, maxRooms = c.MAX_ROOMS) => {
-//   if (counter + seedRooms.length > maxRooms || !seedRooms.length) {
-//     return gridData;
-//   }
-//
-//   gridData = createRoomsFromSeed(gridData, seedRooms.pop());
-//   seedRooms.push(...gridData.placedRooms);
-//   counter += gridData.placedRooms.length;
-//   return growMap(gridData.grid, seedRooms, counter);
-// };
-// growMap(gridData, [firstRoom]);
+// createRoomsFromSeed(gridData, firstRoom);
+const growMap = (gridData, seedRooms, counter = 1, maxRooms = c.MAX_ROOMS) => {
+  if (counter + seedRooms.length > maxRooms || !seedRooms.length) {
+    return gridData;
+  }
+  console.log('gridData before: ', gridData);
+  console.log('seedRooms.length before: ', seedRooms.length);
+  gridData = createRoomsFromSeed(gridData, seedRooms.pop());
+  console.log('gridData after: ', gridData);
+  console.log('seedRooms.length after: ', seedRooms.length);
+
+  // seedRooms.push(...gridData.placedRooms);
+  // counter += gridData.placedRooms.length;
+  // return growMap(gridData.grid, seedRooms, counter);
+};
+growMap(gridData, [firstRoom]);

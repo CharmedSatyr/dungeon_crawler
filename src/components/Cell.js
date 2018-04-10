@@ -1,16 +1,13 @@
 import React from 'react';
 import './Cell.css';
 
-const Cell = ({ coordinates, explored, fn, index, nearby, opacity, player, type }) => (
+const Cell = ({ fn, payload }) => (
   <div
-    className={player ? 'Cell player' : 'Cell'}
+    className={payload.player ? 'Cell player' : 'Cell'}
     onClick={fn}
-    style={{ opacity: opacity, backgroundColor: type === 'floor' ? 'brown' : null }}
+    style={{ backgroundColor: payload.type === 'floor' ? 'brown' : null }}
   >
-    {coordinates.x}, {coordinates.y}
-    {/* index */}
-    {nearby ? 'n' : ''}
-    {explored ? '!' : ''}
+    {payload.coordinates.x}, {payload.coordinates.y}
   </div>
 );
 

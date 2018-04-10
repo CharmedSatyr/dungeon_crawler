@@ -40,6 +40,7 @@ class Grid extends Component {
         moveWest(coordinates);
         break;
       case 32:
+        e.preventDefault();
         console.log('spacebar');
         break;
       default:
@@ -63,12 +64,9 @@ class Grid extends Component {
       // Create an array of Cells containing data from the store
       .map((item, index) => (
         <Cell
-          coordinates={item.coordinates}
           fn={() => setCoordinates(item.coordinates)} // Testing function
           key={index}
-          player={item.player}
-          opacity={item.opacity}
-          type={item.type}
+          payload={item}
         />
       ));
 
