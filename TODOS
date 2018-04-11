@@ -1,0 +1,5 @@
+Check each room direction function individually:
+
+Room doors always skew in one direction
+Rooms are not always at a random height from seed
+Why not add a random number of each room generation functions in each direction to the roomValues Arr for more funk? (IN PROGRESS)

@@ -159,11 +159,13 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
   };
 
   // Push the directional objects to array roomValues
-  const n = north(x, y, height, width);
-  const e = east(x, y, height, width);
-  const s = south(x, y, height, width);
-  const w = west(x, y, height, width);
-  roomValues.push(n, e, s, w);
+  const n = [north(x, y, height, width), north(x, y, height, width)];
+  const e = Array(5).fill(east(x, y, height, width));
+  const s = Array(5).fill(south(x, y, height, width));
+  const w = Array(5).fill(west(x, y, height, width));
+  //roomValues.push(...n, ...e, ...s, ...w)
+  console.log('n: ', n);
+  roomValues.push(...n);
 
   const placedRooms = [];
   // For all generated roomValues
@@ -209,4 +211,5 @@ const growMap = (gridData, seedRooms, counter = 1, maxRooms = c.MAX_ROOMS) => {
   counter += gridData.placedRooms.length;
   return growMap(gridData.gridData, seedRooms, counter);
 };
+
 gridData = growMap(gridData, [firstRoom]);
