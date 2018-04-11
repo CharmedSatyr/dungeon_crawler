@@ -1,4 +1,4 @@
-import { gridData } from './grid.helpers';
+import { gridData } from './grid.generator';
 import * as t from '../constants/action-types';
 
 // Grid reducers

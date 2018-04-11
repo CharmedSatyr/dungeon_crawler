@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import * as c from '../constants/settings';
 
-// HELPER FUNCTIONS FOR CREATING THE MAP
+/*** FUNCTIONS FOR GENERATING THE GRID ***/
 // 1. Create an empty grid with the desired keys
 export let gridData = [];
 
