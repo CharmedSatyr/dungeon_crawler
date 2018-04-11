@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { moveEast, moveSouth, moveNorth, moveWest, setCoordinates } from '../actions/movement';
-import { GRID_WIDTH } from '../constants/settings';
+import * as c from '../constants/settings';
 
 import Cell from '../components/Cell';
 import './Grid.css';
@@ -73,7 +73,7 @@ class Grid extends Component {
     // Render the cells array
     return (
       // Grid width must be Cell width * GRID_WIDTH for columns to line up
-      <div className="Grid" style={{ width: 40 * GRID_WIDTH }}>
+      <div className="Grid" style={{ width: c.CELL_SIDE * c.GRID_WIDTH }}>
         {cells}
       </div>
     );

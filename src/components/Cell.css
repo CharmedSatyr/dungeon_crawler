@@ -5,9 +5,7 @@
   display: flex;
   font-size: 12px;
   justify-content: center;
-  height: 40px;
   user-select: none;
-  width: 40px;
 }
 
 .Cell.player {
