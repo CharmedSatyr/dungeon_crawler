@@ -85,12 +85,10 @@ const isValidRoomPlacement = (gridData, { x, y, width = 1, height = 1 }) => {
 const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_SIZE_RANGE) => {
   const [min, max] = range;
 
-  // Generated room values for each edge of the seed room
-  const roomValues = [];
-
+  const seed = [x, y, height, width];
   // Make a room north of the seed
   // All argument values are values of the room being used as a seed
-  const north = (x, y, height, width) => {
+  const north = (...seed) => {
     return {
       x: _.random(x, x + width - 1), // Can be refined to, e.g., x - width + 1, once you figure out how to fix the door
       get y() {
@@ -109,7 +107,7 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
   };
 
   // Make a room east of the seed
-  const east = (x, y, height, width) => {
+  const east = (...seed) => {
     return {
       x: x + width + 1,
       y: _.random(y, height + y - 1),
@@ -125,7 +123,7 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
   };
 
   // Make a room south of the seed
-  const south = (x, y, height, width) => {
+  const south = (...seed) => {
     return {
       x: _.random(x, width + x - 1),
       y: y + height + 1,
@@ -141,7 +139,7 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
   };
 
   // Make a room west of the seed
-  const west = (x, y, height, width) => {
+  const west = (...seed) => {
     return {
       get x() {
         return x - this.width - 1;
@@ -158,14 +156,26 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
     };
   };
 
-  // Push the directional objects to array roomValues
-  const n = [north(x, y, height, width), north(x, y, height, width)];
-  const e = Array(5).fill(east(x, y, height, width));
-  const s = Array(5).fill(south(x, y, height, width));
-  const w = Array(5).fill(west(x, y, height, width));
-  //roomValues.push(...n, ...e, ...s, ...w)
+  // Generate room values for each edge of the seed room
+  // repeatFunc adds variety to roomValues and permits up to `num` paths
+  // from the seed room in a given direction.
+  const roomValues = [];
+  const repeatFunc = (num, func, args) => {
+    const arr = [];
+    for (let i = 0; i < num; i++) {
+      arr.push(func(...args));
+    }
+    return arr;
+  };
+  const n = [...repeatFunc(3, north, seed)];
+  const e = [...repeatFunc(3, east, seed)];
+  const s = [...repeatFunc(3, south, seed)];
+  const w = [...repeatFunc(3, west, seed)];
+  //  const w = Array(5).fill(west(...seed)); // Does not recalculate values each time
   console.log('n: ', n);
-  roomValues.push(...n);
+  console.log('...n ', ...n);
+  // Push the directional objects to array roomValues
+  roomValues.push(...n, ...e, ...s, ...w);
 
   const placedRooms = [];
   // For all generated roomValues
@@ -178,11 +188,9 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
       gridData = placeCells(gridData, { x: room.door.x, y: room.door.y }, 'floor');
       // record placedRoom values for the next seeds
       placedRooms.push(room);
-    } else {
-      // Note the lack of a working `else` statement. If the randomly generated room placement is invalid, tough luck!
-      // The map has one fewer room.
-      // roomValues.push(north(x, y, height, width));
     }
+    // Note the lack of a working `else` statement. If the randomly generated room placement is invalid, tough luck!
+    // This is the motivation behind repeatFunc above.
   });
   // Return the updated gridData and placedRooms in an object
   // console.log('createRoomsFromSeed output: ', { gridData, placedRooms });
@@ -201,12 +209,7 @@ const growMap = (gridData, seedRooms, counter = 1, maxRooms = c.MAX_ROOMS) => {
     return gridData;
   }
 
-  // console.log('gridData before: ', gridData);
-  // console.log('seedRooms.length before: ', seedRooms.length);
   gridData = createRoomsFromSeed(gridData, seedRooms.pop());
-  // console.log('gridData after: ', gridData);
-  // console.log('seedRooms.length after: ', seedRooms.length);
-
   seedRooms.push(...gridData.placedRooms);
   counter += gridData.placedRooms.length;
   return growMap(gridData.gridData, seedRooms, counter);
