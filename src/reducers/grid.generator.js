@@ -85,75 +85,71 @@ const isValidRoomPlacement = (gridData, { x, y, width = 1, height = 1 }) => {
 const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_SIZE_RANGE) => {
   const [min, max] = range;
 
-  const seed = [x, y, height, width];
+  // This finds an appropriate, random value for door placement between rooms
+  // It works with either x coordinates + widths or y coordinates + heights
+  // start = parent (seed) top left corner x or y value
+  // extension = parent width or height
+  // childStart = child top left corner x or y value
+  // childExtension = child width or height
+  const doorFinder = (start, extension, childStart, childExtension) => {
+    const parent = _.range(start, start + extension);
+    const child = _.range(childStart, childStart + childExtension);
+    const doorRange = child.filter(val => parent.includes(val));
+    return _.random(doorRange[0], doorRange[doorRange.length - 1]);
+  };
+
   // Make a room north of the seed
   // All argument values are values of the room being used as a seed
-  const north = (...seed) => {
-    return {
-      x: _.random(x, x + width - 1), // Can be refined to, e.g., x - width + 1, once you figure out how to fix the door
-      get y() {
-        return y - this.height - 1; // Needs to be in a getter else `this.height` might not be assigned yet
-      },
+  const north = (x, y, height, width) => {
+    const n = {
       height: _.random(min, max),
       width: _.random(min, max),
-      get door() {
-        // The `this` of `door.x` is the `this` of `door`, not of `door.x`, meaning the returned object can access parent object properties
-        return {
-          x: this.x, // A boring but stable value
-          y: y - 1
-        };
-      }
+      door: { y: y - 1 }
     };
+    n.x = _.random(x - n.width + 1, x + width - 1);
+    n.y = y - n.height - 1;
+    n.door.x = doorFinder(x, width, n.x, n.width);
+    return n;
   };
 
   // Make a room east of the seed
-  const east = (...seed) => {
-    return {
+  const east = (x, y, height, width) => {
+    const e = {
       x: x + width + 1,
-      y: _.random(y, height + y - 1),
       height: _.random(min, max),
       width: _.random(min, max),
-      get door() {
-        return {
-          x: this.x - 1,
-          y: this.y // Another boring but stable value
-        };
-      }
+      door: {}
     };
+    e.y = _.random(y - e.height + 1, height + y - 1);
+    e.door.x = e.x - 1;
+    e.door.y = doorFinder(y, height, e.y, e.height);
+    return e;
   };
 
   // Make a room south of the seed
-  const south = (...seed) => {
-    return {
-      x: _.random(x, width + x - 1),
+  const south = (x, y, height, width) => {
+    const s = {
       y: y + height + 1,
       height: _.random(min, max),
       width: _.random(min, max),
-      get door() {
-        return {
-          x: this.x,
-          y: y + height
-        };
-      }
+      door: { y: y + height }
     };
+    s.x = _.random(x - s.width + 1, width + x - 1);
+    s.door.x = doorFinder(x, width, s.x, s.width);
+    return s;
   };
 
   // Make a room west of the seed
-  const west = (...seed) => {
-    return {
-      get x() {
-        return x - this.width - 1;
-      },
-      y: y,
+  const west = (x, y, height, width) => {
+    const w = {
       height: _.random(min, max),
       width: _.random(min, max),
-      get door() {
-        return {
-          x: x - 1,
-          y: this.y
-        };
-      }
+      door: { x: x - 1 }
     };
+    w.x = x - w.width - 1;
+    w.y = _.random(y - w.height + 1, height + y - 1);
+    w.door.y = doorFinder(y, height, w.y, w.height);
+    return w;
   };
 
   // Generate room values for each edge of the seed room
@@ -170,6 +166,7 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
   // Push the directional objects to array roomValues
   const roomValues = [];
   const num = 5; // Number of possible branches from the seed in one direction
+  const seed = [x, y, height, width];
   [north, east, south, west].map(func => roomValues.push(...repeatFunc(num, func, seed)));
 
   // placedRooms contains data for `roomValues` items that made the cut
@@ -194,11 +191,10 @@ const createRoomsFromSeed = (gridData, { x, y, height, width }, range = c.ROOM_S
 
 // This function places rooms around a seed room.
 // It takes gridData, seed rooms, a counter, and a maxRooms constant.
-// The array of seedRooms begins as `firstRoom` from step 3.
-// Then, items in the array `placedRooms` become seeds for future rooms.
-// It runs the createRoomsFromSeed function recursively until maxRooms is reached or there are no more seedRooms.
+// It takes a seedRoom array and places rooms based on that.
+// Then, items in the `placedRooms` array become seeds for future rooms.
 const growMap = (gridData, seedRooms, counter = 1, maxRooms = c.MAX_ROOMS) => {
-  // console.log('counter, seedRooms.length: ', counter + ', ' + seedRooms.length);
+  // It runs the createRoomsFromSeed function recursively until maxRooms is reached or there are no more seedRooms.
   if (counter >= maxRooms || !seedRooms.length) {
     return gridData; // Final output is the straight gridData array that is read by the reducer.
   }
@@ -210,4 +206,11 @@ const growMap = (gridData, seedRooms, counter = 1, maxRooms = c.MAX_ROOMS) => {
   return growMap(gridData.gridData, seedRooms, counter);
 };
 
+// `firstRoom` from step 3 is the mother seedRoom.
 gridData = growMap(gridData, [firstRoom]);
+
+// 5. Add more doors
+// Now that the rooms are placed, we will loop through and add a few more doors to reduce map linearity
+// for (let i = 0; i < gridData.length; i++) {
+// if (gridData[i].type === 'floor' && )
+// }
