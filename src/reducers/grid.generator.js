@@ -211,6 +211,38 @@ gridData = growMap(gridData, [firstRoom]);
 
 // 5. Add more doors
 // Now that the rooms are placed, we will loop through and add a few more doors to reduce map linearity
-// for (let i = 0; i < gridData.length; i++) {
-// if (gridData[i].type === 'floor' && )
-// }
+// Doors connecting horizontally
+for (let i = 1; i < gridData.length - 1; i++) {
+  if (
+    // If three cells are adjacent in a row
+    gridData[i - 1].coordinates.y === gridData[i].coordinates.y &&
+    gridData[i + 1].coordinates.y === gridData[i].coordinates.y &&
+    // And the one in the middle has floors on either side but isn't a floor
+    gridData[i - 1].type === 'floor' &&
+    gridData[i + 1].type === 'floor' &&
+    gridData[i].type === 0
+  ) {
+    // There's a 10% chance it will be converted into a floor
+    if (Math.random() > 0.9) {
+      gridData[i].type = 'floor';
+    }
+  }
+}
+
+// Doors connecting vertically
+for (let i = c.GRID_WIDTH; i < c.GRID_HEIGHT - 1; i++) {
+  if (
+    // If three cells are adjacent in a column
+    gridData[i - c.GRID_WIDTH].coordinates.x === gridData[i].coordinates.x &&
+    gridData[i + c.GRID_WIDTH].coordinates.x === gridData[i].coordinates.x &&
+    // And the one in the middle has floors above and below but isn't a floor
+    gridData[i - c.GRID_WIDTH].type === 'floor' &&
+    gridData[i + c.GRID_WIDTH].type === 'floor' &&
+    gridData[i].type === 0
+  ) {
+    // There's a 10% chance it will be converted into a floor
+    if (Math.random() > 0.9) {
+      gridData[i].type = 'floor';
+    }
+  }
+}
