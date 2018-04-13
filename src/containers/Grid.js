@@ -6,6 +6,11 @@ import * as c from '../constants/settings';
 import Cell from '../components/Cell';
 import './Grid.css';
 
+// Find the player's position
+const playerPosition = gridData => {
+  return gridData.find(cell => cell.player).coordinates;
+};
+
 class Grid extends Component {
   constructor(props) {
     super(props);
@@ -13,31 +18,31 @@ class Grid extends Component {
   }
 
   handleKeyPress(e) {
-    const { coordinates, moveEast, moveSouth, moveWest, moveNorth } = this.props;
+    const { gridData, moveEast, moveSouth, moveWest, moveNorth } = this.props;
     switch (e.keyCode) {
       // North
       case 38:
       case 87:
         e.preventDefault();
-        moveNorth(coordinates);
+        moveNorth(playerPosition(gridData));
         break;
       // East
       case 39:
       case 68:
         e.preventDefault();
-        moveEast(coordinates);
+        moveEast(playerPosition(gridData));
         break;
       // South
       case 40:
       case 83:
         e.preventDefault();
-        moveSouth(coordinates);
+        moveSouth(playerPosition(gridData));
         break;
       // West
       case 37:
       case 65:
         e.preventDefault();
-        moveWest(coordinates);
+        moveWest(playerPosition(gridData));
         break;
       case 32:
         e.preventDefault();
@@ -49,10 +54,6 @@ class Grid extends Component {
   }
   componentWillMount() {
     window.addEventListener('keydown', e => this.handleKeyPress(e));
-
-    // Initialize the starting cell from state
-    const { coordinates, setCoordinates } = this.props;
-    setCoordinates(coordinates);
   }
   componentWillUnmount() {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
@@ -81,8 +82,7 @@ class Grid extends Component {
 }
 
 const mapStateToProps = state => ({
-  gridData: state.grid,
-  coordinates: state.coordinates
+  gridData: state.grid
 });
 
 const mapDispatchToProps = dispatch => ({
