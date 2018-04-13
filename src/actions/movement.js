@@ -1,5 +1,5 @@
 // Player movement action creators
-// Used by both grid and position reducers
+// Used by both grid and coordinates reducers
 import * as t from '../constants/action-types';
 import { GRID_HEIGHT, GRID_WIDTH } from '../constants/settings';
 
