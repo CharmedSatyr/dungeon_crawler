@@ -1,14 +1,55 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { moveEast, moveSouth, moveNorth, moveWest, setCoordinates } from '../actions/movement';
+import { move, setCoordinates } from '../actions/movement';
 import * as c from '../constants/settings';
 
 import Cell from '../components/Cell';
 import './Grid.css';
 
 // Find the player's position
-const playerPosition = gridData => {
+const currentPosition = gridData => {
   return gridData.find(cell => cell.player).coordinates;
+};
+
+// Establish the player's next position given current position and direction
+const nextPosition = (currentPosition, direction) => {
+  switch (direction) {
+    case 'n':
+      return { x: currentPosition.x, y: currentPosition.y - 1 };
+    case 'e':
+      return { x: currentPosition.x + 1, y: currentPosition.y };
+    case 's':
+      return { x: currentPosition.x, y: currentPosition.y + 1 };
+    case 'w':
+      return { x: currentPosition.x - 1, y: currentPosition.y };
+    default:
+      return currentPosition;
+  }
+};
+
+// Make sure the nextPosition is a floor
+const validateNextPosition = (gridData, nextPosition) => {
+  if (
+    gridData.find(
+      cell => cell.coordinates.x === nextPosition.x && cell.coordinates.y === nextPosition.y
+    ).type === 'floor'
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+// Return the valid new position on keypress
+const validMove = (direction, gridData) => {
+  const current = currentPosition(gridData);
+  const next = nextPosition(current, direction);
+
+  if (validateNextPosition(gridData, next)) {
+    return next;
+  } else {
+    return current;
+  }
 };
 
 class Grid extends Component {
@@ -18,32 +59,28 @@ class Grid extends Component {
   }
 
   handleKeyPress(e) {
-    const { gridData, moveEast, moveSouth, moveWest, moveNorth } = this.props;
+    const { gridData, move } = this.props;
     switch (e.keyCode) {
       // North
       case 38:
       case 87:
         e.preventDefault();
-        moveNorth(playerPosition(gridData));
-        break;
+        return move(validMove('n', gridData));
       // East
       case 39:
       case 68:
         e.preventDefault();
-        moveEast(playerPosition(gridData));
-        break;
+        return move(validMove('e', gridData));
       // South
       case 40:
       case 83:
         e.preventDefault();
-        moveSouth(playerPosition(gridData));
-        break;
+        return move(validMove('s', gridData));
       // West
       case 37:
       case 65:
         e.preventDefault();
-        moveWest(playerPosition(gridData));
-        break;
+        return move(validMove('w', gridData));
       case 32:
         e.preventDefault();
         console.log('spacebar');
@@ -87,10 +124,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setCoordinates: c => dispatch(setCoordinates(c)),
-  moveEast: c => dispatch(moveEast(c)),
-  moveNorth: c => dispatch(moveNorth(c)),
-  moveSouth: c => dispatch(moveSouth(c)),
-  moveWest: c => dispatch(moveWest(c))
+  move: c => dispatch(move(c))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Grid);
