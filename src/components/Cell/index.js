@@ -9,7 +9,7 @@ const Cell = ({ fn, payload }) => (
     className="Cell"
     onClick={fn}
     style={{
-      background: payload.type === 'floor' ? 'brown' : null,
+      background: payload.type === 'floor' ? '#e2d6be' : null,
       height: CELL_SIDE,
       width: CELL_SIDE
     }}
