@@ -13,7 +13,7 @@ const Cell = ({ fn, payload }) => (
       width: CELL_SIDE
     }}
   >
-    {payload.player ? <Player /> : null}
+    {payload.player ? <Player coordinates={payload.coordinates} /> : null}
     {payload.player ? null : (
       <span>
         {payload.coordinates.x}, {payload.coordinates.y}
