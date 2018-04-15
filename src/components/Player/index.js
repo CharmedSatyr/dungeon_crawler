@@ -1,9 +1,11 @@
 import React from 'react';
 import * as c from '../../constants/settings';
 import sprite from './heroine-sprite.png';
+import './styles.css';
 
 const Player = ({ coordinates }) => (
   <div
+    className="player"
     style={{
       backgroundImage: `url('${sprite}')`,
       backgroundPosition: `0px ${c.SPRITE_SIZE * 1}px`,
