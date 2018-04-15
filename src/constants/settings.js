@@ -1,4 +1,5 @@
 export const CELL_SIDE = 40; // This is width in pixels for styling
+export const SPRITE_SIZE = 64; // This value was established through trial and error
 export const GRID_HEIGHT = 20; // Number of cells
 export const GRID_WIDTH = 30; // Number of cells
 export const TOTAL_CELLS = GRID_HEIGHT * GRID_WIDTH;
