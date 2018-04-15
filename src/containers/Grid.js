@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { move, setCoordinates } from '../actions/movement';
 import * as c from '../constants/settings';
 
-import Cell from '../components/Cell';
+import Cell from '../components/Cell/';
 import './Grid.css';
 
 // Find the player's position

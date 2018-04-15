@@ -1,6 +1,6 @@
 .Cell {
   align-items: center;
-  background: lightblue;
+  background: #1aad03 url('./grass.png');;
   box-shadow: inset 1px 1px 1px black;
   display: flex;
   font-size: 12px;
