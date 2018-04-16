@@ -15,13 +15,13 @@ const currentPosition = gridData => {
 const nextPosition = (currentPosition, direction) => {
   switch (direction) {
     case 'n':
-      return { direction: 'n', x: currentPosition.x, y: currentPosition.y - 1 };
+      return { direction, x: currentPosition.x, y: currentPosition.y - 1 };
     case 'e':
-      return { direction: 'e', x: currentPosition.x + 1, y: currentPosition.y };
+      return { direction, x: currentPosition.x + 1, y: currentPosition.y };
     case 's':
-      return { direction: 's', x: currentPosition.x, y: currentPosition.y + 1 };
+      return { direction, x: currentPosition.x, y: currentPosition.y + 1 };
     case 'w':
-      return { direction: 'w', x: currentPosition.x - 1, y: currentPosition.y };
+      return { direction, x: currentPosition.x - 1, y: currentPosition.y };
     default:
       return currentPosition;
   }
@@ -32,7 +32,7 @@ const validateNextPosition = (gridData, nextPosition) => {
   if (
     gridData.find(
       cell => cell.coordinates.x === nextPosition.x && cell.coordinates.y === nextPosition.y
-    ).type === 'floor'
+    ).type === 1
   ) {
     return true;
   } else {
