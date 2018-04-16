@@ -1,5 +1,10 @@
-import { gridData } from './grid.generator';
+import { cartography } from './grid.generate';
+import { populate } from './grid.populate';
 import * as t from '../constants/action-types';
+
+let gridData = [];
+gridData = cartography(gridData);
+gridData = populate(gridData);
 
 // Grid reducers
 const grid = (state = gridData, action) => {
