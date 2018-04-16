@@ -2,14 +2,22 @@ import React from 'react';
 import { CELL_SIDE } from '../../constants/settings';
 
 import Player from '../Player';
-import './Cell.css';
+import './styles.css';
+
+const styleCell = type => {
+  switch (type) {
+    case 'floor':
+      return 'Cell path';
+    default:
+      return 'Cell vegetation';
+  }
+};
 
 const Cell = ({ fn, payload }) => (
   <div
-    className="Cell"
+    className={styleCell(payload.type)}
     onClick={fn}
     style={{
-      background: payload.type === 'floor' ? '#e2d6be' : null,
       height: CELL_SIDE,
       width: CELL_SIDE
     }}

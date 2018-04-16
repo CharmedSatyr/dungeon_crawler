@@ -1,0 +1,28 @@
+.Cell {
+  align-items: center;
+  box-shadow: inset 1px 1px 1px rgba(0,0,0,0.1);
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
+  user-select: none;
+}
+
+/* https://opengameart.org/content/tileable-mowed-grass-textures-256x256 */
+.Cell.vegetation {
+  background: #1aad03 url('./grass.png');
+  background-position: 0 256px;
+  background-size: auto;
+  height: 40px;
+  overflow: hidden;
+  width: 40px;
+}
+
+/* https://opengameart.org/content/dirt-001 */
+.Cell.path {
+  background: #e2d6be url('./dirt2.png');
+  background-position: 0px 0px;
+  background-size: contain;
+  height: 40px;
+  overflow: hidden;
+  width: 40px;
+}
