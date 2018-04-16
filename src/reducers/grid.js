@@ -9,7 +9,9 @@ const grid = (state = gridData, action) => {
         // Set cell as player
         if (cell.coordinates.x === action.x && cell.coordinates.y === action.y) {
           return Object.assign({}, cell, {
-            player: true
+            player: {
+              direction: action.direction
+            }
           });
           // Only one player at a time
         } else {

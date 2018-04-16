@@ -2,12 +2,27 @@ import React from 'react';
 import * as c from '../../constants/settings';
 import sprite from './heroine-sprite.png';
 
-const Player = ({ coordinates }) => (
+const faceDirection = direction => {
+  switch (direction) {
+    case 'n':
+      return 0;
+    case 'e':
+      return 2;
+    case 's':
+      return 3;
+    case 'w':
+      return 4;
+    default:
+      return '3';
+  }
+};
+
+const Player = ({ coordinates, direction }) => (
   <div
     className="player"
     style={{
       backgroundImage: `url('${sprite}')`,
-      backgroundPosition: `0px ${c.SPRITE_SIZE * 1}px`,
+      backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(direction)}px`,
       height: 70,
       left:
         Math.floor(

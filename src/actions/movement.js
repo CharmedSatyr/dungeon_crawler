@@ -14,6 +14,7 @@ export const setCoordinates = c => {
 export const move = nextPosition => {
   const action = {
     type: t.SET_COORDINATES,
+    direction: nextPosition.direction,
     x: nextPosition.x,
     y: nextPosition.y
   };

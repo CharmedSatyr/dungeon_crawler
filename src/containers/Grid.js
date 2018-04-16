@@ -15,13 +15,13 @@ const currentPosition = gridData => {
 const nextPosition = (currentPosition, direction) => {
   switch (direction) {
     case 'n':
-      return { x: currentPosition.x, y: currentPosition.y - 1 };
+      return { direction: 'n', x: currentPosition.x, y: currentPosition.y - 1 };
     case 'e':
-      return { x: currentPosition.x + 1, y: currentPosition.y };
+      return { direction: 'e', x: currentPosition.x + 1, y: currentPosition.y };
     case 's':
-      return { x: currentPosition.x, y: currentPosition.y + 1 };
+      return { direction: 's', x: currentPosition.x, y: currentPosition.y + 1 };
     case 'w':
-      return { x: currentPosition.x - 1, y: currentPosition.y };
+      return { direction: 'w', x: currentPosition.x - 1, y: currentPosition.y };
     default:
       return currentPosition;
   }
