@@ -29,11 +29,10 @@ const nextPosition = (currentPosition, direction) => {
 
 // Make sure the nextPosition is a floor
 const validateNextPosition = (gridData, nextPosition) => {
-  if (
-    gridData.find(
-      cell => cell.coordinates.x === nextPosition.x && cell.coordinates.y === nextPosition.y
-    ).type === 1
-  ) {
+  const target = gridData.find(
+    cell => cell.coordinates.x === nextPosition.x && cell.coordinates.y === nextPosition.y
+  );
+  if (target.type === 1 && !target.enemy) {
     return true;
   } else {
     return false;
