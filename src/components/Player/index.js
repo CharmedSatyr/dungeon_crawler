@@ -30,11 +30,11 @@ const Player = ({ coordinates, direction }) => (
         Math.floor(
           (document.documentElement.clientWidth - c.CELL_SIDE * c.GRID_WIDTH) / 2 +
             c.CELL_SIDE * coordinates.x
-        ) - 3.5, // left is cell side * x coordinate, counting from the start of the grid not the browser window
+        ) - 3, // left is cell side * x coordinate, counting from the start of the grid not the browser window
       overflow: 'hidden',
       position: 'absolute',
       transform: 'scale(0.7,0.7)', // The player is smaller than the enemies
-      top: 199 + c.CELL_SIDE * coordinates.y,
+      top: 195 + c.CELL_SIDE * coordinates.y,
       width: c.SPRITE_SIZE
     }}
   />

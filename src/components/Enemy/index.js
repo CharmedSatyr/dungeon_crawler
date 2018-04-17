@@ -26,8 +26,14 @@ const Enemy = ({ coordinates, direction }) => (
       backgroundImage: `url('${sprite}')`,
       backgroundPosition: `-10px ${c.SPRITE_SIZE * faceDirection(direction) - 6}px`,
       height: c.SPRITE_SIZE,
+      left:
+        (document.documentElement.clientWidth - c.CELL_SIDE * c.GRID_WIDTH) / 2 +
+        c.CELL_SIDE * coordinates.x +
+        5,
       overflow: 'hidden',
-      transform: 'scale(0.95,0.95)',
+      position: 'absolute',
+      transform: 'scale(0.9,0.9)',
+      top: 195 + c.CELL_SIDE * coordinates.y,
       width: c.SPRITE_SIZE
     }}
   />
