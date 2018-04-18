@@ -1,1 +1,6 @@
-move helper functions from Grid container to actions
+Add health and attack to player
+Add health and attack to enemies
+Split movement code into grid.helpers.js
+Add attack functions that sprout off of move
+
+separate direction facing from movement so you can face any direction you point to even if you can't move there
