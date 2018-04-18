@@ -52,7 +52,10 @@ export const movement = (state, direction) => {
     }
   };
 
+  // This way of copying the state array works so long as there are no methods stored in state!
+  // Could also map like newState = state.map(c => Object.assign({}, c)), but another map seems less performative?
   let newState = JSON.parse(JSON.stringify(state));
+
   if (validateNextPosition(nextPlayerObj)) {
     newState.splice(currentPlayerIndex, 1, Object.assign({}, currentPlayerObj, { player: false }));
     newState.splice(
