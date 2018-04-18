@@ -10,23 +10,30 @@ import tiles from './dungeon_tileset_40x40.png';
 
 // Set appropriate background tile based on Cell type
 const styleCell = type => {
+  const dirt = '-160px -160px';
   const vines = '-120px -160px';
+  const stoneFloor = '-40px -120px';
+
   switch (true) {
     case type === 0:
       return vines;
     case type >= 1:
-      return '-40px -120px';
+      return dirt;
     default:
-      return '-40px -80px';
+      return vines;
   }
 };
 
 const Loot = () => {
+  const chest1 = '-40px 0px';
+  const chest2 = '0px -40px';
+  const barrel = '0px 0px';
+
   return (
     <div
       style={{
         backgroundImage: `url(${tiles})`,
-        backgroundPosition: `-40px 0px`,
+        backgroundPosition: barrel,
         height: 40,
         width: 40
       }}
@@ -35,13 +42,15 @@ const Loot = () => {
 };
 
 const Portal = () => {
+  const openDoor = '-80px 120px';
+  const closedDoor = '-120px -120px';
   return (
     <div
       style={{
         backgroundImage: `url(${tiles})`,
-        backgroundPosition: `-80px -120px`,
-        height: 40,
-        width: 40
+        backgroundPosition: closedDoor,
+        height: c.CELL_SIDE,
+        width: c.CELL_SIDE
       }}
     />
   );
