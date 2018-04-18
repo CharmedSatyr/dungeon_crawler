@@ -1,5 +1,5 @@
 import React from 'react';
-import { CELL_SIDE } from '../../constants/settings';
+import * as c from '../../constants/settings';
 
 import Enemy from '../Enemy';
 import Player from '../Player';
@@ -60,8 +60,8 @@ const Cell = ({ fn, payload }) => (
       backgroundImage: `url(${tiles})`,
       backgroundPosition: styleCell(payload.type),
       boxShadow: 'inset 0 0 1px rgba(0,0,0,0.5)',
-      height: CELL_SIDE,
-      width: CELL_SIDE
+      height: c.CELL_SIDE,
+      width: c.CELL_SIDE
     }}
   >
     {payload.enemy ? <Enemy coordinates={payload.coordinates} /> : null}
