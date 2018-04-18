@@ -1,22 +1,10 @@
 // Player movement action creators
 import * as t from '../constants/action-types';
 
-// setCoordinates
-export const setCoordinates = c => {
+export const move = direction => {
   const action = {
-    type: t.SET_COORDINATES,
-    x: c.x,
-    y: c.y
-  };
-  return action;
-};
-
-export const move = nextPosition => {
-  const action = {
-    type: t.SET_COORDINATES,
-    direction: nextPosition.direction,
-    x: nextPosition.x,
-    y: nextPosition.y
+    type: t.MOVE,
+    direction
   };
   return action;
 };

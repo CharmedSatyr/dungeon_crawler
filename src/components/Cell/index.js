@@ -53,9 +53,8 @@ const Portal = () => {
 //   </span>
 // );
 
-const Cell = ({ fn, payload }) => (
+const Cell = ({ payload }) => (
   <div
-    onClick={fn}
     style={{
       backgroundImage: `url(${tiles})`,
       backgroundPosition: styleCell(payload.type),

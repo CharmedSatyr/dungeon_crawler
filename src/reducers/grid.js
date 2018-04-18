@@ -1,30 +1,17 @@
-import { cartography } from './grid.generate';
+import { generate } from './grid.generate';
 import { populate } from './grid.populate';
+import { movement } from './grid.movement';
 import * as t from '../constants/action-types';
 
 let gridData = [];
-gridData = cartography(gridData);
+gridData = generate(gridData);
 gridData = populate(gridData);
 
 // Grid reducers
 const grid = (state = gridData, action) => {
   switch (action.type) {
-    case t.SET_COORDINATES:
-      return state.map((cell, index) => {
-        // Set cell as player
-        if (cell.coordinates.x === action.x && cell.coordinates.y === action.y) {
-          return Object.assign({}, cell, {
-            player: {
-              direction: action.direction
-            }
-          });
-          // Only one player at a time
-        } else {
-          return Object.assign({}, cell, {
-            player: false
-          });
-        }
-      });
+    case t.MOVE:
+      return movement(state, action.direction);
     default:
       return state;
   }

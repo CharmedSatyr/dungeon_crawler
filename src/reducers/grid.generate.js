@@ -3,7 +3,7 @@ import * as c from '../constants/settings';
 
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // cartography makes an unpopulated map from an empty array
-export const cartography = grid => {
+export const generate = grid => {
   // 1. Create an empty grid with the desired keys
   for (let i = 0; i < c.GRID_HEIGHT; i++) {
     let x,

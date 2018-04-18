@@ -7,13 +7,13 @@ import sprite from './orc-sprite-40x40.png';
 
 const faceDirection = direction => {
   switch (direction) {
-    case 'n':
+    case 'north':
       return 0;
-    case 'e':
+    case 'east':
       return 2;
-    case 's':
+    case 'south':
       return 3;
-    case 'w':
+    case 'west':
       return 4;
     default:
       return '3';
