@@ -3,7 +3,7 @@ import * as c from '../../constants/settings';
 
 // Enemy Sprite URL:
 // http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/#?body=orc&=eyes_brown&eyes=yellow&legs=pants_red&clothes=none&mail=chain&armor=chest_leather&jacket=none&hair=none&arms=plate&shoulders=leather&spikes=gold&bracers=leather&greaves=none&shoes=boots_metal&hat=none&belt=leather&weapon=spear
-import sprite from './orc-sprite.png';
+import sprite from './orc-sprite-40x40.png';
 
 const faceDirection = direction => {
   switch (direction) {
@@ -24,16 +24,10 @@ const Enemy = ({ coordinates, direction }) => (
   <div
     style={{
       backgroundImage: `url('${sprite}')`,
-      backgroundPosition: `-10px ${c.SPRITE_SIZE * faceDirection(direction) - 6}px`,
+      backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(direction)}px`,
       height: c.SPRITE_SIZE,
-      left:
-        (document.documentElement.clientWidth - c.CELL_SIDE * c.GRID_WIDTH) / 2 +
-        c.CELL_SIDE * coordinates.x +
-        5,
-      overflow: 'hidden',
-      position: 'absolute',
-      transform: 'scale(0.9,0.9)',
-      top: 195 + c.CELL_SIDE * coordinates.y,
+      marginTop: -5,
+      transform: 'scale(1.2,1.2)', // Enemies bigger than hero
       width: c.SPRITE_SIZE
     }}
   />
