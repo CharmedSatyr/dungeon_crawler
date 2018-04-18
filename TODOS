@@ -1,3 +1,5 @@
+improve Payload idea instead of listing each possible payload type as an object key
+
 Add health and attack to player
 Add health and attack to enemies
 Split movement code into grid.helpers.js
