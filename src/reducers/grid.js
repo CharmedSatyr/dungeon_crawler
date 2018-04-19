@@ -5,16 +5,29 @@ import * as t from '../constants/action-types';
 
 const initialState = {
   data: [],
-  playerPosition: { x: 0, y: 0 }
+  level: 1,
+  playerPosition: {
+    coordinates: { x: 0, y: 0 },
+    index: 0
+  }
 };
 
 // Grid reducers
 const grid = (state = initialState, action) => {
   switch (action.type) {
     case t.MOVE:
-      return Object.assign({}, ...state, { data: movement(state.data, action.direction) });
+      const updated = movement(state.data, state.playerPosition, action.direction);
+      return Object.assign({}, ...state, {
+        data: updated.data,
+        playerPosition: updated.playerPosition
+      });
     case t.NEW_LEVEL:
-      return Object.assign({}, ...state, { data: populate(generate(initialState.data)) });
+      // New levels should be created on an empty data array
+      const level = populate(generate(initialState.data));
+      return Object.assign({}, ...state, {
+        data: level.data,
+        playerPosition: level.playerPosition
+      });
     default:
       return state;
   }
