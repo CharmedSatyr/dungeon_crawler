@@ -1,47 +1,39 @@
-export const movement = (state, direction) => {
-  // Find the current player object
-  const getPlayerObj = state => {
-    return state.find(cell => cell.player);
-  };
+import { GRID_WIDTH } from '../constants/settings';
 
-  // Save it as a variable
-  const currentPlayerObj = getPlayerObj(state);
-
-  // Save its coordinates and index
-  const currentPlayerPosition = currentPlayerObj.coordinates;
-  const currentPlayerIndex = state.indexOf(currentPlayerObj);
-
+export const movement = (data, playerPosition, direction) => {
   // Establish the player's potential next position given current position and direction
-  const getNextPlayerPosition = (currentPlayerPosition, direction) => {
+  const getNextPlayerPosition = (playerPosition, direction) => {
     switch (direction) {
       case 'north':
-        return { x: currentPlayerPosition.x, y: currentPlayerPosition.y - 1 };
+        return {
+          coordinates: { x: playerPosition.coordinates.x, y: playerPosition.coordinates.y - 1 },
+          index: playerPosition.index - GRID_WIDTH
+        };
       case 'east':
-        return { x: currentPlayerPosition.x + 1, y: currentPlayerPosition.y };
+        return {
+          coordinates: { x: playerPosition.coordinates.x + 1, y: playerPosition.coordinates.y },
+          index: playerPosition.index + 1
+        };
       case 'south':
-        return { x: currentPlayerPosition.x, y: currentPlayerPosition.y + 1 };
+        return {
+          coordinates: { x: playerPosition.coordinates.x, y: playerPosition.coordinates.y + 1 },
+          index: playerPosition.index + GRID_WIDTH
+        };
       case 'west':
-        return { x: currentPlayerPosition.x - 1, y: currentPlayerPosition.y };
+        return {
+          coordinates: { x: playerPosition.coordinates.x - 1, y: playerPosition.coordinates.y },
+          index: playerPosition.index - 1
+        };
       default:
-        return currentPlayerPosition;
+        return playerPosition;
     }
   };
 
-  // Save its coordinates
-  const nextPlayerPosition = getNextPlayerPosition(currentPlayerPosition, direction);
+  // Save it
+  const nextPlayerPosition = getNextPlayerPosition(playerPosition, direction);
 
   // Get the potential next player object
-  const getNextPlayerObj = (state, nextPlayerPosition) => {
-    return state.find(
-      cell =>
-        cell.coordinates.x === nextPlayerPosition.x && cell.coordinates.y === nextPlayerPosition.y
-    );
-  };
-  // Save it as a variable
-  const nextPlayerObj = getNextPlayerObj(state, nextPlayerPosition);
-
-  // Save its index
-  const nextPlayerIndex = state.indexOf(nextPlayerObj);
+  const nextPlayerObj = data[nextPlayerPosition.index];
 
   // Check if the nextPosition is a floor
   const validateNextPosition = nextPlayerObj => {
@@ -52,17 +44,32 @@ export const movement = (state, direction) => {
     }
   };
 
-  // This way of copying the state array works so long as there are no methods stored in state!
-  // Could also map like newState = state.map(c => Object.assign({}, c)), but another map seems less performative?
-  let newState = JSON.parse(JSON.stringify(state));
-
+  // Update the grid data if the movement is valid
   if (validateNextPosition(nextPlayerObj)) {
-    newState.splice(currentPlayerIndex, 1, Object.assign({}, currentPlayerObj, { player: false }));
-    newState.splice(
-      nextPlayerIndex,
+    // This way of deep copying the data array works so long as there are no methods stored in data!
+    // Could also map like newState = data.map(c => Object.assign({}, c)), but a map seems less performative?
+    let newData = JSON.parse(JSON.stringify(data));
+
+    // The player is no longer at its current position
+    const currentPlayerObj = data[playerPosition.index];
+    newData.splice(playerPosition.index, 1, Object.assign({}, currentPlayerObj, { player: false }));
+
+    // The player is at the next position
+    newData.splice(
+      nextPlayerPosition.index,
       1,
-      Object.assign({}, nextPlayerObj, { player: { direction: direction } })
+      Object.assign({}, nextPlayerObj, { player: { direction } })
     );
+
+    return {
+      data: newData,
+      playerPosition: {
+        coordinates: nextPlayerPosition.coordinates,
+        index: nextPlayerPosition.index
+      }
+    };
   }
-  return newState;
+
+  // Otherwise return current values
+  return { data, playerPosition };
 };
