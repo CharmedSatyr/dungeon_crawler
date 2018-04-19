@@ -1,92 +1,99 @@
 import _ from 'lodash';
 import * as c from '../constants/settings';
 
-// Populate the grid
-export const populate = grid => {
+// Populate the data
+export const populate = data => {
   // Add enemies
-  const addEnemies = grid => {
-    for (let i in grid) {
+  const addEnemies = data => {
+    for (let i in data) {
       // 2.5% chance of a cell being occupied by an enemy
       if (
-        !grid[i].enemy &&
-        !grid[i].loot &&
-        !grid[i].player &&
-        !grid[i].portal &&
-        grid[i].type === 1 &&
+        !data[i].enemy &&
+        !data[i].loot &&
+        !data[i].player &&
+        !data[i].portal &&
+        data[i].type === 1 &&
         Math.random() > 0.975
       ) {
-        grid[i].enemy = {
+        data[i].enemy = {
           damage: _.random(1, 10),
           health: _.random(20, 50)
         };
       }
     }
-    return grid;
+    return data;
   };
-  grid = addEnemies(grid);
+  data = addEnemies(data);
 
   // Add loot
-  const addLoot = grid => {
-    for (let i in grid) {
+  const addLoot = data => {
+    for (let i in data) {
       // 1% chance of a cell being occupied by loot
       if (
-        !grid[i].enemy &&
-        !grid[i].loot &&
-        !grid[i].player &&
-        !grid[i].portal &&
-        grid[i].type === 1 &&
+        !data[i].enemy &&
+        !data[i].loot &&
+        !data[i].player &&
+        !data[i].portal &&
+        data[i].type === 1 &&
         Math.random() > 0.99
       ) {
-        grid[i].loot = {
+        data[i].loot = {
           type: 'health'
         };
       }
     }
-    return grid;
+    return data;
   };
-  grid = addLoot(grid);
+  data = addLoot(data);
 
   // Add portal just west of the southeast corner
-  const addPortal = (grid, count = 0) => {
+  const addPortal = (data, count = 0) => {
     for (let i = c.TOTAL_CELLS - 1; i >= 0; i--) {
       if (
-        !grid[i].enemy &&
-        !grid[i].loot &&
-        !grid[i].player &&
-        !grid[i].portal &&
-        grid[i].type === 1 &&
+        !data[i].enemy &&
+        !data[i].loot &&
+        !data[i].player &&
+        !data[i].portal &&
+        data[i].type === 1 &&
         count <= 2
       ) {
         count++;
         if (count === 2) {
-          grid[i].portal = true;
+          data[i].portal = true;
         }
       }
     }
-    return grid;
+    return data;
   };
-  grid = addPortal(grid);
+  data = addPortal(data);
 
   // Position player just east of the northwest corner
-  const addPlayer = (grid, count = 0) => {
+  let playerPosition;
+  const addPlayer = (data, count = 0) => {
     for (let i = 0; i <= c.TOTAL_CELLS - 1; i++) {
       if (
-        !grid[i].enemy &&
-        !grid[i].loot &&
-        !grid[i].player &&
-        !grid[i].portal &&
-        grid[i].type === 1 &&
+        !data[i].enemy &&
+        !data[i].loot &&
+        !data[i].player &&
+        !data[i].portal &&
+        data[i].type === 1 &&
         count <= 2
       ) {
         count++;
         if (count === 2) {
-          grid[i].player = { direction: 's', level: 1, health: 20 };
+          data[i].player = { direction: 's', level: 1, health: 20 };
+
+          // Save playerCell as a variable
+          playerPosition = {
+            coordinates: { x: data[i].coordinates.x, y: data[i].coordinates.y },
+            index: i
+          };
         }
       }
     }
-    return grid;
+    return data;
   };
-  grid = addPlayer(grid);
+  data = addPlayer(data);
 
-  return grid;
+  return { data, playerPosition };
 };
