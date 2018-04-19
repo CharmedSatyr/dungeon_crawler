@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as a from '../actions/movement';
-import * as c from '../constants/settings';
 
 import Cell from '../components/Cell/';
+import Map from '../components/Map';
+import PlayerPanel from '../components/PlayerPanel';
 
 class Grid extends Component {
   constructor(props) {
@@ -43,37 +44,37 @@ class Grid extends Component {
     }
   }
   componentWillMount() {
+    this.props.new_level();
     window.addEventListener('keydown', e => this.handleKeyPress(e));
   }
   componentWillUnmount() {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
   }
   render() {
-    const { gridData } = this.props;
+    const { gridData, player } = this.props;
 
-    const cells = gridData
-      // Create an array of Cells containing data from the store
-      .map((item, index) => <Cell key={index} payload={item} />);
+    // Create an array of Cells containing data from the store
+    const cells = gridData.map((item, index) => <Cell key={index} payload={item} />);
 
-    // Render the cells array
+    const data = gridData.find(cell => cell.player);
+
     return (
-      // Grid width must be Cell width * GRID_WIDTH for columns to line up
-      <div
-        className="Grid"
-        style={{ display: 'flex', flexWrap: 'wrap', width: c.CELL_SIDE * c.GRID_WIDTH }}
-      >
-        {cells}
+      <div>
+        <PlayerPanel stats={player} />
+        <Map cells={cells} />
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  gridData: state.grid
+const mapStateToProps = ({ grid, player }) => ({
+  gridData: grid.data,
+  player
 });
 
 const mapDispatchToProps = dispatch => ({
-  move: direction => dispatch(a.move(direction))
+  move: direction => dispatch(a.move(direction)),
+  new_level: () => dispatch(a.new_level())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Grid);

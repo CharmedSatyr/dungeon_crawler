@@ -80,7 +80,7 @@ export const populate = grid => {
       ) {
         count++;
         if (count === 2) {
-          grid[i].player = { direction: 's' };
+          grid[i].player = { direction: 's', level: 1, health: 20 };
         }
       }
     }

@@ -14,7 +14,7 @@ export const generate = grid => {
         coordinates: { x, y },
         enemy: false,
         loot: false,
-        player: false, // designated player character
+        player: false,
         portal: false,
         type: 0
       });

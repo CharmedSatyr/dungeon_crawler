@@ -8,3 +8,10 @@ export const move = direction => {
   };
   return action;
 };
+
+export const new_level = () => {
+  const action = {
+    type: t.NEW_LEVEL
+  };
+  return action;
+};
