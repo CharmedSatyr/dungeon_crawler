@@ -6,7 +6,7 @@ import Cell from '../components/Cell/';
 import Map from '../components/Map';
 import PlayerPanel from '../components/PlayerPanel';
 
-class Grid extends Component {
+class Game extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -56,8 +56,6 @@ class Grid extends Component {
     // Create an array of Cells containing data from the store
     const cells = gridData.map((item, index) => <Cell key={index} payload={item} />);
 
-    const data = gridData.find(cell => cell.player);
-
     return (
       <div>
         <PlayerPanel stats={player} />
@@ -69,6 +67,7 @@ class Grid extends Component {
 
 const mapStateToProps = ({ grid, player }) => ({
   gridData: grid.data,
+  playerPosition: grid.playerPosition,
   player
 });
 
@@ -77,4 +76,4 @@ const mapDispatchToProps = dispatch => ({
   new_level: () => dispatch(a.new_level())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Grid);
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
