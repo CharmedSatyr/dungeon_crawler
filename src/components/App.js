@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import Grid from '../containers/Grid';
+import Game from '../containers/Game';
 
 const App = ({ decrement, increment, value }) => {
   return (
@@ -13,7 +13,7 @@ const App = ({ decrement, increment, value }) => {
       </header>
       <div className="App-intro">
         <div className="container">
-          <Grid />
+          <Game />
         </div>
       </div>
     </div>
