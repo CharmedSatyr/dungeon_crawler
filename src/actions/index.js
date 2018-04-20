@@ -21,6 +21,13 @@ const facing = direction => {
   return action;
 };
 
+export const next_level = () => {
+  const action = {
+    type: t.NEXT_LEVEL
+  };
+  return action;
+};
+
 // A thunk
 export const move = direction => {
   // Get info about the cell the player is advancing toward
@@ -30,17 +37,13 @@ export const move = direction => {
   const nextPlayerObj = data[nextPlayerPosition.index];
 
   // Just move if the nextPlayerPosition is an empty floor
-  if (nextPlayerObj.type === 1 && !nextPlayerObj.enemy) {
+  if (nextPlayerObj.type === 1 && !nextPlayerObj.enemy && !nextPlayerObj.portal) {
     return go(direction, nextPlayerPosition, nextPlayerObj);
   }
 
+  if (nextPlayerObj.portal) {
+    return next_level();
+  }
   // If no conditions are met, don't do anything
   return facing(direction);
-};
-
-export const new_level = () => {
-  const action = {
-    type: t.NEW_LEVEL
-  };
-  return action;
 };
