@@ -6,7 +6,7 @@ import * as t from '../constants/action-types';
 
 const initialState = {
   data: [],
-  level: 1,
+  level: 0,
   playerPosition: {
     coordinates: { x: 0, y: 0 },
     index: 0
@@ -34,7 +34,7 @@ const grid = (state = initialState, { type, direction, nextPlayerPosition, nextP
       });
     case t.NEXT_LEVEL:
       // New levels should be created on an empty data array
-      const level = populate(generate([]));
+      let level = populate(generate([], state.level + 1), state.level + 1);
       console.log('Entering level', state.level);
       return Object.assign({}, state, {
         data: level.data,

@@ -10,15 +10,26 @@ import tiles from './dungeon_tileset_40x40.png';
 
 // Set appropriate background tile based on Cell type
 const styleCell = type => {
-  const dirt = '-160px -160px';
+  // 0: dirt path
+  // 1: stone path
+  // 2: vines
+  // 3: rock1
+  const dirtPath = '-160px -160px';
   const vines = '-120px -160px';
-  // const stoneFloor = '-40px -120px';
-
-  switch (true) {
-    case type === 0:
+  const stonePath = '-40px -120px';
+  const rock1 = '-160px 0px';
+  const lava = '-240px -40px';
+  switch (type) {
+    case 'dirtPath':
+      return dirtPath;
+    case 'stonePath':
+      return stonePath;
+    case 'vines':
       return vines;
-    case type >= 1:
-      return dirt;
+    case 'rock1':
+      return rock1;
+    case 'lava':
+      return lava;
     default:
       return vines;
   }

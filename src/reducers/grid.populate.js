@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import * as c from '../constants/settings';
+import tileTypes from '../constants/tile-types';
 
 // Populate the data
-export const populate = data => {
+export const populate = (data, level) => {
   // Add enemies
   const addEnemies = data => {
     for (let i in data) {
@@ -12,7 +13,7 @@ export const populate = data => {
         !data[i].loot &&
         !data[i].player &&
         !data[i].portal &&
-        data[i].type === 1 &&
+        data[i].type === tileTypes(level, 'path') &&
         Math.random() > 0.975
       ) {
         data[i].enemy = {
@@ -34,7 +35,7 @@ export const populate = data => {
         !data[i].loot &&
         !data[i].player &&
         !data[i].portal &&
-        data[i].type === 1 &&
+        data[i].type === tileTypes(level, 'path') &&
         Math.random() > 0.99
       ) {
         data[i].loot = {
@@ -54,7 +55,7 @@ export const populate = data => {
         !data[i].loot &&
         !data[i].player &&
         !data[i].portal &&
-        data[i].type === 1 &&
+        data[i].type === tileTypes(level, 'path') &&
         count <= 2
       ) {
         count++;
@@ -76,7 +77,7 @@ export const populate = data => {
         !data[i].loot &&
         !data[i].player &&
         !data[i].portal &&
-        data[i].type === 1 &&
+        data[i].type === tileTypes(level, 'path') &&
         count <= 2
       ) {
         count++;

@@ -1,5 +1,6 @@
 // Player movement action creators
 import * as t from '../constants/action-types';
+import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
 import { getNextPlayerPosition } from './index.helpers';
 
@@ -31,13 +32,17 @@ export const next_level = () => {
 // A thunk
 export const move = direction => {
   // Get info about the cell the player is advancing toward
-  const data = getState().grid.data;
-  const playerPosition = getState().grid.playerPosition;
+  const { data, playerPosition, level } = getState().grid;
+
   const nextPlayerPosition = getNextPlayerPosition(playerPosition, direction);
   const nextPlayerObj = data[nextPlayerPosition.index];
 
   // Just move if the nextPlayerPosition is an empty floor
-  if (nextPlayerObj.type === 1 && !nextPlayerObj.enemy && !nextPlayerObj.portal) {
+  if (
+    nextPlayerObj.type === tileTypes(level, 'path') &&
+    !nextPlayerObj.enemy &&
+    !nextPlayerObj.portal
+  ) {
     return go(direction, nextPlayerPosition, nextPlayerObj);
   }
 

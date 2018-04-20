@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import * as c from '../constants/settings';
+import tileTypes from '../constants/tile-types';
 
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
-// cartography makes an unpopulated map from an empty array
-export const generate = grid => {
+// generate makes an unpopulated map from an empty array
+export const generate = (grid, level) => {
   // 1. Create an empty grid with the desired keys
   for (let i = 0; i < c.GRID_HEIGHT; i++) {
     let x,
@@ -16,7 +17,7 @@ export const generate = grid => {
         loot: false,
         player: false,
         portal: false,
-        type: 0
+        type: tileTypes(level)
       });
     }
   }
@@ -32,7 +33,11 @@ export const generate = grid => {
   };
 
   // 3. place the first room onto the grid
-  const placeCells = (grid, { x = 0, y = 0, height = 1, width = 1 }, type = 1) => {
+  const placeCells = (
+    grid,
+    { x = 0, y = 0, height = 1, width = 1 },
+    type = tileTypes(level, 'path')
+  ) => {
     for (let i in grid) {
       if (
         grid[i].coordinates.x >= x &&
@@ -63,7 +68,7 @@ export const generate = grid => {
     // check if on or adjacent to existing room
     for (let i in grid) {
       if (
-        grid[i].type === 1 && // primary criterion
+        grid[i].type === tileTypes(level, 'path') && // primary criterion
         grid[i].coordinates.x >= x - 1 &&
         grid[i].coordinates.x <= x + width &&
         grid[i].coordinates.y >= y - 1 &&
@@ -175,7 +180,7 @@ export const generate = grid => {
         // update existing grid with room placement
         grid = placeCells(grid, room);
         // update existing grid with door placement
-        grid = placeCells(grid, { x: room.door.x, y: room.door.y }, 1);
+        grid = placeCells(grid, { x: room.door.x, y: room.door.y }, tileTypes(level, 'path'));
         // record placedRoom values for the next seeds
         placedRooms.push(room);
       }
@@ -215,13 +220,13 @@ export const generate = grid => {
         grid[i - 1].coordinates.y === grid[i].coordinates.y &&
         grid[i + 1].coordinates.y === grid[i].coordinates.y &&
         // And the one in the middle has floors on either side but isn't a floor
-        grid[i - 1].type === 1 &&
-        grid[i + 1].type === 1 &&
-        grid[i].type === 0
+        grid[i - 1].type === tileTypes(level, 'path') &&
+        grid[i + 1].type === tileTypes(level, 'path') &&
+        grid[i].type === tileTypes(level)
       ) {
         // There's a 10% chance it will be converted into a floor
         if (Math.random() > 0.9) {
-          grid[i].type = 1;
+          grid[i].type = tileTypes(level, 'path');
         }
       }
     }
@@ -237,13 +242,13 @@ export const generate = grid => {
         grid[i - c.GRID_WIDTH].coordinates.x === grid[i].coordinates.x &&
         grid[i + c.GRID_WIDTH].coordinates.x === grid[i].coordinates.x &&
         // And the one in the middle has floors above and below but isn't a floor
-        grid[i - c.GRID_WIDTH].type === 1 &&
-        grid[i + c.GRID_WIDTH].type === 1 &&
-        grid[i].type === 0
+        grid[i - c.GRID_WIDTH].type === tileTypes(level, 'path') &&
+        grid[i + c.GRID_WIDTH].type === tileTypes(level, 'path') &&
+        grid[i].type === tileTypes(level)
       ) {
         // There's a 10% chance it will be converted into a floor
         if (Math.random() > 0.9) {
-          grid[i].type = 1;
+          grid[i].type = tileTypes(level, 'path');
         }
       }
     }
