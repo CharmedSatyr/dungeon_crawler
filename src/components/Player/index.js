@@ -5,8 +5,8 @@ import * as c from '../../constants/settings';
 // http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/#?sex=female&body=darkelf2&eyes=red&nose=straight&ears=elven&legs=sara&clothes=sleeveless_maroon&mail=none&armor=chest_leather&jacket=none&hair=ponytail2_raven&shoulders=leather&bracers=cloth&hat=bandana_red&shoes=sara&=cape_black&belt=leather&bracelet=on&cape=none&weapon=spear
 import sprite from './heroine-sprite-40x40.png';
 
-const faceDirection = direction => {
-  switch (direction) {
+const faceDirection = facing => {
+  switch (facing) {
     case 'north':
       return 0;
     case 'east':
@@ -20,11 +20,11 @@ const faceDirection = direction => {
   }
 };
 
-const Player = ({ coordinates, direction }) => (
+const Player = ({ coordinates, facing }) => (
   <div
     style={{
       backgroundImage: `url('${sprite}')`,
-      backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(direction)}px`,
+      backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`,
       height: c.SPRITE_SIZE,
       overflow: 'hidden',
       width: c.SPRITE_SIZE
