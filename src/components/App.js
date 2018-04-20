@@ -4,7 +4,7 @@ import './App.css';
 
 import Game from '../containers/Game';
 
-const App = ({ decrement, increment, value }) => {
+const App = () => {
   return (
     <div className="App">
       <header className="App-header">
