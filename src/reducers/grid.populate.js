@@ -81,7 +81,7 @@ export const populate = data => {
       ) {
         count++;
         if (count === 2) {
-          data[i].player = { direction: 's', level: 1, health: 20 };
+          data[i].player = { facing: 's', level: 1, health: 20 };
 
           // Save playerCell as a variable
           playerPosition = {
