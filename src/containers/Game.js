@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as a from '../actions/movement';
+import * as a from '../actions/';
 
 import Cell from '../components/Cell/';
 import Map from '../components/Map';
@@ -67,7 +67,6 @@ class Game extends Component {
 
 const mapStateToProps = ({ grid, player }) => ({
   gridData: grid.data,
-  playerPosition: grid.playerPosition,
   player
 });
 
