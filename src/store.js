@@ -1,8 +1,13 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 import reducer from './reducers/index';
 
-export const store = createStore(reducer, applyMiddleware(thunk));
-export const getState = store.getState;
+const middlewares = [thunk];
 
-console.log('Initial state:', store.getState());
+if (process.env.NODE_ENV === `development`) {
+  middlewares.push(logger);
+}
+
+export const store = createStore(reducer, applyMiddleware(...middlewares));
+export const getState = store.getState;
