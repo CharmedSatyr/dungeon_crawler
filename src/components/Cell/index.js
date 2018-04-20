@@ -12,7 +12,7 @@ import tiles from './dungeon_tileset_40x40.png';
 const styleCell = type => {
   const dirt = '-160px -160px';
   const vines = '-120px -160px';
-  const stoneFloor = '-40px -120px';
+  // const stoneFloor = '-40px -120px';
 
   switch (true) {
     case type === 0:
@@ -25,8 +25,8 @@ const styleCell = type => {
 };
 
 const Loot = () => {
-  const chest1 = '-40px 0px';
-  const chest2 = '0px -40px';
+  // const chest1 = '-40px 0px';
+  // const chest2 = '0px -40px';
   const barrel = '0px 0px';
 
   return (
@@ -42,7 +42,7 @@ const Loot = () => {
 };
 
 const Portal = () => {
-  const openDoor = '-80px 120px';
+  // const openDoor = '-80px 120px';
   const closedDoor = '-120px -120px';
   return (
     <div
@@ -76,7 +76,7 @@ const Cell = ({ payload }) => (
     {payload.loot ? <Loot /> : null}
     {payload.portal ? <Portal /> : null}
     {payload.player ? (
-      <Player coordinates={payload.coordinates} direction={payload.player.direction} />
+      <Player coordinates={payload.coordinates} facing={payload.player.facing} />
     ) : null}
   </div>
 );
