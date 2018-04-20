@@ -13,10 +13,7 @@ export const generate = (grid, level) => {
       x = j;
       grid.push({
         coordinates: { x, y },
-        enemy: false,
-        loot: false,
-        player: false,
-        portal: false,
+        payload: false,
         type: tileTypes(level)
       });
     }

@@ -7,13 +7,17 @@ export const movement = (data, playerPosition, direction, targetPosition, target
 
   // The player is no longer at its current position
   const currentPlayerObj = data[playerPosition.index];
-  newData.splice(playerPosition.index, 1, Object.assign({}, currentPlayerObj, { player: false }));
+  newData.splice(
+    playerPosition.index,
+    1,
+    Object.assign({}, currentPlayerObj, { payload: { player: false } })
+  );
 
   // The player is at the next position
   newData.splice(
     targetPosition.index,
     1,
-    Object.assign({}, targetObj, { player: { facing: direction } })
+    Object.assign({}, targetObj, { payload: { player: { facing: direction } } })
   );
 
   return {

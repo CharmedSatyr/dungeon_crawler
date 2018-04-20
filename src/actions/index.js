@@ -46,19 +46,21 @@ export const move = direction => {
 
   const targetPosition = getTargetPosition(playerPosition, direction);
   const targetObj = data[targetPosition.index];
+  const { type } = targetObj;
+  const { enemy, loot, portal } = targetObj.payload;
 
   // Just move if the targetPosition is an empty floor
-  if (targetObj.type === tileTypes(level, 'path') && !targetObj.enemy && !targetObj.portal) {
+  if (type === tileTypes(level, 'path') && !enemy && !loot && !portal) {
     return go(direction, targetPosition, targetObj);
   }
 
   // If the targetPosition is an enemy, attack!
-  if (targetObj.type === tileTypes(level, 'path') && targetObj.enemy) {
+  if (enemy) {
     return attack(direction, targetPosition, targetObj);
   }
 
   // If the targetObj is a portal, go to the next level!
-  if (targetObj.portal) {
+  if (portal) {
     return next_level();
   }
 

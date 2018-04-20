@@ -67,28 +67,20 @@ const Portal = () => {
   );
 };
 
-// const c = (
-//   <span>
-//     {payload.coordinates.x}, {payload.coordinates.y}
-//   </span>
-// );
-
-const Cell = ({ payload }) => (
+const Cell = ({ coordinates, payload, type }) => (
   <div
     style={{
       backgroundImage: `url(${tiles})`,
-      backgroundPosition: styleCell(payload.type),
+      backgroundPosition: styleCell(type),
       boxShadow: 'inset 0 0 1px rgba(0,0,0,0.5)',
       height: c.CELL_SIDE,
       width: c.CELL_SIDE
     }}
   >
-    {payload.enemy ? <Enemy coordinates={payload.coordinates} /> : null}
+    {payload.enemy ? <Enemy coordinates={coordinates} /> : null}
     {payload.loot ? <Loot /> : null}
     {payload.portal ? <Portal /> : null}
-    {payload.player ? (
-      <Player coordinates={payload.coordinates} facing={payload.player.facing} />
-    ) : null}
+    {payload.player ? <Player coordinates={coordinates} facing={payload.player.facing} /> : null}
   </div>
 );
 

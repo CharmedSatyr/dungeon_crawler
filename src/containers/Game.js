@@ -54,7 +54,9 @@ class Game extends Component {
     const { gridData, player } = this.props;
 
     // Create an array of Cells containing data from the store
-    const cells = gridData.map((item, index) => <Cell key={index} payload={item} />);
+    const cells = gridData.map((item, index) => (
+      <Cell coordinates={item.coordinates} key={index} payload={item.payload} type={item.type} />
+    ));
 
     return (
       <div>

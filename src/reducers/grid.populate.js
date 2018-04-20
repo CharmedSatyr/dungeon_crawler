@@ -7,19 +7,19 @@ export const populate = (data, level) => {
   // Add enemies
   const addEnemies = data => {
     for (let i in data) {
+      // Enemy
+      const enemy = {
+        damage: _.random(1, 10),
+        health: _.random(20, 50)
+      };
+
       // 2.5% chance of a cell being occupied by an enemy
       if (
-        !data[i].enemy &&
-        !data[i].loot &&
-        !data[i].player &&
-        !data[i].portal &&
+        data[i].payload === false &&
         data[i].type === tileTypes(level, 'path') &&
         Math.random() > 0.975
       ) {
-        data[i].enemy = {
-          damage: _.random(1, 10),
-          health: _.random(20, 50)
-        };
+        data[i].payload = { enemy };
       }
     }
     return data;
@@ -29,18 +29,13 @@ export const populate = (data, level) => {
   // Add loot
   const addLoot = data => {
     for (let i in data) {
+      // Loot
+      const loot = {
+        type: 'health'
+      };
       // 1% chance of a cell being occupied by loot
-      if (
-        !data[i].enemy &&
-        !data[i].loot &&
-        !data[i].player &&
-        !data[i].portal &&
-        data[i].type === tileTypes(level, 'path') &&
-        Math.random() > 0.99
-      ) {
-        data[i].loot = {
-          type: 'health'
-        };
+      if (!data[i].payload && data[i].type === tileTypes(level, 'path') && Math.random() > 0.99) {
+        data[i].payload = { loot };
       }
     }
     return data;
@@ -50,17 +45,15 @@ export const populate = (data, level) => {
   // Add portal just west of the southeast corner
   const addPortal = (data, count = 0) => {
     for (let i = c.TOTAL_CELLS - 1; i >= 0; i--) {
-      if (
-        !data[i].enemy &&
-        !data[i].loot &&
-        !data[i].player &&
-        !data[i].portal &&
-        data[i].type === tileTypes(level, 'path') &&
-        count <= 2
-      ) {
+      // portal
+      const portal = {
+        open: false,
+        closed: true
+      };
+      if (!data[i].payload && data[i].type === tileTypes(level, 'path') && count <= 2) {
         count++;
         if (count === 2) {
-          data[i].portal = true;
+          data[i].payload = { portal };
         }
       }
     }
@@ -72,19 +65,18 @@ export const populate = (data, level) => {
   let playerPosition;
   const addPlayer = (data, count = 0) => {
     for (let i = 0; i <= c.TOTAL_CELLS - 1; i++) {
-      if (
-        !data[i].enemy &&
-        !data[i].loot &&
-        !data[i].player &&
-        !data[i].portal &&
-        data[i].type === tileTypes(level, 'path') &&
-        count <= 2
-      ) {
+      // Player
+      const player = {
+        facing: 's',
+        level: 1,
+        health: 20
+      };
+      if (!data[i].payload && data[i].type === tileTypes(level, 'path') && count <= 2) {
         count++;
         if (count === 2) {
-          data[i].player = { facing: 's', level: 1, health: 20 };
+          data[i].payload = { player };
 
-          // Save playerCell as a variable
+          // Save playerPosition as a variable
           playerPosition = {
             coordinates: { x: data[i].coordinates.x, y: data[i].coordinates.y },
             index: i
