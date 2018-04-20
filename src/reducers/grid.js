@@ -1,8 +1,9 @@
-import { generate } from './grid.generate';
-import { populate } from './grid.populate';
-import { movement } from './grid.movement';
-import { facing } from './grid.facing';
 import * as t from '../constants/action-types';
+import { facing } from './grid.facing';
+import { generate } from './grid.generate';
+import { movement } from './grid.movement';
+import { open } from './grid.open';
+import { populate } from './grid.populate';
 
 const initialState = {
   data: [],
@@ -16,6 +17,15 @@ const initialState = {
 // Grid reducers
 const grid = (state = initialState, { type, direction, targetPosition, targetObj }) => {
   switch (type) {
+    case t.ATTACK:
+      // Temporary
+      return Object.assign({}, state, {
+        data: facing(state.data, state.playerPosition, direction)
+      });
+    case t.FACING:
+      return Object.assign({}, state, {
+        data: facing(state.data, state.playerPosition, direction)
+      });
     case t.MOVE:
       const updated = movement(
         state.data,
@@ -28,10 +38,6 @@ const grid = (state = initialState, { type, direction, targetPosition, targetObj
         data: updated.data,
         playerPosition: updated.playerPosition
       });
-    case t.FACING:
-      return Object.assign({}, state, {
-        data: facing(state.data, state.playerPosition, direction)
-      });
     case t.NEXT_LEVEL:
       // New levels should be created on an empty data array
       let level = populate(generate([], state.level + 1), state.level + 1);
@@ -41,6 +47,8 @@ const grid = (state = initialState, { type, direction, targetPosition, targetObj
         level: state.level + 1,
         playerPosition: level.playerPosition
       });
+    case t.OPEN:
+      return Object.assign({}, state, { data: open(state.data, targetPosition, targetObj) });
     default:
       return state;
   }

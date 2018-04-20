@@ -52,14 +52,14 @@ const Loot = () => {
   );
 };
 
-const Portal = () => {
-  // const openDoor = '-80px 120px';
+const Portal = ({ open }) => {
+  const openDoor = '-80px -120px';
   const closedDoor = '-120px -120px';
   return (
     <div
       style={{
         backgroundImage: `url(${tiles})`,
-        backgroundPosition: closedDoor,
+        backgroundPosition: open ? openDoor : closedDoor,
         height: c.CELL_SIDE,
         width: c.CELL_SIDE
       }}
@@ -79,7 +79,7 @@ const Cell = ({ coordinates, payload, type }) => (
   >
     {payload.enemy ? <Enemy coordinates={coordinates} /> : null}
     {payload.loot ? <Loot /> : null}
-    {payload.portal ? <Portal /> : null}
+    {payload.portal ? <Portal open={payload.portal.open} /> : null}
     {payload.player ? <Player coordinates={coordinates} facing={payload.player.facing} /> : null}
   </div>
 );

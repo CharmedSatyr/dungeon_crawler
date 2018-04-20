@@ -30,9 +30,8 @@ export const populate = (data, level) => {
   const addLoot = data => {
     for (let i in data) {
       // Loot
-      const loot = {
-        type: 'health'
-      };
+      const loot = { type: 'health' };
+
       // 1% chance of a cell being occupied by loot
       if (!data[i].payload && data[i].type === tileTypes(level, 'path') && Math.random() > 0.99) {
         data[i].payload = { loot };
@@ -46,10 +45,8 @@ export const populate = (data, level) => {
   const addPortal = (data, count = 0) => {
     for (let i = c.TOTAL_CELLS - 1; i >= 0; i--) {
       // portal
-      const portal = {
-        open: false,
-        closed: true
-      };
+      const portal = { open: false };
+
       if (!data[i].payload && data[i].type === tileTypes(level, 'path') && count <= 2) {
         count++;
         if (count === 2) {
