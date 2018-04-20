@@ -1,7 +1,7 @@
 import { GRID_WIDTH } from '../constants/settings';
 
 // Establish the player's potential next position given current position and direction
-export const getNextPlayerPosition = (playerPosition, direction) => {
+export const getTargetPosition = (playerPosition, direction) => {
   switch (direction) {
     case 'north':
       return {

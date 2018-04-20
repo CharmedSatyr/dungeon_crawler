@@ -14,15 +14,15 @@ const initialState = {
 };
 
 // Grid reducers
-const grid = (state = initialState, { type, direction, nextPlayerPosition, nextPlayerObj }) => {
+const grid = (state = initialState, { type, direction, targetPosition, targetObj }) => {
   switch (type) {
     case t.MOVE:
       const updated = movement(
         state.data,
         state.playerPosition,
         direction,
-        nextPlayerPosition,
-        nextPlayerObj
+        targetPosition,
+        targetObj
       );
       return Object.assign({}, state, {
         data: updated.data,

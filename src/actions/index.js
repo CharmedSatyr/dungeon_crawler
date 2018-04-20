@@ -2,14 +2,14 @@
 import * as t from '../constants/action-types';
 import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
-import { getNextPlayerPosition } from './index.helpers';
+import { getTargetPosition } from './index.helpers';
 
-const go = (direction, nextPlayerPosition, nextPlayerObj) => {
+const go = (direction, targetPosition, targetObj) => {
   const action = {
     type: t.MOVE,
     direction,
-    nextPlayerPosition,
-    nextPlayerObj
+    targetPosition,
+    targetObj
   };
   return action;
 };
@@ -29,26 +29,39 @@ export const next_level = () => {
   return action;
 };
 
+const attack = (direction, targetPosition, targetObj) => {
+  const action = {
+    type: t.ATTACK,
+    direction,
+    targetPosition,
+    targetObj
+  };
+  return action;
+};
+
 // A thunk
 export const move = direction => {
   // Get info about the cell the player is advancing toward
   const { data, playerPosition, level } = getState().grid;
 
-  const nextPlayerPosition = getNextPlayerPosition(playerPosition, direction);
-  const nextPlayerObj = data[nextPlayerPosition.index];
+  const targetPosition = getTargetPosition(playerPosition, direction);
+  const targetObj = data[targetPosition.index];
 
-  // Just move if the nextPlayerPosition is an empty floor
-  if (
-    nextPlayerObj.type === tileTypes(level, 'path') &&
-    !nextPlayerObj.enemy &&
-    !nextPlayerObj.portal
-  ) {
-    return go(direction, nextPlayerPosition, nextPlayerObj);
+  // Just move if the targetPosition is an empty floor
+  if (targetObj.type === tileTypes(level, 'path') && !targetObj.enemy && !targetObj.portal) {
+    return go(direction, targetPosition, targetObj);
   }
 
-  if (nextPlayerObj.portal) {
+  // If the targetPosition is an enemy, attack!
+  if (targetObj.type === tileTypes(level, 'path') && targetObj.enemy) {
+    return attack(direction, targetPosition, targetObj);
+  }
+
+  // If the targetObj is a portal, go to the next level!
+  if (targetObj.portal) {
     return next_level();
   }
-  // If no conditions are met, don't do anything
+
+  // If no conditions are met, just face in the right direction
   return facing(direction);
 };

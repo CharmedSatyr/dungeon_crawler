@@ -1,5 +1,5 @@
 // Validates basic movement actions
-export const movement = (data, playerPosition, direction, nextPlayerPosition, nextPlayerObj) => {
+export const movement = (data, playerPosition, direction, targetPosition, targetObj) => {
   // Avoiding mapping through all the cells in this function based on a hypothesis about performance
 
   // This way of deep copying the data array works so long as there are no methods stored in data!
@@ -11,16 +11,16 @@ export const movement = (data, playerPosition, direction, nextPlayerPosition, ne
 
   // The player is at the next position
   newData.splice(
-    nextPlayerPosition.index,
+    targetPosition.index,
     1,
-    Object.assign({}, nextPlayerObj, { player: { facing: direction } })
+    Object.assign({}, targetObj, { player: { facing: direction } })
   );
 
   return {
     data: newData,
     playerPosition: {
-      coordinates: nextPlayerPosition.coordinates,
-      index: nextPlayerPosition.index
+      coordinates: targetPosition.coordinates,
+      index: targetPosition.index
     }
   };
 };
