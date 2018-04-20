@@ -7,7 +7,7 @@ export const facing = (data, playerPosition, direction) => {
   newData.splice(
     playerPosition.index,
     1,
-    Object.assign({}, playerObj, { player: { facing: direction } })
+    Object.assign({}, playerObj, { payload: { player: { facing: direction } } })
   );
 
   return newData;
