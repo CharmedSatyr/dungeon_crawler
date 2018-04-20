@@ -1,3 +1,3 @@
 export const MOVE = 'MOVE';
-export const NEW_LEVEL = 'NEW_LEVEL';
+export const NEXT_LEVEL = 'NEXT_LEVEL';
 export const FACING = 'FACING';
