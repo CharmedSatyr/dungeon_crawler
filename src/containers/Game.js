@@ -44,7 +44,7 @@ class Game extends Component {
     }
   }
   componentWillMount() {
-    this.props.new_level();
+    this.props.next_level();
     window.addEventListener('keydown', e => this.handleKeyPress(e));
   }
   componentWillUnmount() {
@@ -72,7 +72,7 @@ const mapStateToProps = ({ grid, player }) => ({
 
 const mapDispatchToProps = dispatch => ({
   move: direction => dispatch(a.move(direction)),
-  new_level: () => dispatch(a.new_level())
+  next_level: () => dispatch(a.next_level())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
