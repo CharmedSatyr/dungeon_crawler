@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 
 const Message = ({ message }) => <span>{message}</span>;
 
+Message.propTypes = {
+  message: PropTypes.string.isRequired
+};
+
 const Messages = ({ messages }) => (
   <div
     style={{
@@ -19,10 +23,6 @@ const Messages = ({ messages }) => (
     {messages.map((m, i) => <Message key={i} message={m} />)}
   </div>
 );
-
-Message.propTypes = {
-  message: PropTypes.string.isRequired
-};
 
 Messages.propTypes = {
   messages: PropTypes.array.isRequired
