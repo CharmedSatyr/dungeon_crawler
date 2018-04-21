@@ -10,15 +10,24 @@ import tiles from './dungeon_tileset_40x40.png';
 
 // Set appropriate background tile based on Cell type
 const styleCell = type => {
-  // 0: dirt path
-  // 1: stone path
-  // 2: vines
-  // 3: rock1
+  /*** Passable ***/
+  // Level 1
   const dirtPath = '-160px -160px';
-  const vines = '-120px -160px';
+  // Level 2
   const stonePath = '-40px -120px';
+
+  /*** Impassable ***/
+  // Level 1
+  const vines = '-120px -160px';
+  // const thick = '-80px -240px';
+
+  // Level 2
   const rock1 = '-160px 0px';
+  // const peeper1 = '-200px 0px';
+
+  // Level 3
   const lava = '-240px -40px';
+
   switch (type) {
     case 'dirtPath':
       return dirtPath;
@@ -38,13 +47,14 @@ const styleCell = type => {
 const Loot = () => {
   // const chest1 = '-40px 0px';
   // const chest2 = '0px -40px';
-  const barrel = '0px 0px';
+  // const emptyBarrel = '0px 0px';
+  const waterBarrel = '-120px -240px';
 
   return (
     <div
       style={{
         backgroundImage: `url(${tiles})`,
-        backgroundPosition: barrel,
+        backgroundPosition: waterBarrel,
         height: 40,
         width: 40
       }}
@@ -77,7 +87,9 @@ const Cell = ({ coordinates, payload, type }) => (
       width: c.CELL_SIDE
     }}
   >
-    {payload.enemy ? <Enemy coordinates={coordinates} /> : null}
+    {payload.enemy ? (
+      <Enemy coordinates={coordinates} direction={payload.enemy.direction} stats={payload.enemy} />
+    ) : null}
     {payload.loot ? <Loot /> : null}
     {payload.portal ? <Portal open={payload.portal.open} /> : null}
     {payload.player ? <Player coordinates={coordinates} facing={payload.player.facing} /> : null}
