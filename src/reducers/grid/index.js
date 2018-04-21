@@ -1,9 +1,9 @@
-import * as t from '../constants/action-types';
-import { facing } from './grid.facing';
-import { generate } from './grid.generate';
-import { movement } from './grid.movement';
-import { open } from './grid.open';
-import { populate } from './grid.populate';
+import * as t from '../../constants/action-types';
+import { facing } from './facing';
+import { generate } from './generate';
+import { movement } from './movement';
+import { open } from './open';
+import { populate } from './populate';
 
 const initialState = {
   data: [],

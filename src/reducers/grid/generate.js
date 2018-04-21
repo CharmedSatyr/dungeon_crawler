@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import * as c from '../constants/settings';
-import tileTypes from '../constants/tile-types';
+import * as c from '../../constants/settings';
+import tileTypes from '../../constants/tile-types';
 
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array

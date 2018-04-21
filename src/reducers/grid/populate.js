@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import * as c from '../constants/settings';
-import tileTypes from '../constants/tile-types';
+import * as c from '../../constants/settings';
+import tileTypes from '../../constants/tile-types';
 
 // Populate the data
 export const populate = (data, level) => {

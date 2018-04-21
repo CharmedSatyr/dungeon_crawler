@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import grid from './grid';
+import grid from './grid/';
 import player from './player';
 import messages from './messages';
 
