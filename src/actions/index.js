@@ -3,13 +3,15 @@ import * as t from '../constants/action-types';
 import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
 import { getTargetPosition } from './index.helpers';
+import _ from 'lodash';
 
-const attack = (direction, targetPosition, targetObj) => {
+const attack = (direction, targetPosition, targetObj, message) => {
   const action = {
     type: t.ATTACK,
     direction,
     targetPosition,
-    targetObj
+    targetObj,
+    message
   };
   return action;
 };
@@ -61,14 +63,26 @@ export const move = direction => {
   const { type } = targetObj;
   const { enemy, loot, portal } = targetObj.payload;
 
-  // Just move if the targetPosition is an empty floor
-  if (type === tileTypes(level, 'path') && !enemy && !loot && !portal) {
+  // Just move if the targetPosition is an empty floor or dead enemy
+  if (
+    (type === tileTypes(level, 'path') && !enemy && !loot && !portal) ||
+    (enemy && enemy.health <= 0)
+  ) {
     return go(direction, targetPosition, targetObj);
   }
 
   // If the targetPosition is an enemy, attack!
-  if (enemy) {
-    return attack(direction, targetPosition, targetObj);
+  if (enemy && enemy.health > 0) {
+    const { weapon } = getState().player;
+    let damage = _.random(weapon.min_damage, weapon.max_damage);
+    enemy.health -= damage;
+    const addendum =
+      enemy.health > 0
+        ? "Your hapless enemy's health drops to " + enemy.health + '.'
+        : 'The enemy is slain!';
+
+    const message = 'You swing mightily and do ' + damage + ' damage. ' + addendum;
+    return attack(direction, targetPosition, targetObj, message);
   }
 
   // If the target is a closed portal, open the door

@@ -4,6 +4,7 @@ import * as a from '../actions/';
 
 import Cell from '../components/Cell/';
 import Map from '../components/Map';
+import Messages from '../components/Messages';
 import PlayerPanel from '../components/PlayerPanel';
 
 class Game extends Component {
@@ -51,7 +52,7 @@ class Game extends Component {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
   }
   render() {
-    const { gridData, player } = this.props;
+    const { gridData, player, messages } = this.props;
 
     // Create an array of Cells containing data from the store
     const cells = gridData.map((item, index) => (
@@ -61,15 +62,17 @@ class Game extends Component {
     return (
       <div>
         <PlayerPanel stats={player} />
+        <Messages messages={messages} />
         <Map cells={cells} />
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ grid, player }) => ({
+const mapStateToProps = ({ grid, player, messages }) => ({
   gridData: grid.data,
-  player
+  player,
+  messages
 });
 
 const mapDispatchToProps = dispatch => ({
