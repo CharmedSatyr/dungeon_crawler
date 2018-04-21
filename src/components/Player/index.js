@@ -27,6 +27,7 @@ const Player = ({ coordinates, facing }) => (
       backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`,
       height: c.SPRITE_SIZE,
       overflow: 'hidden',
+      position: 'absolute',
       width: c.SPRITE_SIZE
     }}
   />
