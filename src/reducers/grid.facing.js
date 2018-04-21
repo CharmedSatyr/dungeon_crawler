@@ -4,11 +4,10 @@ export const facing = (data, playerPosition, direction) => {
   // Essentially just splice a single new value (direction) into the current player object
   let newData = JSON.parse(JSON.stringify(data));
   const playerObj = data[playerPosition.index];
-  newData.splice(
-    playerPosition.index,
-    1,
-    Object.assign({}, playerObj, { payload: { player: { facing: direction } } })
-  );
+  // Don't overwrite other payloads when updating the object
+  const updateObj = Object.assign({}, playerObj);
+  updateObj.payload.player.facing = direction;
+  newData.splice(playerPosition.index, 1, updateObj);
 
   return newData;
 };

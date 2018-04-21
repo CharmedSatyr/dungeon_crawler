@@ -6,19 +6,19 @@ export const movement = (data, playerPosition, direction, targetPosition, target
   let newData = JSON.parse(JSON.stringify(data));
 
   // The player is no longer at its current position
+  // Don't overwrite other payloads when updating the object
   const currentPlayerObj = data[playerPosition.index];
-  newData.splice(
-    playerPosition.index,
-    1,
-    Object.assign({}, currentPlayerObj, { payload: { player: false } })
-  );
+  const formerObj = Object.assign({}, currentPlayerObj);
+  formerObj.payload.player = false;
+  newData.splice(playerPosition.index, 1, formerObj);
 
   // The player is at the next position
-  newData.splice(
-    targetPosition.index,
-    1,
-    Object.assign({}, targetObj, { payload: { player: { facing: direction } } })
-  );
+  // Don't overwrite other payloads when updating the object
+  const newObj = Object.assign({}, targetObj);
+  newObj.payload
+    ? (newObj.payload.player = { facing: direction })
+    : (newObj.payload = { player: { facing: direction } });
+  newData.splice(targetPosition.index, 1, newObj);
 
   return {
     data: newData,
