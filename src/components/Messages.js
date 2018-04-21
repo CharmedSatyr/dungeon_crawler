@@ -25,7 +25,7 @@ const Messages = ({ messages }) => (
 );
 
 Messages.propTypes = {
-  messages: PropTypes.array.isRequired
+  messages: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default Messages;
