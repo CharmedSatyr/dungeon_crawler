@@ -1,5 +1,7 @@
+export const ADD_EXP = 'ADD_EXP';
 export const ATTACK = 'ATTACK';
 export const FACING = 'FACING';
+export const MESSAGE = 'MESSAGE';
 export const MOVE = 'MOVE';
 export const NEXT_LEVEL = 'NEXT_LEVEL';
 export const OPEN = 'OPEN';
