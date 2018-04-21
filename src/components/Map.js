@@ -1,5 +1,6 @@
 import React from 'react';
 import * as c from '../constants/settings';
+import PropTypes from 'prop-types';
 
 // Map width must be Cell width * GRID_WIDTH for columns to line up
 const Map = ({ cells }) => (
@@ -7,5 +8,9 @@ const Map = ({ cells }) => (
     {cells}
   </div>
 );
+
+Map.propTypes = {
+  cells: PropTypes.array.isRequired
+};
 
 export default Map;
