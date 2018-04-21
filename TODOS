@@ -1,8 +1,7 @@
-improve Payload idea instead of listing each possible payload type as an object key
+Add attack to enemies
+Add Fog
+Improve styling
 
-Add health and attack to player
-Add health and attack to enemies
-Split movement code into grid.helpers.js
-Add attack functions that sprout off of move
++ propTypes
 
-separate direction facing from movement so you can face any direction you point to even if you can't move there
+enough testing to establish we've completed the User Stories
