@@ -1,5 +1,6 @@
 import React from 'react';
 import * as c from '../../constants/settings';
+import PropTypes from 'prop-types';
 
 import Enemy from '../Enemy';
 import Player from '../Player';
@@ -9,7 +10,7 @@ import './styles.css';
 import tiles from './dungeon_tileset_40x40.png';
 
 // Set appropriate background tile based on Cell type
-const styleCell = type => {
+const cellBG = type => {
   /*** Passable ***/
   // Level 1
   const dirtPath = '-160px -160px';
@@ -44,22 +45,34 @@ const styleCell = type => {
   }
 };
 
-const Loot = () => {
-  // const chest1 = '-40px 0px';
+const Loot = ({ variety }) => {
+  const chest1 = '-40px 0px';
   // const chest2 = '0px -40px';
   // const emptyBarrel = '0px 0px';
   const waterBarrel = '-120px -240px';
 
+  const setVariety = variety => {
+    switch (variety) {
+      case 'waterBarrel':
+        return waterBarrel;
+      default:
+        return chest1;
+    }
+  };
   return (
     <div
       style={{
         backgroundImage: `url(${tiles})`,
-        backgroundPosition: waterBarrel,
-        height: 40,
-        width: 40
+        backgroundPosition: setVariety(variety),
+        height: c.CELL_SIDE,
+        width: c.CELL_SIDE
       }}
     />
   );
+};
+
+Loot.propTypes = {
+  variety: PropTypes.string
 };
 
 const Portal = ({ open }) => {
@@ -77,11 +90,15 @@ const Portal = ({ open }) => {
   );
 };
 
+Portal.propTypes = {
+  open: PropTypes.bool
+};
+
 const Cell = ({ coordinates, payload, type }) => (
   <div
     style={{
       backgroundImage: `url(${tiles})`,
-      backgroundPosition: styleCell(type),
+      backgroundPosition: cellBG(type),
       boxShadow: 'inset 0 0 1px rgba(0,0,0,0.5)',
       height: c.CELL_SIDE,
       width: c.CELL_SIDE
@@ -95,5 +112,11 @@ const Cell = ({ coordinates, payload, type }) => (
     {payload.player ? <Player coordinates={coordinates} facing={payload.player.facing} /> : null}
   </div>
 );
+
+Cell.propTypes = {
+  coordinates: PropTypes.object.isRequired,
+  payload: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired
+};
 
 export default Cell;
