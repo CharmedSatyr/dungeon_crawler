@@ -13,7 +13,7 @@ export const generate = (grid, level) => {
       x = j;
       grid.push({
         coordinates: { x, y },
-        payload: false,
+        payload: {},
         type: tileTypes(level)
       });
     }

@@ -31,7 +31,7 @@ export const populate = (data, level) => {
 
       // 2.5% chance of a cell being occupied by an enemy
       if (
-        data[i].payload === false &&
+        Object.keys(data[i].payload).length === 0 &&
         data[i].type === tileTypes(level, 'path') &&
         Math.random() > 0.975
       ) {
@@ -49,7 +49,11 @@ export const populate = (data, level) => {
       const loot = { type: 'health' };
 
       // 1% chance of a cell being occupied by loot
-      if (!data[i].payload && data[i].type === tileTypes(level, 'path') && Math.random() > 0.99) {
+      if (
+        Object.keys(data[i].payload).length === 0 &&
+        data[i].type === tileTypes(level, 'path') &&
+        Math.random() > 0.99
+      ) {
         data[i].payload = { loot };
       }
     }
@@ -63,7 +67,11 @@ export const populate = (data, level) => {
       // portal
       const portal = { open: false };
 
-      if (!data[i].payload && data[i].type === tileTypes(level, 'path') && count <= 2) {
+      if (
+        Object.keys(data[i].payload).length === 0 &&
+        data[i].type === tileTypes(level, 'path') &&
+        count <= 2
+      ) {
         count++;
         if (count === 2) {
           data[i].payload = { portal };
@@ -84,7 +92,11 @@ export const populate = (data, level) => {
         level: 1,
         health: 20
       };
-      if (!data[i].payload && data[i].type === tileTypes(level, 'path') && count <= 2) {
+      if (
+        Object.keys(data[i].payload).length === 0 &&
+        data[i].type === tileTypes(level, 'path') &&
+        count <= 2
+      ) {
         count++;
         if (count === 2) {
           data[i].payload = { player };
