@@ -20,13 +20,20 @@ const faceDirection = direction => {
   }
 };
 
-const Enemy = ({ coordinates, direction }) => (
+const bgp = (health, direction) => {
+  if (health > 0) {
+    return `0px ${c.SPRITE_SIZE * faceDirection(direction)}px`;
+  }
+  return `${c.SPRITE_SIZE * -5}px ${c.SPRITE_SIZE * 1}px`;
+};
+const Enemy = ({ coordinates, direction, stats }) => (
   <div
     style={{
       backgroundImage: `url('${sprite}')`,
-      backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(direction)}px`,
+      backgroundPosition: bgp(stats.health, direction),
       height: c.SPRITE_SIZE,
       marginTop: -5,
+      position: 'absolute',
       transform: 'scale(1.2,1.2)', // Enemies bigger than hero
       width: c.SPRITE_SIZE
     }}
