@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as a from '../actions/';
+import PropTypes from 'prop-types';
 
 import Cell from '../components/Cell/';
 import Map from '../components/Map';
@@ -68,6 +69,14 @@ class Game extends Component {
     );
   }
 }
+
+Game.propTypes = {
+  gridData: PropTypes.array.isRequired,
+  player: PropTypes.object.isRequired,
+  messages: PropTypes.array.isRequired,
+  move: PropTypes.func.isRequired,
+  next_level: PropTypes.func.isRequired
+};
 
 const mapStateToProps = ({ grid, player, messages }) => ({
   gridData: grid.data,
