@@ -1,5 +1,6 @@
 import React from 'react';
 import * as c from '../../constants/settings';
+import PropTypes from 'prop-types';
 
 // Player Sprite URL:
 // http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/#?sex=female&body=darkelf2&eyes=red&nose=straight&ears=elven&legs=sara&clothes=sleeveless_maroon&mail=none&armor=chest_leather&jacket=none&hair=ponytail2_raven&shoulders=leather&bracers=cloth&hat=bandana_red&shoes=sara&=cape_black&belt=leather&bracelet=on&cape=none&weapon=spear
@@ -32,5 +33,10 @@ const Player = ({ coordinates, facing }) => (
     }}
   />
 );
+
+Player.propTypes = {
+  coordinates: PropTypes.object.isRequired,
+  facing: PropTypes.string
+};
 
 export default Player;
