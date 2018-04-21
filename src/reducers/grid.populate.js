@@ -8,8 +8,24 @@ export const populate = (data, level) => {
   const addEnemies = data => {
     for (let i in data) {
       // Enemy
+      const direction = () => {
+        const n = Math.random();
+        switch (true) {
+          case n < 0.25:
+            return 'north';
+          case n < 0.5:
+            return 'east';
+          case n < 0.75:
+            return 'south';
+          case n <= 1.0:
+            return 'west';
+          default:
+            return 'south';
+        }
+      };
       const enemy = {
         damage: _.random(1, 10),
+        direction: direction(),
         health: _.random(20, 50)
       };
 
@@ -64,7 +80,7 @@ export const populate = (data, level) => {
     for (let i = 0; i <= c.TOTAL_CELLS - 1; i++) {
       // Player
       const player = {
-        facing: 's',
+        facing: 'south',
         level: 1,
         health: 20
       };
