@@ -1,10 +1,13 @@
-import _ from 'lodash';
 import * as t from '../constants/action-types';
 
 const initialState = {
   level: 1,
   health: 20,
-  damage: _.random(1, 20)
+  weapon: {
+    name: 'fists',
+    min_damage: 1,
+    max_damage: 3
+  }
 };
 
 // Player reducers
