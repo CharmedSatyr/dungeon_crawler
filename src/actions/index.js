@@ -2,16 +2,24 @@
 import * as t from '../constants/action-types';
 import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
+import { batchActions } from 'redux-batched-actions';
 import { getTargetPosition } from './index.helpers';
 import _ from 'lodash';
 
-const attack = (direction, targetPosition, targetObj, message) => {
+const attack = (direction, targetPosition, targetObj) => {
   const action = {
     type: t.ATTACK,
     direction,
     targetPosition,
-    targetObj,
-    message
+    targetObj
+  };
+  return action;
+};
+
+const experience = amount => {
+  const action = {
+    type: t.ADD_EXP,
+    amount
   };
   return action;
 };
@@ -34,6 +42,13 @@ const go = (direction, targetPosition, targetObj) => {
   return action;
 };
 
+const message = message => {
+  const action = {
+    type: t.MESSAGE,
+    message
+  };
+  return action;
+};
 // Open doors
 const open = (direction, targetPosition, targetObj) => {
   const action = {
@@ -81,18 +96,28 @@ export const move = direction => {
         ? "Your hapless enemy's health drops to " + enemy.health + '.'
         : 'The enemy is slain!';
 
-    const message = 'You swing mightily and do ' + damage + ' damage. ' + addendum;
-    return attack(direction, targetPosition, targetObj, message);
+    let msg = 'You swing mightily and do ' + damage + ' damage. ' + addendum;
+    if (enemy.health <= 0) {
+      return batchActions([
+        attack(direction, targetPosition, targetObj),
+        message(msg),
+        experience(10)
+      ]);
+    } else {
+      return batchActions([attack(direction, targetPosition, targetObj), message(msg)]);
+    }
   }
 
   // If the target is a closed portal, open the door
   if (portal && !portal.open) {
-    return open(direction, targetPosition, targetObj);
+    const msg = 'The door creaks open...';
+    return batchActions([open(direction, targetPosition, targetObj), message(msg)]);
   }
 
   // If the targetObj is an open portal, go to the next level!
   if (portal && portal.open) {
-    return next_level();
+    const msg = 'You fearlessly descend into darkness.';
+    return batchActions([next_level(), message(msg)]);
   }
 
   // If no conditions are met, just face in the right direction
