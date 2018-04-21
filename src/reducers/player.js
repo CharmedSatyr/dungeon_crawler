@@ -1,8 +1,10 @@
 import * as t from '../constants/action-types';
 
 const initialState = {
-  level: 1,
+  experience: 0,
+  gold: 0,
   health: 20,
+  level: 1,
   weapon: {
     name: 'fists',
     min_damage: 1,

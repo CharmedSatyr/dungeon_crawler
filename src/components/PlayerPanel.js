@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const PlayerPanel = ({ stats }) => {
   return (
@@ -20,12 +21,18 @@ const PlayerPanel = ({ stats }) => {
         }}
       >
         <p>Level: {stats.level}</p>
+        <p>Experience: {stats.experience}</p>
         <p>Health: {stats.health} </p>
         <p>Weapon: {stats.weapon.name}</p>
         <p>Damage: {`${stats.weapon.min_damage} - ${stats.weapon.max_damage}`}</p>
+        <p>Gold: {stats.gold}</p>
       </div>
     </div>
   );
+};
+
+PlayerPanel.propTypes = {
+  stats: PropTypes.object.isRequired
 };
 
 export default PlayerPanel;
