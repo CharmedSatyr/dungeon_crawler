@@ -18,6 +18,9 @@ const player = (state = initialState, action) => {
     case t.ATTACK:
       console.log('ATTACK!');
       return state;
+    case t.ADD_EXP:
+      console.log('ADD_EXP!');
+      return Object.assign({}, state, { experience: state.experience + action.amount });
     default:
       return state;
   }
