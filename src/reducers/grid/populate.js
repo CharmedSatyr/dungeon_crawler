@@ -24,7 +24,10 @@ export const populate = (data, level) => {
         }
       };
       const enemy = {
-        damage: _.random(1, 10),
+        damage: {
+          min: 1,
+          max: 10
+        },
         direction: direction(),
         health: _.random(20, 50)
       };

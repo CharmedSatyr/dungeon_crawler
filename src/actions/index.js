@@ -1,4 +1,3 @@
-// Player movement action creators
 import * as t from '../constants/action-types';
 import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
@@ -15,9 +14,10 @@ const attack = (direction, targetPosition, targetObj) => {
   };
   return action;
 };
-export const enemy_attack = () => {
+export const enemy_attack = damage => {
   const action = {
-    type: t.ENEMY_ATTACK
+    type: t.ENEMY_ATTACK,
+    damage
   };
   return action;
 };
@@ -56,24 +56,26 @@ export const hostile_enemies = () => {
   const indexNorth = getTargetPosition(playerPosition, 'north').index;
   const indexWest = getTargetPosition(playerPosition, 'west').index;
 
-  // Current structure does not permit simultaneous attacks from different directions
-  if (data[indexEast].payload.enemy && data[indexEast].payload.enemy.health > 0) {
-    return enemy_attack();
-  }
+  const enemyE = data[indexEast].payload.enemy;
+  const enemyS = data[indexSouth].payload.enemy;
+  const enemyN = data[indexNorth].payload.enemy;
+  const enemyW = data[indexWest].payload.enemy;
 
-  if (data[indexSouth].payload.enemy && data[indexSouth].payload.enemy.health > 0) {
-    return enemy_attack();
-  }
+  // If there are no enemies, a `null` action prevents errors, else checkAttack pushes here
+  const batched = [{ type: null }];
 
-  if (data[indexNorth].payload.enemy && data[indexNorth].payload.enemy.health > 0) {
-    return enemy_attack();
-  }
+  // Check for an enemy, calculate attack damage, and post a message
+  const checkAttack = enemy => {
+    if (enemy && enemy.health > 0) {
+      const d = _.random(enemy.damage.min, enemy.damage.max);
+      batched.push(message('An enemy assails you and does ' + d + ' damage!'), enemy_attack(d));
+    }
+  };
 
-  if (data[indexWest].payload.enemy && data[indexWest].payload.enemy.health > 0) {
-    return enemy_attack();
-  }
+  // Check for attack in all directions
+  [enemyE, enemyS, enemyN, enemyW].map(e => checkAttack(e));
 
-  return { type: null };
+  return batchActions(batched);
 };
 
 const message = message => {
