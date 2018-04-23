@@ -17,6 +17,8 @@ const player = (state = initialState, action) => {
   switch (action.type) {
     case t.ADD_EXP:
       return Object.assign({}, state, { experience: state.experience + action.amount });
+    case t.LEVEL_UP:
+      return Object.assign({}, state, { level: state.level + 1 });
     case t.TAKE_DAMAGE:
       return Object.assign({}, state, { health: state.health - action.damage });
     default:

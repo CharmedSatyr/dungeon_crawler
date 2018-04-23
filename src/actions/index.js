@@ -96,6 +96,57 @@ export const hostile_enemies = () => {
   return batchActions(batched);
 };
 
+// Check if the player should level up
+// Thunk
+const level_check = exp => {
+  /***
+     |-------+------------|
+     | LEVEL | EXPERIENCE |
+     |=======+============|
+     | 1     | 0          |
+     | 2     | 30         |
+     | 3     | 70         |
+     | 4     | 120        |
+     | 5     | 180        |
+     |-------+------------|
+  ***/
+
+  const { experience, level } = getState().player;
+  const newExp = exp + experience;
+  const batched = [];
+  const nextLevel = level + 1;
+  const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
+  const levelUpTime = newExp => {
+    switch (true) {
+      case newExp >= 30 && level === 1:
+        batched.push(message(msg));
+        return true;
+      case newExp >= 70 && level === 2:
+        batched.push(message(msg));
+        return true;
+      case newExp >= 120 && level === 3:
+        batched.push(message(msg));
+        return true;
+      case newExp >= 180 && level === 4:
+        batched.push(message(msg));
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const result = levelUpTime(newExp) ? level_up() : { type: null };
+  batched.push(result);
+  return batchActions(batched);
+};
+
+const level_up = () => {
+  const action = {
+    type: t.LEVEL_UP
+  };
+  return action;
+};
+
 const message = message => {
   const action = {
     type: t.MESSAGE,
@@ -116,6 +167,7 @@ const open = (direction, targetPosition, targetObj) => {
 };
 
 // Exported because it's triggered on componentWillMount
+// This is re: game level, not player level
 export const next_level = () => {
   const action = {
     type: t.NEXT_LEVEL
@@ -123,7 +175,7 @@ export const next_level = () => {
   return action;
 };
 
-// This thunk returns action creators as appropriate
+// This thunk returns action creators as appropriate on player move
 export const move = direction => {
   // Get info about the cell the player is advancing toward
   const { data, playerPosition, level } = getState().grid;
@@ -152,11 +204,14 @@ export const move = direction => {
         : 'The enemy is slain!';
 
     let msg = 'You swing mightily and do ' + damage + ' damage. ' + addendum;
+
     if (enemy.health <= 0) {
+      const exp = 10;
       return batchActions([
         attack(direction, targetPosition, targetObj),
         message(msg),
-        experience(10)
+        experience(exp),
+        level_check(exp)
       ]);
     } else {
       return batchActions([attack(direction, targetPosition, targetObj), message(msg)]);
