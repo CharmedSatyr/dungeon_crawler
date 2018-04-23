@@ -14,9 +14,9 @@ const attack = (direction, targetPosition, targetObj) => {
   };
   return action;
 };
-export const enemy_attack = damage => {
+export const take_damage = damage => {
   const action = {
-    type: t.ENEMY_ATTACK,
+    type: t.TAKE_DAMAGE,
     damage
   };
   return action;
@@ -49,7 +49,8 @@ const go = (direction, targetPosition, targetObj) => {
   return action;
 };
 
-// Dispatch an enemy_attack if an enemy is in an adjacent cell; otherwise, do nothing
+// Player takes damage if an enemy is in an adjacent cell; otherwise, do nothing
+// Polling cells around player for enemies seems more efficient than polling cells around enemies for player
 export const hostile_enemies = () => {
   const { data, playerPosition } = getState().grid;
   const eastEnemy = getTargetPosition(playerPosition, 'east');
@@ -57,7 +58,7 @@ export const hostile_enemies = () => {
   const northEnemy = getTargetPosition(playerPosition, 'north');
   const westEnemy = getTargetPosition(playerPosition, 'west');
 
-  // If there are no enemies, a `null` action prevents errors, else checkAttack pushes here
+  // If there are no enemies, dispatch a `null` action, else dispatch harmless `null` with checkAttack pushes
   const batched = [{ type: null }];
 
   // Check for an enemy, calculate attack damage, and post a message
@@ -80,10 +81,10 @@ export const hostile_enemies = () => {
             return 'south';
         }
       };
-      console.log('facePlayer:', facePlayer(enemy));
+
       batched.push(
         message('An enemy assails you and does ' + d + ' damage!'),
-        enemy_attack(d),
+        take_damage(d),
         facing(facePlayer(enemy), enemy)
       );
     }

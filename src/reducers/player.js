@@ -15,14 +15,10 @@ const initialState = {
 // Player reducers
 const player = (state = initialState, action) => {
   switch (action.type) {
-    case t.ATTACK:
-      console.log('ATTACK!');
-      return state;
-    case t.ENEMY_ATTACK:
-      return Object.assign({}, state, { health: state.health - action.damage });
     case t.ADD_EXP:
-      console.log('ADD_EXP!');
       return Object.assign({}, state, { experience: state.experience + action.amount });
+    case t.TAKE_DAMAGE:
+      return Object.assign({}, state, { health: state.health - action.damage });
     default:
       return state;
   }
