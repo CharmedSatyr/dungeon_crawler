@@ -9,7 +9,7 @@ export const movement = (data, playerPosition, direction, targetPosition, target
   // Don't overwrite other payloads when updating the object
   const currentPlayerObj = data[playerPosition.index];
   const formerObj = Object.assign({}, currentPlayerObj);
-  formerObj.payload.player = null;
+  delete formerObj.payload.player;
   newData.splice(playerPosition.index, 1, formerObj);
 
   // The player is at the next position
