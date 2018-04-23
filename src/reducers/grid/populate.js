@@ -28,7 +28,7 @@ export const populate = (data, level) => {
           min: 1,
           max: 10
         },
-        direction: direction(),
+        facing: direction(),
         health: _.random(20, 50)
       };
 

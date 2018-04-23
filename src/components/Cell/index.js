@@ -105,7 +105,7 @@ const Cell = ({ coordinates, payload, type }) => (
     }}
   >
     {payload.enemy ? (
-      <Enemy coordinates={coordinates} direction={payload.enemy.direction} stats={payload.enemy} />
+      <Enemy coordinates={coordinates} facing={payload.enemy.facing} stats={payload.enemy} />
     ) : null}
     {payload.loot ? <Loot /> : null}
     {payload.portal ? <Portal open={payload.portal.open} /> : null}

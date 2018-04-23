@@ -30,10 +30,11 @@ const experience = amount => {
   return action;
 };
 
-const facing = direction => {
+const facing = (direction, entityPosition) => {
   const action = {
     type: t.FACING,
-    direction
+    direction,
+    entityPosition
   };
   return action;
 };
@@ -51,29 +52,45 @@ const go = (direction, targetPosition, targetObj) => {
 // Dispatch an enemy_attack if an enemy is in an adjacent cell; otherwise, do nothing
 export const hostile_enemies = () => {
   const { data, playerPosition } = getState().grid;
-  const indexEast = getTargetPosition(playerPosition, 'east').index;
-  const indexSouth = getTargetPosition(playerPosition, 'south').index;
-  const indexNorth = getTargetPosition(playerPosition, 'north').index;
-  const indexWest = getTargetPosition(playerPosition, 'west').index;
-
-  const enemyE = data[indexEast].payload.enemy;
-  const enemyS = data[indexSouth].payload.enemy;
-  const enemyN = data[indexNorth].payload.enemy;
-  const enemyW = data[indexWest].payload.enemy;
+  const eastEnemy = getTargetPosition(playerPosition, 'east');
+  const southEnemy = getTargetPosition(playerPosition, 'south');
+  const northEnemy = getTargetPosition(playerPosition, 'north');
+  const westEnemy = getTargetPosition(playerPosition, 'west');
 
   // If there are no enemies, a `null` action prevents errors, else checkAttack pushes here
   const batched = [{ type: null }];
 
   // Check for an enemy, calculate attack damage, and post a message
   const checkAttack = enemy => {
-    if (enemy && enemy.health > 0) {
-      const d = _.random(enemy.damage.min, enemy.damage.max);
-      batched.push(message('An enemy assails you and does ' + d + ' damage!'), enemy_attack(d));
+    const { index } = enemy;
+    const payload = data[index].payload.enemy;
+    if (payload && payload.health > 0) {
+      const d = _.random(payload.damage.min, payload.damage.max);
+      const facePlayer = enemy => {
+        switch (enemy) {
+          case eastEnemy:
+            return 'west';
+          case southEnemy:
+            return 'north';
+          case northEnemy:
+            return 'south';
+          case westEnemy:
+            return 'east';
+          default:
+            return 'south';
+        }
+      };
+      console.log('facePlayer:', facePlayer(enemy));
+      batched.push(
+        message('An enemy assails you and does ' + d + ' damage!'),
+        enemy_attack(d),
+        facing(facePlayer(enemy), enemy)
+      );
     }
   };
 
   // Check for attack in all directions
-  [enemyE, enemyS, enemyN, enemyW].map(e => checkAttack(e));
+  [eastEnemy, southEnemy, northEnemy, westEnemy].map(e => checkAttack(e));
 
   return batchActions(batched);
 };
@@ -158,5 +175,5 @@ export const move = direction => {
   }
 
   // If no conditions are met, just face in the right direction
-  return facing(direction);
+  return facing(direction, playerPosition);
 };
