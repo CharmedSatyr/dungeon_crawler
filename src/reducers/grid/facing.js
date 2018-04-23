@@ -13,7 +13,6 @@ export const facing = (data, entityPosition, direction) => {
   }
 
   if (updateObj.payload.enemy) {
-    console.log('updateObj:', updateObj);
     updateObj.payload.enemy.facing = direction;
   }
 
