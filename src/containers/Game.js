@@ -49,6 +49,9 @@ class Game extends Component {
     this.props.next_level();
     window.addEventListener('keydown', e => this.handleKeyPress(e));
   }
+  componentDidMount() {
+    setInterval(this.props.hostile_enemies, 1000);
+  }
   componentWillUnmount() {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
   }
@@ -75,7 +78,8 @@ Game.propTypes = {
   player: PropTypes.object.isRequired,
   messages: PropTypes.array.isRequired,
   move: PropTypes.func.isRequired,
-  next_level: PropTypes.func.isRequired
+  next_level: PropTypes.func.isRequired,
+  hostile_enemies: PropTypes.func.isRequired
 };
 
 const mapStateToProps = ({ grid, player, messages }) => ({
@@ -86,7 +90,8 @@ const mapStateToProps = ({ grid, player, messages }) => ({
 
 const mapDispatchToProps = dispatch => ({
   move: direction => dispatch(a.move(direction)),
-  next_level: () => dispatch(a.next_level())
+  next_level: () => dispatch(a.next_level()),
+  hostile_enemies: () => dispatch(a.hostile_enemies())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

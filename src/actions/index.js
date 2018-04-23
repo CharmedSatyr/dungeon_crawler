@@ -15,6 +15,12 @@ const attack = (direction, targetPosition, targetObj) => {
   };
   return action;
 };
+export const enemy_attack = () => {
+  const action = {
+    type: t.ENEMY_ATTACK
+  };
+  return action;
+};
 
 const experience = amount => {
   const action = {
@@ -42,6 +48,34 @@ const go = (direction, targetPosition, targetObj) => {
   return action;
 };
 
+// Dispatch an enemy_attack if an enemy is in an adjacent cell; otherwise, do nothing
+export const hostile_enemies = () => {
+  const { data, playerPosition } = getState().grid;
+  const indexEast = getTargetPosition(playerPosition, 'east').index;
+  const indexSouth = getTargetPosition(playerPosition, 'south').index;
+  const indexNorth = getTargetPosition(playerPosition, 'north').index;
+  const indexWest = getTargetPosition(playerPosition, 'west').index;
+
+  // Current structure does not permit simultaneous attacks from different directions
+  if (data[indexEast].payload.enemy && data[indexEast].payload.enemy.health > 0) {
+    return enemy_attack();
+  }
+
+  if (data[indexSouth].payload.enemy && data[indexSouth].payload.enemy.health > 0) {
+    return enemy_attack();
+  }
+
+  if (data[indexNorth].payload.enemy && data[indexNorth].payload.enemy.health > 0) {
+    return enemy_attack();
+  }
+
+  if (data[indexWest].payload.enemy && data[indexWest].payload.enemy.health > 0) {
+    return enemy_attack();
+  }
+
+  return { type: null };
+};
+
 const message = message => {
   const action = {
     type: t.MESSAGE,
@@ -49,6 +83,7 @@ const message = message => {
   };
   return action;
 };
+
 // Open doors
 const open = (direction, targetPosition, targetObj) => {
   const action = {
