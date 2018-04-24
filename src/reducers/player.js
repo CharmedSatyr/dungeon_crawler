@@ -3,7 +3,11 @@ import * as t from '../constants/action-types';
 const initialState = {
   experience: 0,
   gold: 0,
-  health: 20,
+  health: {
+    current: 50,
+    min: 0,
+    max: 50
+  },
   level: 1,
   weapon: {
     name: 'fists',
@@ -18,9 +22,23 @@ const player = (state = initialState, action) => {
     case t.ADD_XP:
       return Object.assign({}, state, { experience: state.experience + action.amount });
     case t.LEVEL_UP:
-      return Object.assign({}, state, { level: state.level + 1 });
+      // Leveling up affects damage calculations in actions and increases max health by ~10%
+      const raisedHealth = Math.ceil(state.health.max + 0.1 * state.health.max);
+      return Object.assign(
+        {},
+        state,
+        { level: state.level + 1 },
+        { health: { ...state.health, max: raisedHealth } }
+      );
     case t.TAKE_DAMAGE:
-      return Object.assign({}, state, { health: state.health - action.damage });
+      // Show the remaining health unless the player is dead
+      const remaining = state.health.current - action.damage;
+      return Object.assign({}, state, {
+        health: {
+          ...state.health,
+          current: remaining >= state.health.min ? remaining : state.health.min
+        }
+      });
     default:
       return state;
   }

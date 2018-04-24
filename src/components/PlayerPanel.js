@@ -22,7 +22,9 @@ const PlayerPanel = ({ stats }) => {
       >
         <p>Level: {stats.level}</p>
         <p>Experience: {stats.experience}</p>
-        <p>Health: {stats.health} </p>
+        <p>
+          Health: {stats.health.current}/{stats.health.max}
+        </p>
         <p>Weapon: {stats.weapon.name}</p>
         <p>Damage: {`${stats.weapon.min_damage} - ${stats.weapon.max_damage}`}</p>
         <p>Gold: {stats.gold}</p>
