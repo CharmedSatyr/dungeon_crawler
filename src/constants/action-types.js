@@ -1,4 +1,4 @@
-export const ADD_EXP = 'ADD_EXP';
+export const ADD_XP = 'ADD_EXP';
 export const ATTACK = 'ATTACK';
 export const FACING = 'FACING';
 export const HOSTILE_ENEMIES = 'HOSTILE_ENEMIES';

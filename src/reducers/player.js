@@ -15,7 +15,7 @@ const initialState = {
 // Player reducers
 const player = (state = initialState, action) => {
   switch (action.type) {
-    case t.ADD_EXP:
+    case t.ADD_XP:
       return Object.assign({}, state, { experience: state.experience + action.amount });
     case t.LEVEL_UP:
       return Object.assign({}, state, { level: state.level + 1 });
