@@ -30,7 +30,7 @@ export const populate = (data, level) => {
         },
         facing: direction(),
         health: _.random(20, 50),
-        level: _.random(1, 10)
+        level: _.random(1, 5)
       };
 
       // 2.5% chance of a cell being occupied by an enemy
