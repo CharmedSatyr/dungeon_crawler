@@ -13,7 +13,8 @@ const attack = (direction, targetPosition, targetObj) => {
   };
   return action;
 };
-export const take_damage = damage => {
+
+const take_damage = damage => {
   const action = {
     type: t.TAKE_DAMAGE,
     damage
@@ -52,6 +53,7 @@ const go = (direction, targetPosition, targetObj) => {
 // Polling cells around player for enemies seems more efficient than polling cells around enemies for player
 export const hostile_enemies = () => {
   const { data, playerPosition } = getState().grid;
+  const { player } = getState();
   const eastEnemy = h.getTargetPosition(playerPosition, 'east');
   const southEnemy = h.getTargetPosition(playerPosition, 'south');
   const northEnemy = h.getTargetPosition(playerPosition, 'north');
@@ -61,14 +63,14 @@ export const hostile_enemies = () => {
   const batched = [{ type: null }];
 
   // Check for an enemy, calculate attack damage, and post a message
-  const checkAttack = enemy => {
-    const { index } = enemy;
-    const payload = data[index].payload.enemy;
+  const checkAttack = e => {
+    const { index } = e;
+    const { enemy } = data[index].payload;
 
-    if (payload && payload.health > 0) {
-      const d = h.damageCalc(payload.level, payload.damage.min, payload.damage.max);
-      const facePlayer = enemy => {
-        switch (enemy) {
+    if (enemy && enemy.health > 0 && player.health.current > 0) {
+      const d = h.damageCalc(enemy.level, enemy.damage.min, enemy.damage.max);
+      const facePlayer = e => {
+        switch (e) {
           case eastEnemy:
             return 'west';
           case southEnemy:
@@ -85,7 +87,7 @@ export const hostile_enemies = () => {
       batched.push(
         message('An enemy assails you and does ' + d + ' damage!'),
         take_damage(d),
-        facing(facePlayer(enemy), enemy)
+        facing(facePlayer(e), e)
       );
     }
   };
