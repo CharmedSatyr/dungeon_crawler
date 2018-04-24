@@ -26,12 +26,12 @@ export const populate = (data, level) => {
       const enemy = {
         damage: {
           min: 1,
-          max: 10
+          max: 3
         },
         facing: direction(),
-        health: _.random(20, 50),
         level: _.random(1, 5)
       };
+      enemy.health = enemy.level * 10;
 
       // 2.5% chance of a cell being occupied by an enemy
       if (
