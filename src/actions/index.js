@@ -2,8 +2,7 @@ import * as t from '../constants/action-types';
 import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
 import { batchActions } from 'redux-batched-actions';
-import { getTargetPosition } from './index.helpers';
-import _ from 'lodash';
+import * as h from './index.helpers';
 
 const attack = (direction, targetPosition, targetObj) => {
   const action = {
@@ -24,7 +23,7 @@ export const take_damage = damage => {
 
 const experience = amount => {
   const action = {
-    type: t.ADD_EXP,
+    type: t.ADD_XP,
     amount
   };
   return action;
@@ -53,10 +52,10 @@ const go = (direction, targetPosition, targetObj) => {
 // Polling cells around player for enemies seems more efficient than polling cells around enemies for player
 export const hostile_enemies = () => {
   const { data, playerPosition } = getState().grid;
-  const eastEnemy = getTargetPosition(playerPosition, 'east');
-  const southEnemy = getTargetPosition(playerPosition, 'south');
-  const northEnemy = getTargetPosition(playerPosition, 'north');
-  const westEnemy = getTargetPosition(playerPosition, 'west');
+  const eastEnemy = h.getTargetPosition(playerPosition, 'east');
+  const southEnemy = h.getTargetPosition(playerPosition, 'south');
+  const northEnemy = h.getTargetPosition(playerPosition, 'north');
+  const westEnemy = h.getTargetPosition(playerPosition, 'west');
 
   // If there are no enemies, dispatch a `null` action, else dispatch harmless `null` with checkAttack pushes
   const batched = [{ type: null }];
@@ -65,8 +64,9 @@ export const hostile_enemies = () => {
   const checkAttack = enemy => {
     const { index } = enemy;
     const payload = data[index].payload.enemy;
+
     if (payload && payload.health > 0) {
-      const d = _.random(payload.damage.min, payload.damage.max);
+      const d = h.damageCalc(payload.level, payload.damage.min, payload.damage.max);
       const facePlayer = enemy => {
         switch (enemy) {
           case eastEnemy:
@@ -98,45 +98,15 @@ export const hostile_enemies = () => {
 
 // Check if the player should level up
 // Thunk
-const level_check = exp => {
-  /***
-     |-------+------------|
-     | LEVEL | EXPERIENCE |
-     |=======+============|
-     | 1     | 0          |
-     | 2     | 30         |
-     | 3     | 70         |
-     | 4     | 120        |
-     | 5     | 180        |
-     |-------+------------|
-  ***/
-
+const level_check = xp => {
   const { experience, level } = getState().player;
-  const newExp = exp + experience;
-  const batched = [];
+  const newExp = xp + experience;
   const nextLevel = level + 1;
   const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
-  const levelUpTime = newExp => {
-    switch (true) {
-      case newExp >= 30 && level === 1:
-        batched.push(message(msg));
-        return true;
-      case newExp >= 70 && level === 2:
-        batched.push(message(msg));
-        return true;
-      case newExp >= 120 && level === 3:
-        batched.push(message(msg));
-        return true;
-      case newExp >= 180 && level === 4:
-        batched.push(message(msg));
-        return true;
-      default:
-        return false;
-    }
-  };
-
-  const result = levelUpTime(newExp) ? level_up() : { type: null };
-  batched.push(result);
+  const result = h.levelCalc(newExp, level) ? message(msg) && level_up() : { type: null };
+  const announcement = h.levelCalc(newExp, level) ? message(msg) : { type: null };
+  const batched = [];
+  batched.push(result, announcement);
   return batchActions(batched);
 };
 
@@ -180,7 +150,7 @@ export const move = direction => {
   // Get info about the cell the player is advancing toward
   const { data, playerPosition, level } = getState().grid;
 
-  const targetPosition = getTargetPosition(playerPosition, direction);
+  const targetPosition = h.getTargetPosition(playerPosition, direction);
   const targetObj = data[targetPosition.index];
   const { type } = targetObj;
   const { enemy, loot, portal } = targetObj.payload;
@@ -195,8 +165,9 @@ export const move = direction => {
 
   // If the targetPosition is an enemy, attack!
   if (enemy && enemy.health > 0) {
-    const { weapon } = getState().player;
-    let damage = _.random(weapon.min_damage, weapon.max_damage);
+    const { weapon, level } = getState().player;
+
+    const damage = h.damageCalc(level, weapon.min_damage, weapon.max_damage);
     enemy.health -= damage;
     const addendum =
       enemy.health > 0
@@ -206,12 +177,13 @@ export const move = direction => {
     let msg = 'You swing mightily and do ' + damage + ' damage. ' + addendum;
 
     if (enemy.health <= 0) {
-      const exp = 10;
+      // Experience gained is 10 * enemy level
+      const xp = enemy.level * 10;
       return batchActions([
         attack(direction, targetPosition, targetObj),
         message(msg),
-        experience(exp),
-        level_check(exp)
+        experience(xp),
+        level_check(xp)
       ]);
     } else {
       return batchActions([attack(direction, targetPosition, targetObj), message(msg)]);
