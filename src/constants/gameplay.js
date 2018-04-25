@@ -1,4 +1,4 @@
-/*** These functions determine gameplay balance:
+/*** These functions determine gameplay balance
  * Damage,
  * Experience,
  * Health, and
@@ -53,7 +53,7 @@ export const healthCalc = level => {
   |-------+------------|
  ***/
 
-export const levelCalc = (xp, level) => {
+export const levelUp = (xp, level) => {
   switch (true) {
     case xp >= 30 && level === 1:
       return true;
