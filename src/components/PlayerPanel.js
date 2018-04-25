@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as g from '../constants/gameplay';
 
 const PlayerPanel = ({ stats }) => {
   return (
@@ -26,7 +27,11 @@ const PlayerPanel = ({ stats }) => {
           Health: {stats.health.current}/{stats.health.max}
         </p>
         <p>Weapon: {stats.weapon.name}</p>
-        <p>Damage: {`${stats.weapon.min_damage} - ${stats.weapon.max_damage}`}</p>
+        <p>
+          Damage: {g.damageCalc(stats.weapon.min_damage, stats.weapon.min_damage, stats.level)}
+          -
+          {g.damageCalc(stats.weapon.max_damage, stats.weapon.max_damage, stats.level)}
+        </p>
         <p>Gold: {stats.gold}</p>
       </div>
     </div>
