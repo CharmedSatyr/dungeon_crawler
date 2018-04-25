@@ -1,8 +1,9 @@
 import * as t from '../constants/action-types';
+import * as h from './index.helpers';
+import * as g from '../constants/gameplay';
 import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
 import { batchActions } from 'redux-batched-actions';
-import * as h from './index.helpers';
 
 const attack = (direction, targetPosition, targetObj) => {
   const action = {
@@ -22,7 +23,7 @@ const take_damage = damage => {
   return action;
 };
 
-const experience = amount => {
+const add_xp = amount => {
   const action = {
     type: t.ADD_XP,
     amount
@@ -68,7 +69,7 @@ export const hostile_enemies = () => {
     const { enemy } = data[index].payload;
 
     if (enemy && enemy.health > 0 && player.health.current > 0) {
-      const d = h.damageCalc(enemy.level, enemy.damage.min, enemy.damage.max);
+      const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
       const facePlayer = e => {
         switch (e) {
           case eastEnemy:
@@ -105,8 +106,8 @@ const level_check = xp => {
   const newExp = xp + experience;
   const nextLevel = level + 1;
   const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
-  const result = h.levelCalc(newExp, level) ? message(msg) && level_up() : { type: null };
-  const announcement = h.levelCalc(newExp, level) ? message(msg) : { type: null };
+  const result = g.levelCalc(newExp, level) ? level_up() : { type: null };
+  const announcement = g.levelCalc(newExp, level) ? message(msg) : { type: null };
   const batched = [];
   batched.push(result, announcement);
   return batchActions(batched);
@@ -119,10 +120,10 @@ const level_up = () => {
   return action;
 };
 
-const message = message => {
+const message = msg => {
   const action = {
     type: t.MESSAGE,
-    message
+    msg
   };
   return action;
 };
@@ -169,22 +170,21 @@ export const move = direction => {
   if (enemy && enemy.health > 0) {
     const { weapon, level } = getState().player;
 
-    const damage = h.damageCalc(level, weapon.min_damage, weapon.max_damage);
-    enemy.health -= damage;
+    const d = g.damageCalc(weapon.min_damage, weapon.max_damage, level);
+    enemy.health -= d;
     const addendum =
       enemy.health > 0
         ? "Your hapless enemy's health drops to " + enemy.health + '.'
         : 'The enemy is slain!';
 
-    let msg = 'You swing mightily and do ' + damage + ' damage. ' + addendum;
+    let msg = 'You swing mightily and do ' + d + ' damage. ' + addendum;
 
     if (enemy.health <= 0) {
-      // Experience gained is 10 * enemy level
-      const xp = enemy.level * 10;
+      const xp = g.xpCalc(enemy.level);
       return batchActions([
         attack(direction, targetPosition, targetObj),
         message(msg),
-        experience(xp),
+        add_xp(xp),
         level_check(xp)
       ]);
     } else {
