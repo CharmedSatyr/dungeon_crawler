@@ -106,8 +106,8 @@ const level_check = xp => {
   const newExp = xp + experience;
   const nextLevel = level + 1;
   const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
-  const result = g.levelCalc(newExp, level) ? level_up() : { type: null };
-  const announcement = g.levelCalc(newExp, level) ? message(msg) : { type: null };
+  const result = g.levelCheck(newExp, level) ? level_up() : { type: null };
+  const announcement = g.levelCheck(newExp, level) ? message(msg) : { type: null };
   const batched = [];
   batched.push(result, announcement);
   return batchActions(batched);

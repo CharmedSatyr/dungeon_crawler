@@ -53,7 +53,7 @@ export const healthCalc = level => {
   |-------+------------|
  ***/
 
-export const levelUp = (xp, level) => {
+export const levelCheck = (xp, level) => {
   switch (true) {
     case xp >= 30 && level === 1:
       return true;

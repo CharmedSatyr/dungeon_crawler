@@ -35,12 +35,12 @@ describe('healthCalc', () => {
   });
 });
 
-describe('levelUp', () => {
+describe('levelCheck', () => {
   it('should return a Boolean for whether current experience allows a player to level up', () => {
-    expect(g.levelUp(0, 1)).toBeFalsy();
-    expect(g.levelUp(60, 2)).toBeFalsy();
-    expect(g.levelUp(80, 5)).toBeFalsy();
-    expect(g.levelUp(80, 2)).toBeTruthy();
-    expect(g.levelUp(220, 4)).toBeTruthy();
+    expect(g.levelCheck(0, 1)).toBeFalsy();
+    expect(g.levelCheck(60, 2)).toBeFalsy();
+    expect(g.levelCheck(80, 5)).toBeFalsy();
+    expect(g.levelCheck(80, 2)).toBeTruthy();
+    expect(g.levelCheck(220, 4)).toBeTruthy();
   });
 });
