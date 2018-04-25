@@ -1,20 +1,16 @@
 import * as t from '../constants/action-types';
+import * as g from '../constants/gameplay';
+import * as l from '../constants/loot';
 
 const initialState = {
   experience: 0,
   gold: 0,
-  health: {
-    current: 50,
-    min: 0,
-    max: 50
-  },
+  health: {},
   level: 1,
-  weapon: {
-    name: 'fists',
-    min_damage: 1,
-    max_damage: 3
-  }
+  weapon: l.weapons.fists
 };
+initialState.health.max = g.healthCalc(initialState.level);
+initialState.health.current = initialState.health.max;
 
 // Player reducers
 const player = (state = initialState, action) => {
@@ -22,21 +18,21 @@ const player = (state = initialState, action) => {
     case t.ADD_XP:
       return Object.assign({}, state, { experience: state.experience + action.amount });
     case t.LEVEL_UP:
-      // Leveling up affects damage calculations in actions and increases max health by ~10%
-      const raisedHealth = Math.ceil(state.health.max + 0.1 * state.health.max);
+      const raisedLevel = state.level + 1;
+      const raisedHealth = g.healthCalc(raisedLevel);
       return Object.assign(
         {},
         state,
-        { level: state.level + 1 },
+        { level: raisedLevel },
         { health: { ...state.health, max: raisedHealth } }
       );
     case t.TAKE_DAMAGE:
-      // Show the remaining health unless the player is dead
+      // Show the remaining health unless the player is dead, then show 0
       const remaining = state.health.current - action.damage;
       return Object.assign({}, state, {
         health: {
           ...state.health,
-          current: remaining >= state.health.min ? remaining : state.health.min
+          current: remaining >= 0 ? remaining : 0
         }
       });
     default:

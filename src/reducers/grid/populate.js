@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import * as c from '../../constants/settings';
+import * as l from '../../constants/loot';
+import * as g from '../../constants/gameplay';
 import tileTypes from '../../constants/tile-types';
 
 // Populate the data with payloads (player, enemies, etc.)
@@ -24,14 +26,11 @@ export const populate = (data, level) => {
         }
       };
       const enemy = {
-        damage: {
-          min: 1,
-          max: 3
-        },
+        weapon: l.weapons.spear,
         facing: direction(),
         level: _.random(1, 5)
       };
-      enemy.health = enemy.level * 10;
+      enemy.health = g.healthCalc(enemy.level);
 
       // 2.5% chance of a cell being occupied by an enemy
       if (
