@@ -5,11 +5,11 @@ const initialState = [
 ];
 
 // Player reducers
-const messages = (state = initialState, action) => {
-  switch (action.type) {
+const messages = (state = initialState, { msg, type }) => {
+  switch (type) {
     case t.MESSAGE:
       const m = state;
-      m.push(action.message);
+      m.push(msg);
       if (m.length > 3) {
         m.shift();
       }
