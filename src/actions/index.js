@@ -163,7 +163,8 @@ export const move = direction => {
 // Player takes damage if an enemy is in an adjacent cell; otherwise, do nothing
 // Polling cells around player for enemies seems more efficient than polling cells around enemies for player
 export const hostile_enemies = () => {
-  // const { player } = getState();
+  // TODO: This state should be received as arguments so this function is more easily testable
+  const { player } = getState();
   const { data, playerPosition } = getState().grid;
   const playerAdjacentPositions = h.playerAdjacentPositions(playerPosition);
 
@@ -175,7 +176,7 @@ export const hostile_enemies = () => {
     const { index } = target;
     const { enemy } = data[index].payload;
 
-    if (enemy && enemy.health > 0 /*&& player.health.current > 0*/) {
+    if (enemy && enemy.health > 0 && player.health.current > 0) {
       const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
       batched.push(
         facing(h.facePlayer(target, ...playerAdjacentPositions), target),
