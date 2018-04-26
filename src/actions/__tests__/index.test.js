@@ -1,5 +1,6 @@
 import * as a from '../index';
 import * as t from '../../constants/action-types';
+import { GRID_WIDTH } from '../../constants/settings';
 
 /*** SIMPLE ACTION CREATORS ***/
 describe('add_xp action creator', () => {
@@ -32,7 +33,7 @@ describe('facing action creator', () => {
   });
 });
 
-describe('go action creator', () => {
+describe('move action creator', () => {
   it('should return an action to move an entity in a direction', () => {
     const args = ['north', { x: 0, y: 0 }, { type: 'target' }];
     const action = {
@@ -41,7 +42,7 @@ describe('go action creator', () => {
       targetPosition: args[1],
       targetObj: args[2]
     };
-    expect(a.go(...args)).toEqual(action);
+    expect(a.move(...args)).toEqual(action);
   });
 });
 
@@ -92,10 +93,19 @@ describe('take_damage action creator', () => {
 });
 
 /*** THUNKS ***/
-// describe('hostile_enemies action creator thunk', () => {
-//   it('should trigger `message`, `take_damage`, and `facing` action creators if an enemy is adjacent to the player', () => {
-//     //const obj1
-//     // const actions = [obj1, obj2, obj3]
-//     expect(a.hostile_enemies()).toEqual();
-//   });
-// });
+// Not sure how to test my thunks due to getState closures. Waiting for additional refactoring.
+// TODO: Refactor thunks to allow easier testing
+describe('hostile_enemies action creator thunk', () => {
+  // it('should trigger `message`, `take_damage`, and `facing` action creators if an enemy is adjacent to the player, else type `null`', () => {});
+  it('should not be null or undefined', () => {
+    expect.anything();
+  });
+});
+
+// TODO: Refactor thunks to allow easier testing
+describe('player_input action creator thunk', () => {
+  // it('should trigger the appropriate action creators on player input...', () => {});
+  it('should not be null or undefined', () => {
+    expect.anything();
+  });
+});

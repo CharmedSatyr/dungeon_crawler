@@ -15,28 +15,28 @@ class Game extends Component {
   }
 
   handleKeyPress(e) {
-    const { move } = this.props;
+    const { player_input } = this.props;
     switch (e.keyCode) {
       // North
       case 38:
       case 87:
         e.preventDefault();
-        return move('north');
+        return player_input('north');
       // East
       case 39:
       case 68:
         e.preventDefault();
-        return move('east');
+        return player_input('east');
       // South
       case 40:
       case 83:
         e.preventDefault();
-        return move('south');
+        return player_input('south');
       // West
       case 37:
       case 65:
         e.preventDefault();
-        return move('west');
+        return player_input('west');
       case 32:
         e.preventDefault();
         console.log('spacebar');
@@ -77,7 +77,7 @@ Game.propTypes = {
   gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
   player: PropTypes.object.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
-  move: PropTypes.func.isRequired,
+  player_input: PropTypes.func.isRequired,
   next_level: PropTypes.func.isRequired,
   hostile_enemies: PropTypes.func.isRequired
 };
@@ -89,7 +89,7 @@ const mapStateToProps = ({ grid, player, messages }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  move: direction => dispatch(a.move(direction)),
+  player_input: direction => dispatch(a.player_input(direction)),
   next_level: () => dispatch(a.next_level()),
   hostile_enemies: () => dispatch(a.hostile_enemies())
 });

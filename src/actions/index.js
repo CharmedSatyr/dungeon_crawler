@@ -32,7 +32,7 @@ export const facing = (direction, entityPosition) => {
   return action;
 };
 
-export const go = (direction, targetPosition, targetObj) => {
+export const move = (direction, targetPosition, targetObj) => {
   const action = {
     type: t.MOVE,
     direction,
@@ -99,9 +99,10 @@ export const take_damage = damage => {
 };
 
 // THUNK
-// This primary thunk returns action creators as appropriate on player move
-export const move = direction => {
+// This primary thunk returns action creators as appropriate on player input
+export const player_input = direction => {
   // Get info about the cell the player is advancing toward
+  // TODO: This state should be received as arguments so this function is more easily testable
   const { data, playerPosition, level } = getState().grid;
 
   const targetPosition = h.getTargetPosition(playerPosition, direction);
@@ -114,7 +115,7 @@ export const move = direction => {
     (type === tileTypes(level, 'path') && !enemy && !loot && !portal) ||
     (enemy && enemy.health <= 0)
   ) {
-    return go(direction, targetPosition, targetObj);
+    return move(direction, targetPosition, targetObj);
   }
 
   // If the targetPosition is an enemy, attack!
