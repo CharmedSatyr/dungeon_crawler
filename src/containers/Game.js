@@ -56,7 +56,7 @@ class Game extends Component {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
   }
   render() {
-    const { gridData, player, messages } = this.props;
+    const { gridData, messages, player } = this.props;
 
     // Create an array of Cells containing data from the store
     const cells = gridData.map((item, index) => (
@@ -74,9 +74,9 @@ class Game extends Component {
 }
 
 Game.propTypes = {
-  gridData: PropTypes.array.isRequired,
+  gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
   player: PropTypes.object.isRequired,
-  messages: PropTypes.array.isRequired,
+  messages: PropTypes.arrayOf(PropTypes.string).isRequired,
   move: PropTypes.func.isRequired,
   next_level: PropTypes.func.isRequired,
   hostile_enemies: PropTypes.func.isRequired
