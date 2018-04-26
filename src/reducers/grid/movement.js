@@ -1,9 +1,11 @@
+import _ from 'lodash';
+
 // Validates basic movement actions
 export const movement = (data, playerPosition, direction, targetPosition, targetObj) => {
   // Avoiding mapping through all the cells in this function based on a hypothesis about performance
 
-  // This way of deep copying the data array works so long as there are no methods stored in data!
-  let newData = JSON.parse(JSON.stringify(data));
+  // Shallow clone
+  let newData = _.clone(data);
 
   // The player is no longer at its current position
   // Don't overwrite other payloads when updating the object
