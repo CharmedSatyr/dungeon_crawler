@@ -42,8 +42,8 @@ export const go = (direction, targetPosition, targetObj) => {
   return action;
 };
 
+// THUNK
 // Check if the player should level up
-// Thunk
 export const level_check = xp => {
   const { experience, level } = getState().player;
   const newExp = xp + experience;
@@ -170,7 +170,7 @@ export const hostile_enemies = () => {
   // If there are no enemies, dispatch a `null` action, else dispatch harmless `null` with checkAttack pushes
   const batched = [{ type: null }];
 
-  // Check for an enemy, calculate attack damage, and post a message
+  // Check for an enemy, face it the right way, calculate damage taken, and push a message
   const checkAttack = target => {
     const { index } = target;
     const { enemy } = data[index].payload;
@@ -178,9 +178,9 @@ export const hostile_enemies = () => {
     if (enemy && enemy.health > 0 /*&& player.health.current > 0*/) {
       const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
       batched.push(
-        message('An enemy assails you and does ' + d + ' damage!'),
+        facing(h.facePlayer(target, ...playerAdjacentPositions), target),
         take_damage(d),
-        facing(h.facePlayer(target, ...playerAdjacentPositions), target)
+        message('An enemy assails you and does ' + d + ' damage!')
       );
     }
   };
