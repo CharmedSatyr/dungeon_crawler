@@ -92,10 +92,10 @@ describe('take_damage action creator', () => {
 });
 
 /*** THUNKS ***/
-describe('hostile_enemies action creator thunk', () => {
-  it('should trigger `message`, `take_damage`, and `facing` action creators if an enemy is adjacent to the player', () => {
-    //const obj1
-    // const actions = [obj1, obj2, obj3]
-    expect(a.hostile_enemies()).toEqual();
-  });
-});
+// describe('hostile_enemies action creator thunk', () => {
+//   it('should trigger `message`, `take_damage`, and `facing` action creators if an enemy is adjacent to the player', () => {
+//     //const obj1
+//     // const actions = [obj1, obj2, obj3]
+//     expect(a.hostile_enemies()).toEqual();
+//   });
+// });

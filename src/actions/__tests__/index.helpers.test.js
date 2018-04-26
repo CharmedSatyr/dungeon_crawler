@@ -37,11 +37,20 @@ describe('playerAdjacentPositions', () => {
     expect(h.playerAdjacentPositions(playerPosition)).toEqual([e, n, s, w]);
   });
 });
-//
-//describe('facePlayer', () => {
-//  it('should return direction entity should face to face player if position is adjacent to player, else null', () => {
-//    const
-//    const playerPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
-//  })
-//})
-//
+
+describe('facePlayer', () => {
+  it('should return direction entity should face to face player if position is adjacent to player, else null', () => {
+    // e, n, s, w are all adjacent to the player
+    const e = { coordinates: { x: 1, y: 0 }, index: 1 };
+    const n = { coordinates: { x: 0, y: -1 }, index: -GRID_WIDTH };
+    const s = { coordinates: { x: 0, y: 1 }, index: GRID_WIDTH };
+    const w = { coordinates: { x: -1, y: 0 }, index: -1 };
+    const adjacent = [e, n, s, w];
+
+    expect(h.facePlayer(e, ...adjacent)).toBe('west');
+    expect(h.facePlayer(n, ...adjacent)).toBe('south');
+    expect(h.facePlayer(s, ...adjacent)).toBe('north');
+    expect(h.facePlayer(w, ...adjacent)).toBe('east');
+    expect(h.facePlayer(null, ...adjacent)).toBe(null);
+  });
+});

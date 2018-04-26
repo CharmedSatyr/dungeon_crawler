@@ -5,7 +5,15 @@ import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
 import { batchActions } from 'redux-batched-actions';
 
-const attack = (direction, targetPosition, targetObj) => {
+export const add_xp = amount => {
+  const action = {
+    type: t.ADD_XP,
+    amount
+  };
+  return action;
+};
+
+export const attack = (direction, targetPosition, targetObj) => {
   const action = {
     type: t.ATTACK,
     direction,
@@ -15,23 +23,7 @@ const attack = (direction, targetPosition, targetObj) => {
   return action;
 };
 
-const take_damage = damage => {
-  const action = {
-    type: t.TAKE_DAMAGE,
-    damage
-  };
-  return action;
-};
-
-const add_xp = amount => {
-  const action = {
-    type: t.ADD_XP,
-    amount
-  };
-  return action;
-};
-
-const facing = (direction, entityPosition) => {
+export const facing = (direction, entityPosition) => {
   const action = {
     type: t.FACING,
     direction,
@@ -40,7 +32,7 @@ const facing = (direction, entityPosition) => {
   return action;
 };
 
-const go = (direction, targetPosition, targetObj) => {
+export const go = (direction, targetPosition, targetObj) => {
   const action = {
     type: t.MOVE,
     direction,
@@ -50,58 +42,9 @@ const go = (direction, targetPosition, targetObj) => {
   return action;
 };
 
-// Player takes damage if an enemy is in an adjacent cell; otherwise, do nothing
-// Polling cells around player for enemies seems more efficient than polling cells around enemies for player
-export const hostile_enemies = () => {
-  const { data, playerPosition } = getState().grid;
-  const { player } = getState();
-  const eastEnemy = h.getTargetPosition(playerPosition, 'east');
-  const southEnemy = h.getTargetPosition(playerPosition, 'south');
-  const northEnemy = h.getTargetPosition(playerPosition, 'north');
-  const westEnemy = h.getTargetPosition(playerPosition, 'west');
-
-  // If there are no enemies, dispatch a `null` action, else dispatch harmless `null` with checkAttack pushes
-  const batched = [{ type: null }];
-
-  // Check for an enemy, calculate attack damage, and post a message
-  const checkAttack = e => {
-    const { index } = e;
-    const { enemy } = data[index].payload;
-
-    if (enemy && enemy.health > 0 && player.health.current > 0) {
-      const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
-      const facePlayer = e => {
-        switch (e) {
-          case eastEnemy:
-            return 'west';
-          case southEnemy:
-            return 'north';
-          case northEnemy:
-            return 'south';
-          case westEnemy:
-            return 'east';
-          default:
-            return 'south';
-        }
-      };
-
-      batched.push(
-        message('An enemy assails you and does ' + d + ' damage!'),
-        take_damage(d),
-        facing(facePlayer(e), e)
-      );
-    }
-  };
-
-  // Check for attack in all directions
-  [eastEnemy, southEnemy, northEnemy, westEnemy].map(e => checkAttack(e));
-
-  return batchActions(batched);
-};
-
 // Check if the player should level up
 // Thunk
-const level_check = xp => {
+export const level_check = xp => {
   const { experience, level } = getState().player;
   const newExp = xp + experience;
   const nextLevel = level + 1;
@@ -113,14 +56,14 @@ const level_check = xp => {
   return batchActions(batched);
 };
 
-const level_up = () => {
+export const level_up = () => {
   const action = {
     type: t.LEVEL_UP
   };
   return action;
 };
 
-const message = msg => {
+export const message = msg => {
   const action = {
     type: t.MESSAGE,
     msg
@@ -128,8 +71,16 @@ const message = msg => {
   return action;
 };
 
+// This affects game level, not player level
+export const next_level = () => {
+  const action = {
+    type: t.NEXT_LEVEL
+  };
+  return action;
+};
+
 // Open doors
-const open = (direction, targetPosition, targetObj) => {
+export const open = (direction, targetPosition, targetObj) => {
   const action = {
     type: t.OPEN,
     direction,
@@ -139,16 +90,16 @@ const open = (direction, targetPosition, targetObj) => {
   return action;
 };
 
-// Exported because it's triggered on componentWillMount
-// This is re: game level, not player level
-export const next_level = () => {
+export const take_damage = damage => {
   const action = {
-    type: t.NEXT_LEVEL
+    type: t.TAKE_DAMAGE,
+    damage
   };
   return action;
 };
 
-// This thunk returns action creators as appropriate on player move
+// THUNK
+// This primary thunk returns action creators as appropriate on player move
 export const move = direction => {
   // Get info about the cell the player is advancing toward
   const { data, playerPosition, level } = getState().grid;
@@ -206,4 +157,36 @@ export const move = direction => {
 
   // If no conditions are met, just face in the right direction
   return facing(direction, playerPosition);
+};
+
+// THUNK
+// Player takes damage if an enemy is in an adjacent cell; otherwise, do nothing
+// Polling cells around player for enemies seems more efficient than polling cells around enemies for player
+export const hostile_enemies = () => {
+  // const { player } = getState();
+  const { data, playerPosition } = getState().grid;
+  const playerAdjacentPositions = h.playerAdjacentPositions(playerPosition);
+
+  // If there are no enemies, dispatch a `null` action, else dispatch harmless `null` with checkAttack pushes
+  const batched = [{ type: null }];
+
+  // Check for an enemy, calculate attack damage, and post a message
+  const checkAttack = target => {
+    const { index } = target;
+    const { enemy } = data[index].payload;
+
+    if (enemy && enemy.health > 0 /*&& player.health.current > 0*/) {
+      const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
+      batched.push(
+        message('An enemy assails you and does ' + d + ' damage!'),
+        take_damage(d),
+        facing(h.facePlayer(target, ...playerAdjacentPositions), target)
+      );
+    }
+  };
+
+  // Check for attack in all directions
+  playerAdjacentPositions.map(e => checkAttack(e));
+
+  return batchActions(batched);
 };

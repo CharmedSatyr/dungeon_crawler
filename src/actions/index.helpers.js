@@ -40,16 +40,22 @@ export const playerAdjacentPositions = playerPosition => {
 
 // Return direction entity should be facing
 // to face player if position is adjacent to player
-export const facePlayer = (position, playerPosition) => {
-  switch (position) {
-    case playerAdjacentPositions(playerPosition)[0]:
-      return 'west';
-    case playerAdjacentPositions(playerPosition)[1]:
-      return 'south';
-    case playerAdjacentPositions(playerPosition)[2]:
-      return 'north';
-    case playerAdjacentPositions(playerPosition)[3]:
+export const facePlayer = (
+  target,
+  playerAdjacentEast,
+  playerAdjacentNorth,
+  playerAdjacentSouth,
+  playerAdjacentWest
+) => {
+  switch (target) {
+    case playerAdjacentWest:
       return 'east';
+    case playerAdjacentSouth:
+      return 'north';
+    case playerAdjacentNorth:
+      return 'south';
+    case playerAdjacentEast:
+      return 'west';
     default:
       return null;
   }
