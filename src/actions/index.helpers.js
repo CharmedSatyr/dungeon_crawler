@@ -40,6 +40,8 @@ export const playerAdjacentPositions = playerPosition => {
 
 // Return direction entity should be facing
 // to face player if position is adjacent to player
+// NOTE: the adjacent cell objects are passed in explicitly to avoid
+// weird closure/object inequality issues. Do not change this!
 export const facePlayer = (
   target,
   playerAdjacentEast,
