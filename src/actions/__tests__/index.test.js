@@ -26,20 +26,19 @@ describe('add_xp action creator', () => {
 // });
 
 describe('facing action creator', () => {
-  it('should return an action to set the direction a target is facing', () => {
-    const args = ['north', { x: 0, y: 0 }];
-    const action = { type: t.FACING, direction: args[0], targetPosition: args[1] };
+  it('should return an action to set the direction an entity is facing', () => {
+    const args = [{ x: 0, y: 0 }];
+    const action = { type: t.FACING, targetObj: args[0] };
     expect(a.facing(...args)).toEqual(action);
   });
 });
 
 describe('move action creator', () => {
   it('should return an action to move to a target position', () => {
-    const args = [{ x: 0, y: 0 }, { type: 'target' }];
+    const args = [{ x: 0, y: 0 }];
     const action = {
       type: t.MOVE,
-      targetPosition: args[0],
-      targetObj: args[1]
+      targetObj: args[0]
     };
     expect(a.move(...args)).toEqual(action);
   });
@@ -72,11 +71,10 @@ describe('next_level action creator', () => {
 
 describe('open action creator', () => {
   it('should return an action to open a door or other target object', () => {
-    const args = [{ x: 0, y: 0 }, { type: 'target' }];
+    const args = [{ x: 0, y: 0 }];
     const action = {
       type: t.OPEN,
-      targetPosition: args[0],
-      targetObj: args[1]
+      targetObj: args[0]
     };
     expect(a.open(...args)).toEqual(action);
   });
