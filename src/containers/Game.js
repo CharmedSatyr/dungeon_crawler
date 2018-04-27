@@ -18,31 +18,31 @@ class Game extends Component {
   }
   handleKeyPress(e) {
     const { getTargetObj } = this;
-    const { player_input, playerPosition } = this.props;
+    const { player_input } = this.props;
     switch (e.keyCode) {
       // North
       case 38:
       case 87:
         e.preventDefault();
-        return player_input('north', playerPosition, getTargetObj('north'));
+        return player_input(getTargetObj('north'));
       // East
       case 39:
       case 68:
         e.preventDefault();
-        return player_input('east', playerPosition, getTargetObj('east'));
+        return player_input(getTargetObj('east'));
       // South
       case 40:
       case 83:
         e.preventDefault();
-        return player_input('south', playerPosition, getTargetObj('south'));
+        return player_input(getTargetObj('south'));
       // West
       case 37:
       case 65:
         e.preventDefault();
-        return player_input('west', playerPosition, getTargetObj('west'));
+        return player_input(getTargetObj('west'));
       case 32:
         e.preventDefault();
-        console.log('spacebar', playerPosition, getTargetObj('spacebar'));
+        console.log('spacebar');
         break;
       default:
         return;
@@ -54,9 +54,10 @@ class Game extends Component {
     const pap = h.playerAdjacentPositions(playerPosition);
     pap.forEach(targetPosition => {
       const { index } = targetPosition;
-      const { enemy } = gridData[index].payload;
+      const targetObj = gridData[index];
+      const { enemy } = targetObj.payload;
       if (enemy && enemy.health > 0) {
-        hostile_enemies(enemy, targetPosition, pap);
+        hostile_enemies(enemy, targetObj, pap);
       }
     });
   }
@@ -112,11 +113,9 @@ const mapStateToProps = ({ grid, player, messages }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  hostile_enemies: (enemy, targetPosition, pap) =>
-    dispatch(a.hostile_enemies(enemy, targetPosition, pap)),
+  hostile_enemies: (enemy, targetObj, pap) => dispatch(a.hostile_enemies(enemy, targetObj, pap)),
   next_level: () => dispatch(a.next_level()),
-  player_input: (direction, playerPosition, targetObj) =>
-    dispatch(a.player_input(direction, playerPosition, targetObj))
+  player_input: targetObj => dispatch(a.player_input(targetObj))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
