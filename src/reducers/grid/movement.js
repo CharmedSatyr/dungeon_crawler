@@ -1,7 +1,8 @@
 import _ from 'lodash';
+import * as h from '../../actions/index.helpers';
 
 // Validates basic movement actions
-export const movement = (data, playerPosition, direction, targetPosition, targetObj) => {
+export const movement = (data, playerPosition, targetPosition, targetObj) => {
   // Avoiding mapping through all the cells in this function based on a hypothesis about performance
 
   // Shallow clone
@@ -19,8 +20,8 @@ export const movement = (data, playerPosition, direction, targetPosition, target
   const newObj = Object.assign({}, targetObj);
 
   newObj.payload
-    ? (newObj.payload.player = { facing: direction })
-    : (newObj.payload = { player: { facing: direction } });
+    ? (newObj.payload.player = { facing: h.getDirection(playerPosition, targetPosition) })
+    : (newObj.payload = { player: { facing: h.getDirection(playerPosition, targetPosition) } });
   newData.splice(targetPosition.index, 1, newObj);
 
   return {
