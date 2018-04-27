@@ -14,15 +14,15 @@ export const add_xp = amount => {
   return action;
 };
 
-export const attack = (direction, targetPosition, targetObj) => {
-  const action = {
-    type: t.ATTACK,
-    direction,
-    targetPosition,
-    targetObj
-  };
-  return action;
-};
+// export const attack = (direction, targetPosition, targetObj) => {
+//   const action = {
+//     type: t.ATTACK,
+//     direction,
+//     targetPosition,
+//     targetObj
+//   };
+//   return action;
+// };
 
 export const facing = (direction, targetPosition) => {
   const action = {
@@ -33,10 +33,9 @@ export const facing = (direction, targetPosition) => {
   return action;
 };
 
-export const move = (direction, targetPosition, targetObj) => {
+export const move = (targetPosition, targetObj) => {
   const action = {
     type: t.MOVE,
-    direction,
     targetPosition,
     targetObj
   };
@@ -67,10 +66,9 @@ export const next_level = () => {
 };
 
 // Open doors
-export const open = (direction, targetPosition, targetObj) => {
+export const open = (targetPosition, targetObj) => {
   const action = {
     type: t.OPEN,
-    direction,
     targetPosition,
     targetObj
   };
@@ -113,14 +111,18 @@ export const level_check = xp => {
 };
 
 // This primary thunk returns action creators as appropriate on player input
-export const player_input = direction => {
+export const player_input = (direction, playerPosition, targetObj) => {
   // Get info about the cell the player is advancing toward
+  // TODO: Remove need for 'direction' argument
+  // TODO: Fix Attack to actually use a reducer other than for facing
   // TODO: This state should be received as arguments so this function is more easily testable
   // TODO: Remove getTargetPosition and other functions that belong in Game from helpers and put them there
-  const { data, playerPosition, level } = getState().grid;
+  // TODO: It should be possible to infer direction from playerPosition and targetObj
+  // TODO: It should be possible to get targetPosition from targetObj
+  // TODO: Many of the below component functions need fewer arguments
+  const { level } = getState().grid;
 
   const targetPosition = h.getTargetPosition(playerPosition, direction);
-  const targetObj = data[targetPosition.index];
   const { type } = targetObj;
   const { enemy, loot, portal } = targetObj.payload;
 
@@ -129,7 +131,7 @@ export const player_input = direction => {
     (type === tileTypes(level, 'path') && !enemy && !loot && !portal) ||
     (enemy && enemy.health <= 0)
   ) {
-    return move(direction, targetPosition, targetObj);
+    return move(targetPosition, targetObj);
   }
 
   // If the targetPosition is an enemy, attack!
@@ -137,7 +139,7 @@ export const player_input = direction => {
     const { weapon, level } = getState().player;
 
     const d = g.damageCalc(weapon.min_damage, weapon.max_damage, level);
-    enemy.health -= d;
+    enemy.health -= d; // This lowers the enemy's health without going through a proper ATTACK reducer!
     const addendum =
       enemy.health > 0
         ? "Your hapless enemy's health drops to " + enemy.health + '.'
@@ -147,21 +149,16 @@ export const player_input = direction => {
 
     if (enemy.health <= 0) {
       const xp = g.xpCalc(enemy.level);
-      return batchActions([
-        attack(direction, targetPosition, targetObj),
-        message(msg),
-        add_xp(xp),
-        level_check(xp)
-      ]);
+      return batchActions([message(msg), add_xp(xp), level_check(xp)]);
     } else {
-      return batchActions([attack(direction, targetPosition, targetObj), message(msg)]);
+      return batchActions([message(msg)]);
     }
   }
 
   // If the target is a closed portal, open the door
   if (portal && !portal.open) {
     const msg = 'The door creaks open...';
-    return batchActions([open(direction, targetPosition, targetObj), message(msg)]);
+    return batchActions([open(targetPosition, targetObj), message(msg)]);
   }
 
   // If the targetObj is an open portal, go to the next level!
