@@ -1,5 +1,33 @@
 import { GRID_WIDTH } from '../constants/settings';
 
+export const getDirection = (originPosition, targetPosition) => {
+  if (
+    originPosition.coordinates.x + 1 === targetPosition.coordinates.x &&
+    originPosition.coordinates.y === targetPosition.coordinates.y
+  ) {
+    return 'east';
+  }
+  if (
+    originPosition.coordinates.x === targetPosition.coordinates.x &&
+    originPosition.coordinates.y - 1 === targetPosition.coordinates.y
+  ) {
+    return 'north';
+  }
+  if (
+    originPosition.coordinates.x === targetPosition.coordinates.x &&
+    originPosition.coordinates.y + 1 === targetPosition.coordinates.y
+  ) {
+    return 'south';
+  }
+  if (
+    originPosition.coordinates.x - 1 === targetPosition.coordinates.x &&
+    originPosition.coordinates.y === targetPosition.coordinates.y
+  ) {
+    return 'west';
+  }
+  return null;
+};
+
 // Establish the player's potential next position given current position and direction
 export const getTargetPosition = (originPosition, direction) => {
   switch (direction) {
