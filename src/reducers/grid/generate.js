@@ -6,6 +6,7 @@ import tileTypes from '../../constants/tile-types';
 // generate makes an unpopulated map from an empty array
 export const generate = (grid, level) => {
   // 1. Create an empty grid with the desired keys
+  let index = 0;
   for (let i = 0; i < c.GRID_HEIGHT; i++) {
     let x,
       y = i;
@@ -13,9 +14,11 @@ export const generate = (grid, level) => {
       x = j;
       grid.push({
         coordinates: { x, y },
+        index,
         payload: {},
         type: tileTypes(level)
       });
+      index++;
     }
   }
 
