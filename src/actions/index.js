@@ -5,6 +5,7 @@ import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
 import { batchActions } from 'redux-batched-actions';
 
+/*** ACTION CREATORS ***/
 export const add_xp = amount => {
   const action = {
     type: t.ADD_XP,
@@ -84,11 +85,38 @@ export const take_damage = damage => {
   return action;
 };
 
-// THUNK
+/*** THUNKS ***/
+// Turn the enemy toward the player, display damage notification, inflict damage
+// The `enemy` argument is the payload of a cell object; `targetPosition` is its position; `pap` is playerAdjacentPositions
+export const hostile_enemies = (enemy, targetPosition, pap) => {
+  const batched = [];
+  const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
+  batched.push(
+    facing(h.facePlayer(targetPosition, ...pap), targetPosition),
+    message('An enemy assails you and does ' + d + ' damage!'),
+    take_damage(d)
+  );
+  return batchActions(batched);
+};
+
+// Check if the player should level up
+export const level_check = xp => {
+  const { experience, level } = getState().player;
+  const newExp = xp + experience;
+  const nextLevel = level + 1;
+  const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
+  const result = g.levelCheck(newExp, level) ? level_up() : { type: null };
+  const announcement = g.levelCheck(newExp, level) ? message(msg) : { type: null };
+  const batched = [];
+  batched.push(result, announcement);
+  return batchActions(batched);
+};
+
 // This primary thunk returns action creators as appropriate on player input
 export const player_input = direction => {
   // Get info about the cell the player is advancing toward
   // TODO: This state should be received as arguments so this function is more easily testable
+  // TODO: Remove getTargetPosition and other functions that belong in Game from helpers and put them there
   const { data, playerPosition, level } = getState().grid;
 
   const targetPosition = h.getTargetPosition(playerPosition, direction);
@@ -144,32 +172,4 @@ export const player_input = direction => {
 
   // If no conditions are met, just face in the right direction
   return facing(direction, playerPosition);
-};
-
-// THUNK
-// Check if the player should level up
-export const level_check = xp => {
-  const { experience, level } = getState().player;
-  const newExp = xp + experience;
-  const nextLevel = level + 1;
-  const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
-  const result = g.levelCheck(newExp, level) ? level_up() : { type: null };
-  const announcement = g.levelCheck(newExp, level) ? message(msg) : { type: null };
-  const batched = [];
-  batched.push(result, announcement);
-  return batchActions(batched);
-};
-
-// THUNK
-// Player takes damage if an enemy is in an adjacent cell; otherwise, do nothing
-// Polling cells around player for enemies seems more efficient than polling cells around enemies for player
-export const hostile_enemies = (enemy, target, pap) => {
-  const batched = [];
-  const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
-  batched.push(
-    facing(h.facePlayer(target, ...pap), target),
-    message('An enemy assails you and does ' + d + ' damage!'),
-    take_damage(d)
-  );
-  return batchActions(batched);
 };
