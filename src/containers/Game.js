@@ -14,33 +14,35 @@ class Game extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.getTargetObj = this.getTargetObj.bind(this);
   }
   handleKeyPress(e) {
-    const { player_input } = this.props;
+    const { getTargetObj } = this;
+    const { player_input, playerPosition } = this.props;
     switch (e.keyCode) {
       // North
       case 38:
       case 87:
         e.preventDefault();
-        return player_input('north');
+        return player_input('north', playerPosition, getTargetObj('north'));
       // East
       case 39:
       case 68:
         e.preventDefault();
-        return player_input('east');
+        return player_input('east', playerPosition, getTargetObj('east'));
       // South
       case 40:
       case 83:
         e.preventDefault();
-        return player_input('south');
+        return player_input('south', playerPosition, getTargetObj('south'));
       // West
       case 37:
       case 65:
         e.preventDefault();
-        return player_input('west');
+        return player_input('west', playerPosition, getTargetObj('west'));
       case 32:
         e.preventDefault();
-        console.log('spacebar');
+        console.log('spacebar', playerPosition, getTargetObj('spacebar'));
         break;
       default:
         return;
@@ -58,7 +60,12 @@ class Game extends Component {
       }
     });
   }
-
+  getTargetObj(direction) {
+    const { gridData, playerPosition } = this.props;
+    const targetPosition = h.getTargetPosition(playerPosition, direction);
+    const targetObj = gridData[targetPosition.index];
+    return targetObj;
+  }
   componentWillMount() {
     this.props.next_level();
     window.addEventListener('keydown', e => this.handleKeyPress(e));
@@ -108,7 +115,8 @@ const mapDispatchToProps = dispatch => ({
   hostile_enemies: (enemy, targetPosition, pap) =>
     dispatch(a.hostile_enemies(enemy, targetPosition, pap)),
   next_level: () => dispatch(a.next_level()),
-  player_input: direction => dispatch(a.player_input(direction))
+  player_input: (direction, playerPosition, targetObj) =>
+    dispatch(a.player_input(direction, playerPosition, targetObj))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
