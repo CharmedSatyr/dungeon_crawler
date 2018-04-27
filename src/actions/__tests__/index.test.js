@@ -11,19 +11,19 @@ describe('add_xp action creator', () => {
   });
 });
 
-describe('attack action creator', () => {
-  it('should return an action to attack an object in a direction', () => {
-    const args = ['north', { a: 0 }, { b: 1 }];
-    const action = {
-      type: t.ATTACK,
-      direction: args[0],
-      targetPosition: args[1],
-      targetObj: args[2]
-    };
-
-    expect(a.attack(...args)).toEqual(action);
-  });
-});
+// describe('attack action creator', () => {
+//   it('should return an action to attack an object in a direction', () => {
+//     const args = ['north', { a: 0 }, { b: 1 }];
+//     const action = {
+//       type: t.ATTACK,
+//       direction: args[0],
+//       targetPosition: args[1],
+//       targetObj: args[2]
+//     };
+//
+//     expect(a.attack(...args)).toEqual(action);
+//   });
+// });
 
 describe('facing action creator', () => {
   it('should return an action to set the direction a target is facing', () => {
@@ -34,13 +34,12 @@ describe('facing action creator', () => {
 });
 
 describe('move action creator', () => {
-  it('should return an action to move an target in a direction', () => {
-    const args = ['north', { x: 0, y: 0 }, { type: 'target' }];
+  it('should return an action to move to a target position', () => {
+    const args = [{ x: 0, y: 0 }, { type: 'target' }];
     const action = {
       type: t.MOVE,
-      direction: args[0],
-      targetPosition: args[1],
-      targetObj: args[2]
+      targetPosition: args[0],
+      targetObj: args[1]
     };
     expect(a.move(...args)).toEqual(action);
   });
@@ -73,12 +72,11 @@ describe('next_level action creator', () => {
 
 describe('open action creator', () => {
   it('should return an action to open a door or other target object', () => {
-    const args = ['north', { x: 0, y: 0 }, { type: 'target' }];
+    const args = [{ x: 0, y: 0 }, { type: 'target' }];
     const action = {
       type: t.OPEN,
-      direction: args[0],
-      targetPosition: args[1],
-      targetObj: args[2]
+      targetPosition: args[0],
+      targetObj: args[1]
     };
     expect(a.open(...args)).toEqual(action);
   });
