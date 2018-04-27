@@ -4,16 +4,16 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import reducer from './reducers/index';
 
-const middlewares1 = [thunk, batchDispatchMiddleware];
-const middlewares2 = [];
+const middleware0 = [thunk, batchDispatchMiddleware];
+const middleware1 = [];
 
 if (process.env.NODE_ENV !== 'production') {
-  middlewares2.push(logger);
+  middleware1.push(logger);
 }
 
 export const store = createStore(
-  enableBatching(reducer, applyMiddleware(...middlewares1)),
-  applyMiddleware(...middlewares2)
+  enableBatching(reducer, applyMiddleware(...middleware0)),
+  applyMiddleware(...middleware1)
 );
 
 export const { getState } = store;
