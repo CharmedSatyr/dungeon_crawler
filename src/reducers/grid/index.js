@@ -24,10 +24,10 @@ const grid = (state = initialState, { type, direction, targetPosition, targetObj
     //  });
     case t.FACING:
       return Object.assign({}, state, {
-        data: facing(state.data, targetPosition, direction)
+        data: facing(state.data, state.playerPosition, targetObj)
       });
     case t.MOVE:
-      const updated = movement(state.data, state.playerPosition, targetPosition, targetObj);
+      const updated = movement(state.data, state.playerPosition, targetObj);
       return Object.assign({}, state, {
         data: updated.data,
         playerPosition: updated.playerPosition
@@ -42,7 +42,7 @@ const grid = (state = initialState, { type, direction, targetPosition, targetObj
         playerPosition: level.playerPosition
       });
     case t.OPEN:
-      return Object.assign({}, state, { data: open(state.data, targetPosition, targetObj) });
+      return Object.assign({}, state, { data: open(state.data, targetObj) });
     default:
       return state;
   }

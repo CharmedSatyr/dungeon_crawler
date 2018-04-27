@@ -2,7 +2,7 @@ import _ from 'lodash';
 import * as h from '../../actions/index.helpers';
 
 // Validates basic movement actions
-export const movement = (data, playerPosition, targetPosition, targetObj) => {
+export const movement = (data, playerPosition, targetObj) => {
   // Avoiding mapping through all the cells in this function based on a hypothesis about performance
 
   // Shallow clone
@@ -18,17 +18,18 @@ export const movement = (data, playerPosition, targetPosition, targetObj) => {
   // The player is at the next position
   // Don't overwrite other payloads when updating the object
   const newObj = Object.assign({}, targetObj);
+  const direction = h.getDirection(playerPosition, targetObj);
 
   newObj.payload
-    ? (newObj.payload.player = { facing: h.getDirection(playerPosition, targetPosition) })
-    : (newObj.payload = { player: { facing: h.getDirection(playerPosition, targetPosition) } });
-  newData.splice(targetPosition.index, 1, newObj);
+    ? (newObj.payload.player = { facing: direction })
+    : (newObj.payload = { player: { facing: direction } });
+  newData.splice(targetObj.index, 1, newObj);
 
   return {
     data: newData,
     playerPosition: {
-      coordinates: targetPosition.coordinates,
-      index: targetPosition.index
+      coordinates: targetObj.coordinates,
+      index: targetObj.index
     }
   };
 };
