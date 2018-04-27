@@ -17,23 +17,17 @@ const initialState = {
 // Grid reducers
 const grid = (state = initialState, { type, direction, targetPosition, targetObj }) => {
   switch (type) {
-    case t.ATTACK:
-      // Temporary
-      return Object.assign({}, state, {
-        data: facing(state.data, state.playerPosition, direction)
-      });
+    //case t.ATTACK:
+    //  // Temporary
+    //  return Object.assign({}, state, {
+    //    data: facing(state.data, state.playerPosition, direction)
+    //  });
     case t.FACING:
       return Object.assign({}, state, {
         data: facing(state.data, targetPosition, direction)
       });
     case t.MOVE:
-      const updated = movement(
-        state.data,
-        state.playerPosition,
-        direction,
-        targetPosition,
-        targetObj
-      );
+      const updated = movement(state.data, state.playerPosition, targetPosition, targetObj);
       return Object.assign({}, state, {
         data: updated.data,
         playerPosition: updated.playerPosition
