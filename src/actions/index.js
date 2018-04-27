@@ -23,11 +23,11 @@ export const attack = (direction, targetPosition, targetObj) => {
   return action;
 };
 
-export const facing = (direction, entityPosition) => {
+export const facing = (direction, targetPosition) => {
   const action = {
     type: t.FACING,
     direction,
-    entityPosition
+    targetPosition
   };
   return action;
 };
@@ -40,20 +40,6 @@ export const move = (direction, targetPosition, targetObj) => {
     targetObj
   };
   return action;
-};
-
-// THUNK
-// Check if the player should level up
-export const level_check = xp => {
-  const { experience, level } = getState().player;
-  const newExp = xp + experience;
-  const nextLevel = level + 1;
-  const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
-  const result = g.levelCheck(newExp, level) ? level_up() : { type: null };
-  const announcement = g.levelCheck(newExp, level) ? message(msg) : { type: null };
-  const batched = [];
-  batched.push(result, announcement);
-  return batchActions(batched);
 };
 
 export const level_up = () => {
@@ -161,34 +147,29 @@ export const player_input = direction => {
 };
 
 // THUNK
+// Check if the player should level up
+export const level_check = xp => {
+  const { experience, level } = getState().player;
+  const newExp = xp + experience;
+  const nextLevel = level + 1;
+  const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
+  const result = g.levelCheck(newExp, level) ? level_up() : { type: null };
+  const announcement = g.levelCheck(newExp, level) ? message(msg) : { type: null };
+  const batched = [];
+  batched.push(result, announcement);
+  return batchActions(batched);
+};
+
+// THUNK
 // Player takes damage if an enemy is in an adjacent cell; otherwise, do nothing
 // Polling cells around player for enemies seems more efficient than polling cells around enemies for player
-export const hostile_enemies = () => {
-  // TODO: This state should be received as arguments so this function is more easily testable
-  const { player } = getState();
-  const { data, playerPosition } = getState().grid;
-  const playerAdjacentPositions = h.playerAdjacentPositions(playerPosition);
-
-  // If there are no enemies, dispatch a `null` action, else dispatch harmless `null` with checkAttack pushes
-  const batched = [{ type: null }];
-
-  // Check for an enemy, face it the right way, calculate damage taken, and push a message
-  const checkAttack = target => {
-    const { index } = target;
-    const { enemy } = data[index].payload;
-
-    if (enemy && enemy.health > 0 && player.health.current > 0) {
-      const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
-      batched.push(
-        facing(h.facePlayer(target, ...playerAdjacentPositions), target),
-        take_damage(d),
-        message('An enemy assails you and does ' + d + ' damage!')
-      );
-    }
-  };
-
-  // Check for attack in all directions
-  playerAdjacentPositions.map(e => checkAttack(e));
-
+export const hostile_enemies = (enemy, target, pap) => {
+  const batched = [];
+  const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
+  batched.push(
+    facing(h.facePlayer(target, ...pap), target),
+    message('An enemy assails you and does ' + d + ' damage!'),
+    take_damage(d)
+  );
   return batchActions(batched);
 };

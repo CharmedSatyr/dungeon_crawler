@@ -8,12 +8,13 @@ import Map from '../components/Map';
 import Messages from '../components/Messages';
 import PlayerPanel from '../components/PlayerPanel';
 
+import * as h from '../actions/index.helpers';
+
 class Game extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
-
   handleKeyPress(e) {
     const { player_input } = this.props;
     switch (e.keyCode) {
@@ -45,12 +46,25 @@ class Game extends Component {
         return;
     }
   }
+  checkAttack(playerPosition) {
+    // Check for living enemies adjacent to player
+    const { gridData, hostile_enemies } = this.props;
+    const pap = h.playerAdjacentPositions(playerPosition);
+    pap.forEach(target => {
+      const { index } = target;
+      const { enemy } = gridData[index].payload;
+      if (enemy && enemy.health > 0) {
+        hostile_enemies(enemy, target, pap);
+      }
+    });
+  }
+
   componentWillMount() {
     this.props.next_level();
     window.addEventListener('keydown', e => this.handleKeyPress(e));
   }
   componentDidMount() {
-    setInterval(this.props.hostile_enemies, 1000);
+    setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
   }
   componentWillUnmount() {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
@@ -75,23 +89,25 @@ class Game extends Component {
 
 Game.propTypes = {
   gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  player: PropTypes.object.isRequired,
+  hostile_enemies: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
-  player_input: PropTypes.func.isRequired,
   next_level: PropTypes.func.isRequired,
-  hostile_enemies: PropTypes.func.isRequired
+  player: PropTypes.object.isRequired,
+  playerPosition: PropTypes.object.isRequired,
+  player_input: PropTypes.func.isRequired
 };
 
 const mapStateToProps = ({ grid, player, messages }) => ({
   gridData: grid.data,
-  player,
-  messages
+  messages,
+  playerPosition: grid.playerPosition,
+  player
 });
 
 const mapDispatchToProps = dispatch => ({
-  player_input: direction => dispatch(a.player_input(direction)),
+  hostile_enemies: (enemy, target, pap) => dispatch(a.hostile_enemies(enemy, target, pap)),
   next_level: () => dispatch(a.next_level()),
-  hostile_enemies: () => dispatch(a.hostile_enemies())
+  player_input: direction => dispatch(a.player_input(direction))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

@@ -26,15 +26,15 @@ describe('attack action creator', () => {
 });
 
 describe('facing action creator', () => {
-  it('should return an action to set the direction an entity is facing', () => {
+  it('should return an action to set the direction a target is facing', () => {
     const args = ['north', { x: 0, y: 0 }];
-    const action = { type: t.FACING, direction: args[0], entityPosition: args[1] };
+    const action = { type: t.FACING, direction: args[0], targetPosition: args[1] };
     expect(a.facing(...args)).toEqual(action);
   });
 });
 
 describe('move action creator', () => {
-  it('should return an action to move an entity in a direction', () => {
+  it('should return an action to move an target in a direction', () => {
     const args = ['north', { x: 0, y: 0 }, { type: 'target' }];
     const action = {
       type: t.MOVE,
@@ -93,12 +93,25 @@ describe('take_damage action creator', () => {
 });
 
 /*** THUNKS ***/
-// Not sure how to test my thunks due to getState closures. Waiting for additional refactoring.
-// TODO: Refactor thunks to allow easier testing
 describe('hostile_enemies action creator thunk', () => {
-  // it('should trigger `message`, `take_damage`, and `facing` action creators if an enemy is adjacent to the player, else type `null`', () => {});
-  it('should not be null or undefined', () => {
-    expect.anything();
+  it('should trigger `facing`, `message`, and `take_damage` action creators', () => {
+    const enemy = {
+      facing: 'west',
+      health: 40,
+      level: 4,
+      weapon: { name: 'Spear', min_damage: 3, max_damage: 7 }
+    };
+    const e = { coordinates: { x: 1, y: 0 }, index: 1 };
+    const n = { coordinates: { x: 0, y: -1 }, index: -GRID_WIDTH };
+    const s = { coordinates: { x: 0, y: 1 }, index: GRID_WIDTH };
+    const w = { coordinates: { x: -1, y: 0 }, index: -1 };
+    const target = { e };
+    const pap = [e, n, s, w];
+    const batchAction = {
+      payload: [{ type: t.FACING }, { type: t.MESSAGE }, { type: t.TAKE_DAMAGE }],
+      type: 'BATCHING_REDUCER.BATCH'
+    };
+    expect(a.hostile_enemies(enemy, target, pap)).toMatchObject(batchAction);
   });
 });
 
