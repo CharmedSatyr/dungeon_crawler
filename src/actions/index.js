@@ -1,5 +1,4 @@
 import * as t from '../constants/action-types';
-import * as h from './index.helpers';
 import * as g from '../constants/gameplay';
 import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
@@ -24,19 +23,17 @@ export const add_xp = amount => {
 //   return action;
 // };
 
-export const facing = (direction, targetPosition) => {
+export const facing = targetObj => {
   const action = {
     type: t.FACING,
-    direction,
-    targetPosition
+    targetObj
   };
   return action;
 };
 
-export const move = (targetPosition, targetObj) => {
+export const move = targetObj => {
   const action = {
     type: t.MOVE,
-    targetPosition,
     targetObj
   };
   return action;
@@ -66,10 +63,9 @@ export const next_level = () => {
 };
 
 // Open doors
-export const open = (targetPosition, targetObj) => {
+export const open = targetObj => {
   const action = {
     type: t.OPEN,
-    targetPosition,
     targetObj
   };
   return action;
@@ -86,11 +82,11 @@ export const take_damage = damage => {
 /*** THUNKS ***/
 // Turn the enemy toward the player, display damage notification, inflict damage
 // The `enemy` argument is the payload of a cell object; `targetPosition` is its position; `pap` is playerAdjacentPositions
-export const hostile_enemies = (enemy, targetPosition, pap) => {
+export const hostile_enemies = (enemy, targetObj, pap) => {
   const batched = [];
   const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
   batched.push(
-    facing(h.facePlayer(targetPosition, ...pap), targetPosition),
+    facing(targetObj),
     message('An enemy assails you and does ' + d + ' damage!'),
     take_damage(d)
   );
@@ -111,9 +107,8 @@ export const level_check = xp => {
 };
 
 // This primary thunk returns action creators as appropriate on player input
-export const player_input = (direction, playerPosition, targetObj) => {
+export const player_input = targetObj => {
   // Get info about the cell the player is advancing toward
-  // TODO: Remove need for 'direction' argument
   // TODO: Fix Attack to actually use a reducer other than for facing
   // TODO: This state should be received as arguments so this function is more easily testable
   // TODO: Remove getTargetPosition and other functions that belong in Game from helpers and put them there
@@ -122,7 +117,6 @@ export const player_input = (direction, playerPosition, targetObj) => {
   // TODO: Many of the below component functions need fewer arguments
   const { level } = getState().grid;
 
-  const targetPosition = h.getTargetPosition(playerPosition, direction);
   const { type } = targetObj;
   const { enemy, loot, portal } = targetObj.payload;
 
@@ -131,7 +125,7 @@ export const player_input = (direction, playerPosition, targetObj) => {
     (type === tileTypes(level, 'path') && !enemy && !loot && !portal) ||
     (enemy && enemy.health <= 0)
   ) {
-    return move(targetPosition, targetObj);
+    return move(targetObj);
   }
 
   // If the targetPosition is an enemy, attack!
@@ -139,7 +133,9 @@ export const player_input = (direction, playerPosition, targetObj) => {
     const { weapon, level } = getState().player;
 
     const d = g.damageCalc(weapon.min_damage, weapon.max_damage, level);
-    enemy.health -= d; // This lowers the enemy's health without going through a proper ATTACK reducer!
+    // TODO: This lowers the enemy's health without going through a proper ATTACK reducer!
+    // TODO: Player does not change facing direction when attacking
+    enemy.health -= d;
     const addendum =
       enemy.health > 0
         ? "Your hapless enemy's health drops to " + enemy.health + '.'
@@ -158,7 +154,7 @@ export const player_input = (direction, playerPosition, targetObj) => {
   // If the target is a closed portal, open the door
   if (portal && !portal.open) {
     const msg = 'The door creaks open...';
-    return batchActions([open(targetPosition, targetObj), message(msg)]);
+    return batchActions([open(targetObj), message(msg)]);
   }
 
   // If the targetObj is an open portal, go to the next level!
@@ -168,5 +164,6 @@ export const player_input = (direction, playerPosition, targetObj) => {
   }
 
   // If no conditions are met, just face in the right direction
-  return facing(direction, playerPosition);
+  // TODO: This no longer works
+  return facing(targetObj);
 };
