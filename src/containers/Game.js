@@ -52,12 +52,14 @@ class Game extends Component {
     // Check for living enemies adjacent to player
     const { gridData, hostile_enemies } = this.props;
     const pap = h.playerAdjacentPositions(playerPosition);
+    // For each neighbor
     pap.forEach(targetPosition => {
       const { index } = targetPosition;
       const targetObj = gridData[index];
       const { enemy } = targetObj.payload;
+      // If enemy, initiate its attack
       if (enemy && enemy.health > 0) {
-        hostile_enemies(enemy, targetObj, pap);
+        hostile_enemies(targetObj);
       }
     });
   }
@@ -113,7 +115,7 @@ const mapStateToProps = ({ grid, player, messages }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  hostile_enemies: (enemy, targetObj, pap) => dispatch(a.hostile_enemies(enemy, targetObj, pap)),
+  hostile_enemies: targetObj => dispatch(a.hostile_enemies(targetObj)),
   next_level: () => dispatch(a.next_level()),
   player_input: targetObj => dispatch(a.player_input(targetObj))
 });
