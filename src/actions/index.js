@@ -22,10 +22,11 @@ export const attack = (targetObj, d) => {
   return action;
 };
 
-export const facing = targetObj => {
+export const facing = (targetObj, flag) => {
   const action = {
     type: t.FACING,
-    targetObj
+    targetObj,
+    flag
   };
   return action;
 };
@@ -80,16 +81,14 @@ export const take_damage = damage => {
 
 /*** THUNKS ***/
 // Turn the enemy toward the player, display damage notification, inflict damage
-// The `enemy` argument is the payload of a cell object; `targetPosition` is its position; `pap` is playerAdjacentPositions
-export const hostile_enemies = (enemy, targetObj, pap) => {
-  const batched = [];
+export const hostile_enemies = targetObj => {
+  const { enemy } = targetObj.payload;
   const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
-  batched.push(
-    facing(targetObj),
+  return batchActions([
+    facing(targetObj, 'enemy'),
     message('An enemy assails you and does ' + d + ' damage!'),
     take_damage(d)
-  );
-  return batchActions(batched);
+  ]);
 };
 
 // Check if the player should level up
@@ -117,35 +116,40 @@ export const player_input = targetObj => {
     (type === tileTypes(level, 'path') && !enemy && !loot && !portal) ||
     (enemy && enemy.health <= 0)
   ) {
-    return batchActions([facing(targetObj), move(targetObj)]);
+    return move(targetObj);
   }
 
   // If the targetPosition is an enemy, attack!
   if (enemy && enemy.health > 0) {
     const { weapon, level } = getState().player;
 
+    // Calculate damage and display a message
     const d = g.damageCalc(weapon.min_damage, weapon.max_damage, level);
-    const a = attack(targetObj, d);
     const h = enemy.health - d;
-
     const addendum =
       h > 0 ? "Your hapless enemy's health drops to " + h + '.' : 'The enemy is slain!';
-
     let msg = 'You swing mightily and do ' + d + ' damage. ' + addendum;
-    const m = message(msg);
 
+    // If the enemy is dead, player gains experience
     if (enemy.health <= 0) {
       const xp = g.xpCalc(enemy.level);
-      return batchActions([a, m, facing(targetObj), add_xp(xp), level_check(xp)]);
+      return batchActions([
+        add_xp(xp),
+        attack(targetObj, d),
+        facing(targetObj),
+        level_check(xp),
+        message(msg)
+      ]);
     } else {
-      return batchActions([a, m, facing(targetObj)]);
+      // Otherwise keep fighting
+      return batchActions([attack(targetObj, d), message(msg), facing(targetObj)]);
     }
   }
 
   // If the target is a closed portal, open the door
   if (portal && !portal.open) {
     const msg = 'The door creaks open...';
-    return batchActions([open(targetObj), message(msg)]);
+    return batchActions([open(targetObj), message(msg), facing(targetObj)]);
   }
 
   // If the targetObj is an open portal, go to the next level!
