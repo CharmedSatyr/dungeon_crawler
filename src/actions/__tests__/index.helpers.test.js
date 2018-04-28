@@ -1,6 +1,21 @@
 import * as h from '../index.helpers';
 import { GRID_WIDTH } from '../../constants/settings';
 
+describe('getDirection', () => {
+  it('should return the direction an entity is moving, given origin and target positions', () => {
+    // arguments = origin, target
+    const originPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
+    const e = { coordinates: { x: 1, y: 0 }, index: 1 };
+    const n = { coordinates: { x: 0, y: -1 }, index: -GRID_WIDTH };
+    const s = { coordinates: { x: 0, y: 1 }, index: GRID_WIDTH };
+    const w = { coordinates: { x: -1, y: 0 }, index: -1 };
+    expect(h.getDirection(originPosition, e)).toBe('east');
+    expect(h.getDirection(originPosition, n)).toBe('north');
+    expect(h.getDirection(originPosition, s)).toBe('south');
+    expect(h.getDirection(originPosition, w)).toBe('west');
+  });
+});
+
 describe('getTargetPosition', () => {
   it('should return the coordinates and index of the cell the source (usually player) is moving to', () => {
     const originPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
