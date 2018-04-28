@@ -1,7 +1,8 @@
 import * as t from '../../constants/action-types';
+import { attack } from './attack';
 import { facing } from './facing';
 import { generate } from './generate';
-import { movement } from './movement';
+import { move } from './move';
 import { open } from './open';
 import { populate } from './populate';
 
@@ -15,19 +16,18 @@ const initialState = {
 };
 
 // Grid reducers
-const grid = (state = initialState, { type, direction, targetPosition, targetObj }) => {
+const grid = (state = initialState, { type, direction, targetObj, damage }) => {
   switch (type) {
-    //case t.ATTACK:
-    //  // Temporary
-    //  return Object.assign({}, state, {
-    //    data: facing(state.data, state.playerPosition, direction)
-    //  });
+    case t.ATTACK:
+      return Object.assign({}, state, {
+        data: attack(state.data, targetObj, damage)
+      });
     case t.FACING:
       return Object.assign({}, state, {
         data: facing(state.data, state.playerPosition, targetObj)
       });
     case t.MOVE:
-      const updated = movement(state.data, state.playerPosition, targetObj);
+      const updated = move(state.data, state.playerPosition, targetObj);
       return Object.assign({}, state, {
         data: updated.data,
         playerPosition: updated.playerPosition

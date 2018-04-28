@@ -13,15 +13,14 @@ export const add_xp = amount => {
   return action;
 };
 
-// export const attack = (direction, targetPosition, targetObj) => {
-//   const action = {
-//     type: t.ATTACK,
-//     direction,
-//     targetPosition,
-//     targetObj
-//   };
-//   return action;
-// };
+export const attack = (targetObj, d) => {
+  const action = {
+    type: t.ATTACK,
+    targetObj,
+    damage: d
+  };
+  return action;
+};
 
 export const facing = targetObj => {
   const action = {
@@ -109,14 +108,7 @@ export const level_check = xp => {
 // This primary thunk returns action creators as appropriate on player input
 export const player_input = targetObj => {
   // Get info about the cell the player is advancing toward
-  // TODO: Fix Attack to actually use a reducer other than for facing
-  // TODO: This state should be received as arguments so this function is more easily testable
-  // TODO: Remove getTargetPosition and other functions that belong in Game from helpers and put them there
-  // TODO: It should be possible to infer direction from playerPosition and targetObj
-  // TODO: It should be possible to get targetPosition from targetObj
-  // TODO: Many of the below component functions need fewer arguments
   const { level } = getState().grid;
-
   const { type } = targetObj;
   const { enemy, loot, portal } = targetObj.payload;
 
@@ -125,7 +117,7 @@ export const player_input = targetObj => {
     (type === tileTypes(level, 'path') && !enemy && !loot && !portal) ||
     (enemy && enemy.health <= 0)
   ) {
-    return move(targetObj);
+    return batchActions([facing(targetObj), move(targetObj)]);
   }
 
   // If the targetPosition is an enemy, attack!
@@ -133,21 +125,20 @@ export const player_input = targetObj => {
     const { weapon, level } = getState().player;
 
     const d = g.damageCalc(weapon.min_damage, weapon.max_damage, level);
-    // TODO: This lowers the enemy's health without going through a proper ATTACK reducer!
-    // TODO: Player does not change facing direction when attacking
-    enemy.health -= d;
+    const a = attack(targetObj, d);
+    const h = enemy.health - d;
+
     const addendum =
-      enemy.health > 0
-        ? "Your hapless enemy's health drops to " + enemy.health + '.'
-        : 'The enemy is slain!';
+      h > 0 ? "Your hapless enemy's health drops to " + h + '.' : 'The enemy is slain!';
 
     let msg = 'You swing mightily and do ' + d + ' damage. ' + addendum;
+    const m = message(msg);
 
     if (enemy.health <= 0) {
       const xp = g.xpCalc(enemy.level);
-      return batchActions([message(msg), add_xp(xp), level_check(xp)]);
+      return batchActions([a, m, facing(targetObj), add_xp(xp), level_check(xp)]);
     } else {
-      return batchActions([message(msg)]);
+      return batchActions([a, m, facing(targetObj)]);
     }
   }
 
@@ -164,6 +155,5 @@ export const player_input = targetObj => {
   }
 
   // If no conditions are met, just face in the right direction
-  // TODO: This no longer works
   return facing(targetObj);
 };
