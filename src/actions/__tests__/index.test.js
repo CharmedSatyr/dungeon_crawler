@@ -1,6 +1,5 @@
 import * as a from '../index';
 import * as t from '../../constants/action-types';
-import { GRID_WIDTH } from '../../constants/settings';
 
 /*** SIMPLE ACTION CREATORS ***/
 describe('add_xp action creator', () => {
@@ -27,9 +26,37 @@ describe('add_xp action creator', () => {
 
 describe('facing action creator', () => {
   it('should return an action to set the direction an entity is facing', () => {
-    const args = [{ x: 0, y: 0 }];
-    const action = { type: t.FACING, targetObj: args[0] };
-    expect(a.facing(...args)).toEqual(action);
+    const enemyObj = {
+      coordinates: { x: expect.any(Number), y: expect.any(Number) },
+      payload: {
+        enemy: {
+          facing: expect.any(String)
+        }
+      }
+    };
+    const playerObj = {
+      coordinates: { x: expect.any(Number), y: expect.any(Number) },
+      payload: {
+        enemy: {
+          facing: expect.any(String)
+        }
+      }
+    };
+
+    const enemyArgs = [enemyObj, 'enemy'];
+    const playerArgs = [playerObj];
+    const action_noFlag = {
+      type: t.FACING,
+      targetObj: expect(playerArgs[0]),
+      flag: expect.not.anything()
+    };
+    const action = {
+      type: t.FACING,
+      targetObj: expect.objectContaining(enemyArgs[0]),
+      flag: expect(enemyArgs[1])
+    };
+    expect(a.facing(...playerArgs)).toMatchObject(action_noFlag);
+    expect(a.facing(...enemyArgs)).toMatchObject(action);
   });
 });
 
@@ -91,23 +118,27 @@ describe('take_damage action creator', () => {
 /*** THUNKS ***/
 describe('hostile_enemies action creator thunk', () => {
   it('should trigger `facing`, `message`, and `take_damage` action creators', () => {
-    const enemy = {
-      facing: 'west',
-      health: 40,
-      level: 4,
-      weapon: { name: 'Spear', min_damage: 3, max_damage: 7 }
+    const targetObj = {
+      coordinates: {},
+      index: expect.any(Number),
+      payload: {
+        enemy: {
+          weapon: {
+            min_damage: expect.any(Number),
+            max_damage: expect.any(Number)
+          }
+        }
+      }
     };
-    const e = { coordinates: { x: 1, y: 0 }, index: 1 };
-    const n = { coordinates: { x: 0, y: -1 }, index: -GRID_WIDTH };
-    const s = { coordinates: { x: 0, y: 1 }, index: GRID_WIDTH };
-    const w = { coordinates: { x: -1, y: 0 }, index: -1 };
-    const target = { e };
-    const pap = [e, n, s, w];
     const batchAction = {
-      payload: [{ type: t.FACING }, { type: t.MESSAGE }, { type: t.TAKE_DAMAGE }],
+      payload: [
+        { type: t.FACING, targetObj },
+        { type: t.MESSAGE, msg: expect.any(String) },
+        { type: t.TAKE_DAMAGE, damage: expect.any(Number) }
+      ],
       type: 'BATCHING_REDUCER.BATCH'
     };
-    expect(a.hostile_enemies(enemy, target, pap)).toMatchObject(batchAction);
+    expect(a.hostile_enemies(targetObj)).toMatchObject(batchAction);
   });
 });
 
