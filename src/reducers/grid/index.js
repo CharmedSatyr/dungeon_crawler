@@ -16,7 +16,7 @@ const initialState = {
 };
 
 // Grid reducers
-const grid = (state = initialState, { type, direction, targetObj, damage }) => {
+const grid = (state = initialState, { damage, direction, flag, targetObj, type }) => {
   switch (type) {
     case t.ATTACK:
       return Object.assign({}, state, {
@@ -24,7 +24,7 @@ const grid = (state = initialState, { type, direction, targetObj, damage }) => {
       });
     case t.FACING:
       return Object.assign({}, state, {
-        data: facing(state.data, state.playerPosition, targetObj)
+        data: facing(state.data, state.playerPosition, targetObj, flag)
       });
     case t.MOVE:
       const updated = move(state.data, state.playerPosition, targetObj);
