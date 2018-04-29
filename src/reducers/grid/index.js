@@ -1,5 +1,6 @@
 import * as t from '../../constants/action-types';
 import { attack } from './attack';
+import drink from './drink';
 import { facing } from './facing';
 import { generate } from './generate';
 import { move } from './move';
@@ -21,6 +22,10 @@ const grid = (state = initialState, { damage, direction, flag, targetObj, type }
     case t.ATTACK:
       return Object.assign({}, state, {
         data: attack(state.data, targetObj, damage)
+      });
+    case t.DRINK:
+      return Object.assign({}, state, {
+        data: drink(state.data, targetObj)
       });
     case t.FACING:
       return Object.assign({}, state, {
