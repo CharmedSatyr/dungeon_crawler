@@ -22,7 +22,7 @@ export const attack = (targetObj, d) => {
   return action;
 };
 
-export const facing = (targetObj, flag) => {
+export const facing = (targetObj, flag = 'player') => {
   const action = {
     type: t.FACING,
     targetObj,
@@ -92,20 +92,18 @@ export const hostile_enemies = targetObj => {
 };
 
 // Check if the player should level up
-export const level_check = xp => {
-  const { experience, level } = getState().player;
+export const level_check = (xp, player = getState().player) => {
+  const { experience, level } = player;
   const newExp = xp + experience;
-  const nextLevel = level + 1;
-  const msg = 'You feel yourself growing stronger... You have achieved level ' + nextLevel + '.';
-  const result = g.levelCheck(newExp, level) ? level_up() : { type: null };
-  const announcement = g.levelCheck(newExp, level) ? message(msg) : { type: null };
-  const batched = [];
-  batched.push(result, announcement);
-  return batchActions(batched);
+  const msg = `You feel yourself growing stronger... You have achieved level ${level + 1}.`;
+  if (g.levelCheck(newExp, level)) {
+    return batchActions([level_up(), message(msg)]);
+  }
+  return batchActions([{ type: null }]);
 };
 
 // This primary thunk returns action creators as appropriate on player input
-export const player_input = targetObj => {
+export const player_input = (targetObj, player = getState().player) => {
   // Get info about the cell the player is advancing toward
   const { level } = getState().grid;
   const { type } = targetObj;
@@ -121,7 +119,7 @@ export const player_input = targetObj => {
 
   // If the targetPosition is an enemy, attack!
   if (enemy && enemy.health > 0) {
-    const { weapon, level } = getState().player;
+    const { weapon, level } = player;
 
     // Calculate damage and display a message
     const d = g.damageCalc(weapon.min_damage, weapon.max_damage, level);
@@ -131,7 +129,7 @@ export const player_input = targetObj => {
     let msg = 'You swing mightily and do ' + d + ' damage. ' + addendum;
 
     // If the enemy is dead, player gains experience
-    if (enemy.health <= 0) {
+    if (h <= 0) {
       const xp = g.xpCalc(enemy.level);
       return batchActions([
         add_xp(xp),
