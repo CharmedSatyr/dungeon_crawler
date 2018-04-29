@@ -1,5 +1,6 @@
 export const ADD_XP = 'ADD_EXP';
 export const ATTACK = 'ATTACK';
+export const DRINK = 'DRINK';
 export const FACING = 'FACING';
 export const HOSTILE_ENEMIES = 'HOSTILE_ENEMIES';
 export const LEVEL_UP = 'LEVEL_UP';

@@ -24,6 +24,21 @@ describe('`attack` action creator', () => {
   });
 });
 
+describe('`drink` action creator', () => {
+  it('should return an action to drink from a water barrel', () => {
+    const targetObj = {
+      payload: {
+        loot: {}
+      }
+    };
+    const action = {
+      type: t.DRINK,
+      targetObj
+    };
+    expect(a.drink(targetObj)).toEqual(action);
+  });
+});
+
 describe('`facing` action creator', () => {
   it('should return an action containing a type, the argument object, and the provided or `player` flag', () => {
     const enemyObj = {
@@ -111,6 +126,7 @@ describe('`take_damage` action creator', () => {
 });
 
 /*** THUNKS ***/
+// hostile_enemies
 describe('`hostile_enemies` action creator thunk', () => {
   it('should trigger batched `facing`, `message`, and `take_damage` action creators', () => {
     const targetObj = {
@@ -137,6 +153,7 @@ describe('`hostile_enemies` action creator thunk', () => {
   });
 });
 
+// level_check
 describe('`level_check` action creator thunk', () => {
   const player = { experience: 0, level: 1 };
   it('should trigger batched `level_up` and `message` action creators if the player should level up', () => {
@@ -155,6 +172,7 @@ describe('`level_check` action creator thunk', () => {
   });
 });
 
+// player_input
 describe('`player_input` action creator thunk', () => {
   it('should trigger `move` action creator if the argument type is `dirtPath`', () => {
     const pathTargetObj = {
@@ -210,6 +228,30 @@ describe('`player_input` action creator thunk', () => {
         { type: 'BATCHING_REDUCER.BATCH' }, // level_check is a thunk
         { type: t.MESSAGE }
       ],
+      type: 'BATCHING_REDUCER.BATCH'
+    });
+  });
+
+  it('should trigger batched `drink`, `message`, and `facing` action creators if the targetObj is a full water barrel', () => {
+    const waterBarrel = {
+      payload: {
+        barrel: { full: true }
+      }
+    };
+    expect(a.player_input(waterBarrel)).toMatchObject({
+      payload: [{ type: t.DRINK }, { type: t.MESSAGE }, { type: t.FACING }],
+      type: 'BATCHING_REDUCER.BATCH'
+    });
+  });
+
+  it('should trigger batched `message` and `facing` action creators if the targetObj is an empty water barrel', () => {
+    const emptyBarrel = {
+      payload: {
+        barrel: { full: false }
+      }
+    };
+    expect(a.player_input(emptyBarrel)).toMatchObject({
+      payload: [{ type: t.MESSAGE }, { type: t.FACING }],
       type: 'BATCHING_REDUCER.BATCH'
     });
   });
