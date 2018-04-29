@@ -31,11 +31,13 @@ describe('`drink` action creator', () => {
         loot: {}
       }
     };
+    const amount = expect.any(Number);
     const action = {
       type: t.DRINK,
-      targetObj
+      targetObj,
+      amount
     };
-    expect(a.drink(targetObj)).toEqual(action);
+    expect(a.drink(targetObj, amount)).toEqual(action);
   });
 });
 

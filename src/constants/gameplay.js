@@ -30,6 +30,12 @@ export const xpCalc = enemyLevel => {
   return enemyLevel * 10;
 };
 
+// Calculate how much a drink of enchanted spring water heals
+// Amount based on grid level
+export const healingCalc = gridLevel => {
+  return gridLevel * 10;
+};
+
 // Calculate new max health on level up
 // Leveling up affects damage calculations in actions and increases max health by ~10%
 export const healthCalc = level => {

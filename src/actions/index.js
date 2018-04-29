@@ -22,10 +22,11 @@ export const attack = (targetObj, d) => {
   return action;
 };
 
-export const drink = targetObj => {
+export const drink = (targetObj, amount) => {
   const action = {
     type: t.DRINK,
-    targetObj
+    targetObj,
+    amount
   };
   return action;
 };
@@ -153,8 +154,9 @@ export const player_input = (targetObj, player = getState().player) => {
   }
   // If the target is a full water barrel, drink it
   if (barrel && barrel.full) {
+    const amount = g.healingCalc(level);
     const msg = 'You drink from the enchanted spring water and feel refreshed.';
-    return batchActions([drink(targetObj), message(msg), facing(targetObj)]);
+    return batchActions([drink(targetObj, amount), message(msg), facing(targetObj)]);
   }
 
   // If the target is an empty barrel, see a message

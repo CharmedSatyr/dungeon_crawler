@@ -28,6 +28,12 @@ describe('xpCalc', () => {
   });
 });
 
+describe('healingCalc', () => {
+  it('should calculate the amount of healing dealt on drink, based on grid level', () => {
+    expect(g.healingCalc(1)).toBe(10);
+  });
+});
+
 describe('healthCalc', () => {
   it('should calculate new max health on level up', () => {
     expect(g.healthCalc(1)).toBe(10);
