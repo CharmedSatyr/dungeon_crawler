@@ -1,8 +1,9 @@
 import * as a from '../index';
+import * as g from '../../constants/gameplay';
 import * as t from '../../constants/action-types';
 
 /*** SIMPLE ACTION CREATORS ***/
-describe('add_xp action creator', () => {
+describe('`add_xp` action creator', () => {
   it('should return an action to add experience to the player', () => {
     const args = 56;
     const action = { type: t.ADD_XP, amount: 56 };
@@ -10,57 +11,51 @@ describe('add_xp action creator', () => {
   });
 });
 
-// describe('attack action creator', () => {
-//   it('should return an action to attack an object in a direction', () => {
-//     const args = ['north', { a: 0 }, { b: 1 }];
-//     const action = {
-//       type: t.ATTACK,
-//       direction: args[0],
-//       targetPosition: args[1],
-//       targetObj: args[2]
-//     };
-//
-//     expect(a.attack(...args)).toEqual(action);
-//   });
-// });
-
-describe('facing action creator', () => {
-  it('should return an action to set the direction an entity is facing', () => {
-    const enemyObj = {
-      coordinates: { x: expect.any(Number), y: expect.any(Number) },
-      payload: {
-        enemy: {
-          facing: expect.any(String)
-        }
-      }
-    };
-    const playerObj = {
-      coordinates: { x: expect.any(Number), y: expect.any(Number) },
-      payload: {
-        enemy: {
-          facing: expect.any(String)
-        }
-      }
-    };
-
-    const enemyArgs = [enemyObj, 'enemy'];
-    const playerArgs = [playerObj];
-    const action_noFlag = {
-      type: t.FACING,
-      targetObj: expect(playerArgs[0]),
-      flag: expect.not.anything()
-    };
+describe('`attack` action creator', () => {
+  it('should return an action to attack a targetObject a certain amount', () => {
+    const targetObj = {};
+    const d = 10;
     const action = {
-      type: t.FACING,
-      targetObj: expect.objectContaining(enemyArgs[0]),
-      flag: expect(enemyArgs[1])
+      type: t.ATTACK,
+      targetObj,
+      damage: d
     };
-    expect(a.facing(...playerArgs)).toMatchObject(action_noFlag);
-    expect(a.facing(...enemyArgs)).toMatchObject(action);
+    expect(a.attack(targetObj, d)).toMatchObject(action);
   });
 });
 
-describe('move action creator', () => {
+describe('`facing` action creator', () => {
+  it('should return an action containing a type, the argument object, and the provided or `player` flag', () => {
+    const enemyObj = {
+      coordinates: { x: 0, y: 0 },
+      payload: {
+        enemy: {
+          facing: 'south'
+        }
+      }
+    };
+    expect(a.facing(enemyObj, 'enemy')).toMatchObject({
+      type: t.FACING,
+      targetObj: enemyObj,
+      flag: 'enemy'
+    });
+    const playerObj = {
+      coordinates: { x: 0, y: 0 },
+      payload: {
+        player: {
+          facing: 'north'
+        }
+      }
+    };
+    expect(a.facing(playerObj)).toMatchObject({
+      type: t.FACING,
+      targetObj: playerObj,
+      flag: 'player'
+    });
+  });
+});
+
+describe('`move` action creator', () => {
   it('should return an action to move to a target position', () => {
     const args = [{ x: 0, y: 0 }];
     const action = {
@@ -71,14 +66,14 @@ describe('move action creator', () => {
   });
 });
 
-describe('level_up action creator', () => {
+describe('`level_up` action creator', () => {
   it('should return an action to level up the player', () => {
     const action = { type: t.LEVEL_UP };
     expect(a.level_up()).toEqual(action);
   });
 });
 
-describe('message action creator', () => {
+describe('`message` action creator', () => {
   it('should return an action to display a message', () => {
     const args = 'test!';
     const action = {
@@ -89,14 +84,14 @@ describe('message action creator', () => {
   });
 });
 
-describe('next_level action creator', () => {
+describe('`next_level` action creator', () => {
   it('should return an action to advance the player to the next game level', () => {
     const action = { type: t.NEXT_LEVEL };
     expect(a.next_level()).toEqual(action);
   });
 });
 
-describe('open action creator', () => {
+describe('`open` action creator', () => {
   it('should return an action to open a door or other target object', () => {
     const args = [{ x: 0, y: 0 }];
     const action = {
@@ -107,7 +102,7 @@ describe('open action creator', () => {
   });
 });
 
-describe('take_damage action creator', () => {
+describe('`take_damage` action creator', () => {
   it('should return an action to cause the player to take a specified amount of damage', () => {
     const args = 12;
     const action = { type: t.TAKE_DAMAGE, damage: 12 };
@@ -116,8 +111,8 @@ describe('take_damage action creator', () => {
 });
 
 /*** THUNKS ***/
-describe('hostile_enemies action creator thunk', () => {
-  it('should trigger `facing`, `message`, and `take_damage` action creators', () => {
+describe('`hostile_enemies` action creator thunk', () => {
+  it('should trigger batched `facing`, `message`, and `take_damage` action creators', () => {
     const targetObj = {
       coordinates: {},
       index: expect.any(Number),
@@ -142,10 +137,112 @@ describe('hostile_enemies action creator thunk', () => {
   });
 });
 
-// TODO: Refactor thunks to allow easier testing
-describe('player_input action creator thunk', () => {
-  // it('should trigger the appropriate action creators on player input...', () => {});
-  it('should not be null or undefined', () => {
-    expect.anything();
+describe('`level_check` action creator thunk', () => {
+  const player = { experience: 0, level: 1 };
+  it('should trigger batched `level_up` and `message` action creators if the player should level up', () => {
+    const xp = 1000000;
+    expect(a.level_check(xp, player)).toMatchObject({
+      payload: [{ type: t.LEVEL_UP }, { type: t.MESSAGE }],
+      type: 'BATCHING_REDUCER.BATCH'
+    });
+  });
+  it('should return a `null` type action if the player should not level up', () => {
+    const xp = 0;
+    expect(a.level_check(xp, player)).toMatchObject({
+      payload: [{ type: null }],
+      type: 'BATCHING_REDUCER.BATCH'
+    });
+  });
+});
+
+describe('`player_input` action creator thunk', () => {
+  it('should trigger `move` action creator if the argument type is `dirtPath`', () => {
+    const pathTargetObj = {
+      payload: {},
+      type: 'dirtPath'
+    };
+    expect(a.player_input(pathTargetObj)).toMatchObject({ type: t.MOVE });
+  });
+
+  it('should trigger `move` action creator if the argument payload is a dead enemy', () => {
+    const enemyDeadTargetObj = {
+      payload: {
+        enemy: {
+          health: -10
+        }
+      }
+    };
+    expect(a.player_input(enemyDeadTargetObj)).toMatchObject({ type: t.MOVE });
+  });
+
+  it('should trigger batched `attack`, `message`, and `facing` action creators if the argument payload is a living enemy', () => {
+    const enemyAliveTargetObj = {
+      payload: {
+        enemy: {
+          health: 10
+        }
+      }
+    };
+    expect(a.player_input(enemyAliveTargetObj)).toMatchObject({
+      payload: [{ type: t.ATTACK }, { type: t.MESSAGE }, { type: t.FACING }],
+      type: 'BATCHING_REDUCER.BATCH'
+    });
+  });
+
+  it('should trigger batched `add_xp`, `attack`, `facing`, `level_check`, and `message` action creators if the enemy dies on attack', () => {
+    const enemyWillDieTargetObj = {
+      payload: {
+        enemy: {
+          level: 1,
+          health: 10
+        }
+      }
+    };
+    const player = { weapon: { min_damage: 10, max_damage: 10 }, level: 1 };
+    expect(a.player_input(enemyWillDieTargetObj, player)).toMatchObject({
+      payload: [
+        { type: t.ADD_XP, amount: g.xpCalc(enemyWillDieTargetObj.payload.enemy.level) },
+        {
+          type: t.ATTACK,
+          damage: g.damageCalc(player.weapon.min_damage, player.weapon.max_damage, player.level)
+        },
+        { type: t.FACING },
+        { type: 'BATCHING_REDUCER.BATCH' }, // level_check is a thunk
+        { type: t.MESSAGE }
+      ],
+      type: 'BATCHING_REDUCER.BATCH'
+    });
+  });
+
+  it('should trigger batched `open`, `message`, and `facing` action creators if the targetObj is a closed portal', () => {
+    const closedPortal = {
+      payload: {
+        portal: { open: false }
+      }
+    };
+    expect(a.player_input(closedPortal)).toMatchObject({
+      payload: [{ type: t.OPEN }, { type: t.MESSAGE }, { type: t.FACING }],
+      type: 'BATCHING_REDUCER.BATCH'
+    });
+  });
+
+  it('should trigger batched `next_level` and `message` action creators if the targetObj is an open portal', () => {
+    const openPortal = {
+      payload: {
+        portal: { open: true }
+      }
+    };
+    expect(a.player_input(openPortal)).toMatchObject({
+      payload: [{ type: t.NEXT_LEVEL }, { type: t.MESSAGE }],
+      type: 'BATCHING_REDUCER.BATCH'
+    });
+  });
+
+  it('should trigger `facing` action creator if argument type is `vines`', () => {
+    const barrierTargetObj = {
+      payload: {},
+      type: 'vines'
+    };
+    expect(a.player_input(barrierTargetObj)).toMatchObject({ type: t.FACING });
   });
 });
