@@ -26,6 +26,19 @@ const player = (state = initialState, action) => {
         { level: raisedLevel },
         { health: { ...state.health, max: raisedHealth } }
       );
+    case t.DRINK:
+      // Heal the player by the amount in the barrel if that won't put the player over max health
+      // Otherwise, the player is back to max health
+      const healthBoost = action.targetObj.payload.barrel.amount;
+      return Object.assign({}, state, {
+        health: {
+          ...state.health,
+          current:
+            state.health.current + healthBoost <= state.health.max
+              ? state.health.current + healthBoost
+              : state.health.max
+        }
+      });
     case t.TAKE_DAMAGE:
       // Show the remaining health unless the player is dead, then show 0
       const remaining = state.health.current - action.damage;
