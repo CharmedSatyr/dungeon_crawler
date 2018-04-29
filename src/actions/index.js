@@ -22,6 +22,14 @@ export const attack = (targetObj, d) => {
   return action;
 };
 
+export const drink = targetObj => {
+  const action = {
+    type: t.DRINK,
+    targetObj
+  };
+  return action;
+};
+
 export const facing = (targetObj, flag = 'player') => {
   const action = {
     type: t.FACING,
@@ -107,7 +115,7 @@ export const player_input = (targetObj, player = getState().player) => {
   // Get info about the cell the player is advancing toward
   const { level } = getState().grid;
   const { type } = targetObj;
-  const { enemy, loot, portal } = targetObj.payload;
+  const { barrel, enemy, loot, portal } = targetObj.payload;
 
   // Just move if the targetPosition is an empty floor or dead enemy
   if (
@@ -142,6 +150,17 @@ export const player_input = (targetObj, player = getState().player) => {
       // Otherwise keep fighting
       return batchActions([attack(targetObj, d), message(msg), facing(targetObj)]);
     }
+  }
+  // If the target is a full water barrel, drink it
+  if (barrel && barrel.full) {
+    const msg = 'You drink from the enchanted spring water and feel refreshed.';
+    return batchActions([drink(targetObj), message(msg), facing(targetObj)]);
+  }
+
+  // If the target is an empty barrel, see a message
+  if (barrel && !barrel.full) {
+    const msg = 'Not a drop remains in this container...';
+    return batchActions([message(msg), facing(targetObj)]);
   }
 
   // If the target is a closed portal, open the door
