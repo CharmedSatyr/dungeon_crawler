@@ -7,7 +7,7 @@ import * as h from '../../actions/index.helpers';
 export const facing = (data, playerPosition, targetObj, flag) => {
   const newData = _.clone(data);
   // Default flag, called by player_input
-  if (flag === 'player' && targetObj.payload.player) {
+  if (flag === 'player') {
     // Update the `facing` value of the current player object with inferred travel direction
     const direction = h.getDirection(playerPosition, targetObj);
     const player = data[playerPosition.index];
