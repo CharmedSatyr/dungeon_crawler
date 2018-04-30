@@ -116,7 +116,7 @@ export const player_input = (targetObj, player = getState().player) => {
   // Get info about the cell the player is advancing toward
   const { level } = getState().grid;
   const { type } = targetObj;
-  const { barrel, enemy, loot, portal } = targetObj.payload;
+  const { enemy, loot, portal } = targetObj.payload;
 
   // Just move if the targetPosition is an empty floor or dead enemy
   if (
@@ -153,14 +153,14 @@ export const player_input = (targetObj, player = getState().player) => {
     }
   }
   // If the target is a full water barrel, drink it
-  if (barrel && barrel.full) {
+  if (loot && loot.barrel && loot.barrel.full) {
     const amount = g.healingCalc(level);
     const msg = 'You drink from the enchanted spring water and feel refreshed.';
     return batchActions([drink(targetObj, amount), message(msg), facing(targetObj)]);
   }
 
   // If the target is an empty barrel, see a message
-  if (barrel && !barrel.full) {
+  if (loot && loot.barrel && !loot.barrel.full) {
     const msg = 'Not a drop remains in this container...';
     return batchActions([message(msg), facing(targetObj)]);
   }

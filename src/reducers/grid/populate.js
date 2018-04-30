@@ -51,28 +51,8 @@ export const populate = (data, level) => {
       // Loot
       const setLoot = chances => {
         switch (true) {
-          case chances <= 0.1:
-            return 'spear';
-          case chances <= 0.2:
-            return '2';
-          case chances <= 0.3:
-            return '3';
-          case chances <= 0.4:
-            return '4';
-          case chances <= 0.5:
-            return '5';
-          case chances <= 0.6:
-            return '6';
-          case chances <= 0.7:
-            return '7';
-          case chances <= 0.8:
-            return '8';
-          case chances <= 0.9:
-            return '9';
-          case chances <= 1.0:
-            return '10';
           default:
-            return 'spear';
+            return { barrel: { full: true } };
         }
       };
 
@@ -167,7 +147,7 @@ export const populate = (data, level) => {
         return true;
       };
 
-      const loot = { type: setLoot(Math.random()) };
+      const loot = setLoot(Math.random());
       // 1% chance of a cell being occupied by loot
       if (
         Object.keys(data[i].payload).length === 0 &&

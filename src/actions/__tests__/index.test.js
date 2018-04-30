@@ -237,7 +237,9 @@ describe('`player_input` action creator thunk', () => {
   it('should trigger batched `drink`, `message`, and `facing` action creators if the targetObj is a full water barrel', () => {
     const waterBarrel = {
       payload: {
-        barrel: { full: true }
+        loot: {
+          barrel: { full: true }
+        }
       }
     };
     expect(a.player_input(waterBarrel)).toMatchObject({
@@ -249,7 +251,9 @@ describe('`player_input` action creator thunk', () => {
   it('should trigger batched `message` and `facing` action creators if the targetObj is an empty water barrel', () => {
     const emptyBarrel = {
       payload: {
-        barrel: { full: false }
+        loot: {
+          barrel: { full: false }
+        }
       }
     };
     expect(a.player_input(emptyBarrel)).toMatchObject({

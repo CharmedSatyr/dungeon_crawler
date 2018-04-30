@@ -46,18 +46,26 @@ const cellBG = type => {
 };
 
 const Loot = ({ variety }) => {
-  const chest1 = '-40px 0px';
+  // const chest1 = '-40px 0px';
   // const chest2 = '0px -40px';
-  // const emptyBarrel = '0px 0px';
+  const emptyBarrel = '0px 0px';
   const waterBarrel = '-120px -240px';
 
   const setVariety = variety => {
-    switch (variety) {
-      case 'waterBarrel':
-        return waterBarrel;
-      default:
-        return chest1;
+    if (variety.barrel.full) {
+      return waterBarrel;
+    } else {
+      return emptyBarrel;
     }
+    //    switch (variety) {
+    //      case variety.barrel.full:
+    //        return waterBarrel;
+    //      case variety.barrel.full === false:
+    //        return emptyBarrel;
+    //      default:
+    //        console.log(variety.barrel.full);
+    //        return chest1;
+    //    }
   };
   return (
     <div
@@ -72,7 +80,7 @@ const Loot = ({ variety }) => {
 };
 
 Loot.propTypes = {
-  variety: PropTypes.string
+  variety: PropTypes.object
 };
 
 const Portal = ({ open }) => {
@@ -107,7 +115,7 @@ const Cell = ({ coordinates, payload, type }) => (
     {payload.enemy ? (
       <Enemy coordinates={coordinates} facing={payload.enemy.facing} stats={payload.enemy} />
     ) : null}
-    {payload.loot ? <Loot /> : null}
+    {payload.loot ? <Loot variety={payload.loot} /> : null}
     {payload.portal ? <Portal open={payload.portal.open} /> : null}
     {payload.player ? <Player coordinates={coordinates} facing={payload.player.facing} /> : null}
   </div>
