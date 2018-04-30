@@ -5,7 +5,7 @@ import * as g from '../../constants/gameplay';
 import tileTypes from '../../constants/tile-types';
 
 // Populate the data with payloads (player, enemies, etc.)
-export const populate = (data, level) => {
+const populate = (data, level) => {
   // Add enemies
   const addEnemies = data => {
     for (let i in data) {
@@ -216,3 +216,5 @@ export const populate = (data, level) => {
 
   return { data, playerPosition };
 };
+
+export default populate;

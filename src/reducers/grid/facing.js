@@ -4,7 +4,7 @@ import * as h from '../../actions/index.helpers';
 // Changes the direction entities are facing
 // Independent from movement so the player can face different directions even if no movement is possible--
 // e.g., in corridors or when attacking
-export const facing = (data, playerPosition, targetObj, flag) => {
+const facing = (data, playerPosition, targetObj, flag) => {
   const newData = _.clone(data);
   // Default flag, called by player_input
   if (flag === 'player') {
@@ -28,3 +28,5 @@ export const facing = (data, playerPosition, targetObj, flag) => {
 
   return newData;
 };
+
+export default facing;

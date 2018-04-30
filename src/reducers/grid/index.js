@@ -1,11 +1,11 @@
 import * as t from '../../constants/action-types';
-import { attack } from './attack';
+import attack from './attack';
 import drink from './drink';
-import { facing } from './facing';
-import { generate } from './generate';
-import { move } from './move';
-import { open } from './open';
-import { populate } from './populate';
+import facing from './facing';
+import generate from './generate';
+import move from './move';
+import open from './open';
+import populate from './populate';
 
 const initialState = {
   data: [],

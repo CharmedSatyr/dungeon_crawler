@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Deals damage to an enemy
-export const attack = (data, targetObj, damage) => {
+const attack = (data, targetObj, damage) => {
   // Avoiding mapping through all the cells in this function based on a hypothesis about performance
 
   // Shallow clone
@@ -15,3 +15,5 @@ export const attack = (data, targetObj, damage) => {
 
   return newData;
 };
+
+export default attack;

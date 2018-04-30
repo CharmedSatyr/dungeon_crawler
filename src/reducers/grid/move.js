@@ -2,7 +2,7 @@ import _ from 'lodash';
 import * as h from '../../actions/index.helpers';
 
 // Validates basic movement actions
-export const move = (data, playerPosition, targetObj) => {
+const move = (data, playerPosition, targetObj) => {
   // Avoiding mapping through all the cells in this function based on a hypothesis about performance
 
   // Shallow clone
@@ -32,3 +32,5 @@ export const move = (data, playerPosition, targetObj) => {
     }
   };
 };
+
+export default move;

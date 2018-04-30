@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Opens portals
-export const open = (data, targetObj) => {
+const open = (data, targetObj) => {
   // Essentially just splice a single new value (direction) into the current player object
   let newData = _.clone(data);
   newData.splice(
@@ -12,3 +12,5 @@ export const open = (data, targetObj) => {
 
   return newData;
 };
+
+export default open;
