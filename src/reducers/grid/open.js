@@ -4,11 +4,9 @@ import _ from 'lodash';
 const open = (data, targetObj) => {
   // Essentially just splice a single new value (direction) into the current player object
   let newData = _.clone(data);
-  newData.splice(
-    targetObj.index,
-    1,
-    Object.assign({}, targetObj, { payload: { portal: { closed: false, open: true } } })
-  );
+  const newObj = Object.assign({}, targetObj, { payload: { portal: { open: true } } });
+
+  newData.splice(targetObj.index, 1, newObj);
 
   return newData;
 };
