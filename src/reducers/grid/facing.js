@@ -20,10 +20,9 @@ const facing = (data, playerPosition, targetObj, flag) => {
   // This means the enemies should face the player
   if (flag === 'enemy' && targetObj.payload.enemy) {
     const direction = h.getDirection(targetObj, playerPosition);
-    const enemy = targetObj;
-    const newObj = Object.assign({}, enemy);
+    const newObj = Object.assign({}, targetObj);
     newObj.payload.enemy.facing = direction;
-    newData.splice(enemy.index, 1, newObj);
+    newData.splice(targetObj.index, 1, newObj);
   }
 
   return newData;
