@@ -2,36 +2,47 @@ import _ from 'lodash';
 import * as c from '../../constants/settings';
 import tileTypes from '../../constants/tile-types';
 
-/*** FUNCTIONS FOR GENERATING THE GRID ***/
-// generate makes an unpopulated map from an empty array
-const generate = (grid, level) => {
-  // 1. Create an empty grid with the desired keys
+// 1. Create an empty grid with the desired keys
+export const makeGrid = (height, width, type, grid = []) => {
   let index = 0;
-  for (let i = 0; i < c.GRID_HEIGHT; i++) {
+  for (let i = 0; i < height; i++) {
     let x,
       y = i;
-    for (let j = 0; j < c.GRID_WIDTH; j++) {
+    for (let j = 0; j < width; j++) {
       x = j;
       grid.push({
         coordinates: { x, y },
         index,
         payload: {},
-        type: tileTypes(level)
+        type
       });
       index++;
     }
   }
+  return grid;
+};
 
-  // 2. Random values for the first room
-  const [min, max] = c.ROOM_SIZE_RANGE;
-
-  const firstRoom = {
-    x: _.random(1, c.GRID_WIDTH - max - 1), // x top left corner placement
-    y: _.random(1, c.GRID_HEIGHT - max), // y top left corner placement
+// 2. Set random values for the first room
+export const makeSeed = (gridHeight, gridWidth, range) => {
+  const [min, max] = range;
+  if (max + 2 > gridHeight || max + 2 > gridWidth) {
+    throw new Error('Error: Invalid range. Seed room must fit entirely on non-edge grid cells.');
+  }
+  return {
+    x: _.random(1, gridWidth - max - 1), // x top left corner placement
+    y: _.random(1, gridHeight - max - 1), // y top left corner placement
     height: _.random(min, max), // height of first room
     width: _.random(min, max) // width of first room
   };
+};
 
+/*** FUNCTIONS FOR GENERATING THE GRID ***/
+// generate makes an unpopulated map from an empty array
+const generate = (grid, level) => {
+  // Step 1
+  grid = makeGrid(c.GRID_HEIGHT, c.GRID_WIDTH, tileTypes(level), grid);
+  // Step 2
+  const seedRoom = makeSeed(c.GRID_HEIGHT, c.GRID_WIDTH, c.ROOM_SIZE_RANGE);
   // 3. place the first room onto the grid
   const placeCells = (
     grid,
@@ -50,7 +61,7 @@ const generate = (grid, level) => {
     }
     return grid;
   };
-  grid = placeCells(grid, firstRoom); // Step 3
+  grid = placeCells(grid, seedRoom); // Step 3
 
   // 4. place additional rooms based on that seed.
   // This function returns a Boolean based on placement criteria
@@ -207,8 +218,8 @@ const generate = (grid, level) => {
 
     return growMap(grid.grid, seedRooms, counter);
   };
-  // `firstRoom` from step 3 is the mother seedRoom.
-  grid = growMap(grid, [firstRoom]);
+  // `seedRoom` from step 2 is the mother seedRoom.
+  grid = growMap(grid, [seedRoom]);
 
   // 5. Add more doors
   // Now that the rooms are placed, we will loop through and add a few more doors to reduce map linearity
