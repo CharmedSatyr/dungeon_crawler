@@ -22,6 +22,13 @@ export const attack = (targetObj, d) => {
   return action;
 };
 
+export const clear_animation = () => {
+  const action = {
+    type: t.CLEAR_ANIMATION
+  };
+  return action;
+};
+
 export const drink = (targetObj, amount) => {
   const action = {
     type: t.DRINK,
