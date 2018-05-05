@@ -13,40 +13,49 @@ import * as h from '../actions/index.helpers';
 class Game extends Component {
   constructor(props) {
     super(props);
+
+    // Inititalize
+    this.props.next_level();
+    window.addEventListener('keydown', e => {
+      e.preventDefault();
+      this.handleKeyPress(e);
+    });
+
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.getTargetObj = this.getTargetObj.bind(this);
   }
   handleKeyPress(e) {
-    const { getTargetObj } = this;
-    const { player_input } = this.props;
     switch (e.keyCode) {
       // North
       case 38:
       case 87:
-        e.preventDefault();
-        return player_input(getTargetObj('north'));
+        return this.setDispatch('north');
       // East
       case 39:
       case 68:
-        e.preventDefault();
-        return player_input(getTargetObj('east'));
+        return this.setDispatch('east');
       // South
       case 40:
       case 83:
-        e.preventDefault();
-        return player_input(getTargetObj('south'));
+        return this.setDispatch('south');
       // West
       case 37:
       case 65:
-        e.preventDefault();
-        return player_input(getTargetObj('west'));
+        return this.setDispatch('west');
       case 32:
-        e.preventDefault();
         console.log('spacebar');
         break;
       default:
         return;
     }
+  }
+  setDispatch(direction) {
+    const { player_input, clear_animation } = this.props;
+
+    player_input(this.getTargetObj(direction));
+    setTimeout(() => {
+      clear_animation();
+    }, 500);
   }
   checkAttack(playerPosition) {
     // Check for living enemies adjacent to player
@@ -68,10 +77,6 @@ class Game extends Component {
     const targetPosition = h.getTargetPosition(playerPosition, direction);
     const targetObj = gridData[targetPosition.index];
     return targetObj;
-  }
-  componentWillMount() {
-    this.props.next_level();
-    window.addEventListener('keydown', e => this.handleKeyPress(e));
   }
   componentDidMount() {
     setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
@@ -117,6 +122,7 @@ const mapStateToProps = ({ animation, grid, player, messages }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  clear_animation: () => dispatch(a.clear_animation()),
   hostile_enemies: targetObj => dispatch(a.hostile_enemies(targetObj)),
   next_level: () => dispatch(a.next_level()),
   player_input: targetObj => dispatch(a.player_input(targetObj))
