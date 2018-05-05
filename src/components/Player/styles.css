@@ -11,7 +11,7 @@
 }
 
 .attack-west {
-  animation: westSpearThrust 0.8s steps(7) 1;
+  animation: westSpearThrust 0.4s steps(7) 1;
 }
 @keyframes westSpearThrust {
   0% {
@@ -30,7 +30,7 @@
 
 /*** EAST ***/
 .move-east {
-  animation: moveEast 0.5s steps(8) 1;
+  animation: moveEast 0.4s steps(8) 1;
 }
 
 @keyframes moveEast {
@@ -45,7 +45,7 @@
 
 /*** NORTH ***/
 .move-north {
-  animation: moveNorth 0.5s steps(8) 1;
+  animation: moveNorth 0.4s steps(8) 1;
 }
 
 @keyframes moveNorth {
@@ -60,7 +60,7 @@
 
 /*** SOUTH ***/
 .move-south {
-  animation: moveSouth 0.5s steps(8) 1;
+  animation: moveSouth 0.4s steps(8) 1;
 }
 
 @keyframes moveSouth {
@@ -75,7 +75,7 @@
 
 /*** WEST ***/
 .move-west {
-  animation: moveWest 0.5s steps(8) 1;
+  animation: moveWest 0.4s steps(8) 1;
 }
 
 @keyframes moveWest {
