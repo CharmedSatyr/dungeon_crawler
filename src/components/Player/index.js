@@ -2,40 +2,36 @@ import React from 'react';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
-// Player Sprite URL:
-// http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/#?sex=female&body=darkelf2&eyes=red&nose=straight&ears=elven&legs=sara&clothes=sleeveless_maroon&mail=none&armor=chest_leather&jacket=none&hair=ponytail2_raven&shoulders=leather&bracers=cloth&hat=bandana_red&shoes=sara&=cape_black&belt=leather&bracelet=on&cape=none&weapon=spear
-import sprite from './heroine-sprite-40x40.png';
+import './styles.css';
 
 const faceDirection = facing => {
   switch (facing) {
     case 'north':
-      return 0;
+      return -8;
     case 'east':
-      return 2;
+      return -11;
     case 'south':
-      return 3;
+      return -10;
     case 'west':
-      return 4;
+      return -9;
     default:
-      return '3';
+      return -10;
   }
 };
 
-const Player = ({ coordinates, facing }) => (
+const Player = ({ animation, facing }) => (
   <div
+    className={`sprite ${animation[animation.length - 1]}-${facing}`}
     style={{
-      backgroundImage: `url('${sprite}')`,
       backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`,
       height: c.SPRITE_SIZE,
-      overflow: 'hidden',
-      position: 'absolute',
       width: c.SPRITE_SIZE
     }}
   />
 );
 
 Player.propTypes = {
-  coordinates: PropTypes.object.isRequired,
+  animation: PropTypes.arrayOf(PropTypes.string),
   facing: PropTypes.string
 };
 

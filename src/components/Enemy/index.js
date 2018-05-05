@@ -28,7 +28,7 @@ const bgp = (health, facing) => {
   return `${c.SPRITE_SIZE * -5}px ${c.SPRITE_SIZE * 1}px`;
 };
 
-const Enemy = ({ coordinates, facing, stats }) => (
+const Enemy = ({ facing, stats }) => (
   <div
     style={{
       backgroundImage: `url('${sprite}')`,
@@ -43,7 +43,6 @@ const Enemy = ({ coordinates, facing, stats }) => (
 );
 
 Enemy.propTypes = {
-  coordinates: PropTypes.object.isRequired,
   facing: PropTypes.string,
   stats: PropTypes.object.isRequired
 };

@@ -80,11 +80,11 @@ class Game extends Component {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
   }
   render() {
-    const { gridData, messages, player } = this.props;
+    const { animation, gridData, messages, player } = this.props;
 
     // Create an array of Cells containing data from the store
     const cells = gridData.map((item, index) => (
-      <Cell coordinates={item.coordinates} key={index} payload={item.payload} type={item.type} />
+      <Cell animation={animation} key={index} payload={item.payload} type={item.type} />
     ));
 
     return (
@@ -98,6 +98,7 @@ class Game extends Component {
 }
 
 Game.propTypes = {
+  animation: PropTypes.object,
   gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
   hostile_enemies: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -107,7 +108,8 @@ Game.propTypes = {
   player_input: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ grid, player, messages }) => ({
+const mapStateToProps = ({ animation, grid, player, messages }) => ({
+  animation,
   gridData: grid.data,
   messages,
   playerPosition: grid.playerPosition,

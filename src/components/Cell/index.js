@@ -102,7 +102,7 @@ Portal.propTypes = {
   open: PropTypes.bool
 };
 
-const Cell = ({ coordinates, payload, type }) => (
+const Cell = ({ animation, payload, type }) => (
   <div
     style={{
       backgroundImage: `url(${tiles})`,
@@ -112,17 +112,15 @@ const Cell = ({ coordinates, payload, type }) => (
       width: c.CELL_SIDE
     }}
   >
-    {payload.enemy ? (
-      <Enemy coordinates={coordinates} facing={payload.enemy.facing} stats={payload.enemy} />
-    ) : null}
+    {payload.enemy ? <Enemy facing={payload.enemy.facing} stats={payload.enemy} /> : null}
     {payload.loot ? <Loot variety={payload.loot} /> : null}
     {payload.portal ? <Portal open={payload.portal.open} /> : null}
-    {payload.player ? <Player coordinates={coordinates} facing={payload.player.facing} /> : null}
+    {payload.player ? <Player animation={animation.player} facing={payload.player.facing} /> : null}
   </div>
 );
 
 Cell.propTypes = {
-  coordinates: PropTypes.object.isRequired,
+  animation: PropTypes.object,
   payload: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired
 };
