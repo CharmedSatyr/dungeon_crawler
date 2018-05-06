@@ -50,12 +50,8 @@ class Game extends Component {
     }
   }
   setDispatch(direction) {
-    const { player_input, clear_animation } = this.props;
-
+    const { player_input } = this.props;
     player_input(this.getTargetObj(direction));
-    setTimeout(() => {
-      clear_animation();
-    }, 500);
   }
   checkAttack(playerPosition) {
     // Check for living enemies adjacent to player
@@ -85,11 +81,11 @@ class Game extends Component {
     window.removeEventListener('keydown', e => this.handleKeyPress(e));
   }
   render() {
-    const { animation, gridData, messages, player } = this.props;
+    const { gridData, messages, player } = this.props;
 
     // Create an array of Cells containing data from the store
     const cells = gridData.map((item, index) => (
-      <Cell animation={animation} key={index} payload={item.payload} type={item.type} />
+      <Cell key={index} payload={item.payload} type={item.type} />
     ));
 
     return (
@@ -103,7 +99,6 @@ class Game extends Component {
 }
 
 Game.propTypes = {
-  animation: PropTypes.object,
   gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
   hostile_enemies: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -113,8 +108,7 @@ Game.propTypes = {
   player_input: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ animation, grid, player, messages }) => ({
-  animation,
+const mapStateToProps = ({ grid, player, messages }) => ({
   gridData: grid.data,
   messages,
   playerPosition: grid.playerPosition,
@@ -122,7 +116,6 @@ const mapStateToProps = ({ animation, grid, player, messages }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  clear_animation: () => dispatch(a.clear_animation()),
   hostile_enemies: targetObj => dispatch(a.hostile_enemies(targetObj)),
   next_level: () => dispatch(a.next_level()),
   player_input: targetObj => dispatch(a.player_input(targetObj))
