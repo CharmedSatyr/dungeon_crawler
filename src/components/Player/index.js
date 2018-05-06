@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
 import './styles.css';
 
-export default class Player extends Component {
+class Player extends Component {
   faceDirection(facing) {
     switch (facing) {
       case 'north':
@@ -21,10 +22,10 @@ export default class Player extends Component {
   }
   render() {
     const { faceDirection } = this;
-    const { animation, facing } = this.props;
+    const { playerAnimation, facing } = this.props;
     let playerClass;
-    animation.length
-      ? (playerClass = `sprite ${animation[animation.length - 1]}-${facing}`)
+    playerAnimation.length
+      ? (playerClass = `sprite ${playerAnimation[playerAnimation.length - 1]}-${facing}`)
       : (playerClass = 'sprite');
     return (
       <div
@@ -40,6 +41,12 @@ export default class Player extends Component {
 }
 
 Player.propTypes = {
-  animation: PropTypes.arrayOf(PropTypes.string),
+  playerAnimation: PropTypes.arrayOf(PropTypes.string),
   facing: PropTypes.string
 };
+
+const mapStateToProps = ({ animation }) => ({
+  playerAnimation: animation.player
+});
+
+export default connect(mapStateToProps, null)(Player);
