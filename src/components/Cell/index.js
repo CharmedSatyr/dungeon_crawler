@@ -6,7 +6,6 @@ import Enemy from '../Enemy';
 import Player from '../Player';
 import './styles.css';
 
-// Tiles adapted to 40x40 from https://opengameart.org/content/rpg-tileset-32x32
 import tiles from './dungeon_tileset_40x40.png';
 
 // Set appropriate background tile based on Cell type
