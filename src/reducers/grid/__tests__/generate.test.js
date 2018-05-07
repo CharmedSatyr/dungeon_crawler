@@ -61,24 +61,38 @@ describe('`makeSeed` generate grid reducer function', () => {
   });
 });
 
-// describe('`placeCells` generate grid reducer function', () => {
-//   it('should place a seed room onto the grid with predetermined upper left x/y coordinates, height, and width, and with a different type from the default', () => {
-//     const seed = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'other' };
-//
-//     const seededGrid = [seed, obj1, obj2, obj3];
-//     expect(generate.placeCells(grid, seed, seededGrid));
-//   });
-// });
+describe('`placeCells` generate grid reducer function', () => {
+  it('should modify the type of each grid cell that meets coordinate/height/width specs', () => {
+    //     const seed = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'other' };
+    //
+    //     const seededGrid = [seed, obj1, obj2, obj3];
+    //     expect(generate.placeCells(grid, seed, seededGrid));
+  });
+});
 
-// describe('`isValidRoomPlacement` generate grid reducer function', () => {
-//   it('should return a Boolean....');
-// });
-//
+describe('`isValidRoomPlacement` generate grid reducer function', () => {
+  it(
+    'should return true if the placement would leave one cell margin around the grid edges and not overlap or be adjacent to other cells with the indicated type'
+  );
+  it('should return false if the room would extend from the top or to the bottom of the grid');
+  it('should return false if the room would extend from the left or to the right of the grid');
+  it('should return false if the room would overlap other cells of the same type');
+});
+
 // describe('`createRoomsFromSeed` generate grid reducer function');
-//
-// describe('`doorFinder` generate grid reducer function');
-//
-// describe('`north` generate grid reducer function');
+
+describe('`doorFinder` generate grid reducer function', () => {
+  it(
+    'should return a random set of coordinates within the range of cells that are adjacent to and between two rooms with given starting coordinates and extensions'
+  );
+});
+
+describe('`north` generate grid reducer function', () => {
+  it(
+    'should generate random coordinates and extension for a group of cells, all with y coordinates more than one less than those of the seed room, and with at least one column sharing an x coordinate with the seed room, and one cell on that column having a y value of exactly one less than the top of the seed room'
+  );
+});
+
 // describe('`south` generate grid reducer function');
 // describe('`east` generate grid reducer function');
 // describe('`west` generate grid reducer function');
