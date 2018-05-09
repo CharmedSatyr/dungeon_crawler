@@ -3,6 +3,7 @@ import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
 import Enemy from '../Enemy';
+import Loot from '../Loot';
 import Player from '../Player';
 import './styles.css';
 
@@ -42,44 +43,6 @@ const cellBG = type => {
     default:
       return vines;
   }
-};
-
-const Loot = ({ variety }) => {
-  // const chest1 = '-40px 0px';
-  // const chest2 = '0px -40px';
-  const emptyBarrel = '0px 0px';
-  const waterBarrel = '-120px -240px';
-
-  const setVariety = variety => {
-    if (variety.barrel.full) {
-      return waterBarrel;
-    } else {
-      return emptyBarrel;
-    }
-    //    switch (variety) {
-    //      case variety.barrel.full:
-    //        return waterBarrel;
-    //      case variety.barrel.full === false:
-    //        return emptyBarrel;
-    //      default:
-    //        console.log(variety.barrel.full);
-    //        return chest1;
-    //    }
-  };
-  return (
-    <div
-      style={{
-        backgroundImage: `url(${tiles})`,
-        backgroundPosition: setVariety(variety),
-        height: c.CELL_SIDE,
-        width: c.CELL_SIDE
-      }}
-    />
-  );
-};
-
-Loot.propTypes = {
-  variety: PropTypes.object
 };
 
 const Portal = ({ open }) => {
