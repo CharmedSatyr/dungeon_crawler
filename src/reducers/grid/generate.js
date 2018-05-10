@@ -2,7 +2,7 @@ import _ from 'lodash';
 import * as c from '../../constants/settings';
 import tileTypes from '../../constants/tile-types';
 
-// 1. Create an empty grid with the desired keys
+// Create an empty grid with the desired keys
 export const makeGrid = (height, width, type, grid = []) => {
   let index = 0;
   for (let i = 0; i < height; i++) {
@@ -22,7 +22,7 @@ export const makeGrid = (height, width, type, grid = []) => {
   return grid;
 };
 
-// 2. Set random values for the first room
+// Set random values for the first room
 export const makeSeed = (gridHeight, gridWidth, range) => {
   const [min, max] = range;
   if (max + 2 > gridHeight || max + 2 > gridWidth) {
@@ -51,6 +51,42 @@ export const placeRoom = (grid, { x = 0, y = 0, height = 1, width = 1 }, type) =
   return grid;
 };
 
+// This function returns a Boolean based on placement criteria
+// True if room can be placed entirely on interior grid cells that are
+// not adjacent to or overlapping other room cells, false otherwise
+export const isValidRoomPlacement = (
+  grid,
+  { x = 0, y = 0, width = 1, height = 1 },
+  gridHeight,
+  gridWidth,
+  type
+) => {
+  // check if on the edge of or outside of the grid
+  // statements are top || bottom
+  if (y < 1 || y + height >= gridHeight) {
+    return false;
+  }
+  // statements are left || right
+  if (x < 1 || x + width >= gridWidth) {
+    return false;
+  }
+
+  // check if on or adjacent to existing room
+  for (let i in grid) {
+    if (
+      grid[i].type === type && // primary criterion
+      grid[i].coordinates.x >= x - 1 &&
+      grid[i].coordinates.x <= x + width &&
+      grid[i].coordinates.y >= y - 1 &&
+      grid[i].coordinates.y <= y + height
+    ) {
+      return false;
+    }
+  }
+  // all grid cells are clear
+  return true;
+};
+
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
 const generate = (grid, level) => {
@@ -64,35 +100,6 @@ const generate = (grid, level) => {
   grid = placeRoom(grid, seedRoom, tileTypes(level, 'path'));
 
   // 4. place additional rooms based on that seed.
-  // This function returns a Boolean based on placement criteria
-  const isValidRoomPlacement = (grid, { x, y, width = 1, height = 1 }) => {
-    // check if on the edge of or outside of the grid
-    // statements are top || bottom
-    if (y < 1 || y + height >= c.GRID_HEIGHT) {
-      return false;
-    }
-    // statements are left || right
-    if (x < 1 || x + width >= c.GRID_WIDTH) {
-      return false;
-    }
-
-    // check if on or adjacent to existing room
-    for (let i in grid) {
-      if (
-        grid[i].type === tileTypes(level, 'path') && // primary criterion
-        grid[i].coordinates.x >= x - 1 &&
-        grid[i].coordinates.x <= x + width &&
-        grid[i].coordinates.y >= y - 1 &&
-        grid[i].coordinates.y <= y + height
-      ) {
-        return false;
-      }
-    }
-
-    // all grid cells are clear
-    return true;
-  };
-
   // This function takes grid, a seed room, and a room size range and returns and object
   // that contains modified grid and a record of placed rooms
   const createRoomsFromSeed = (grid, { x, y, height, width }, range = c.ROOM_SIZE_RANGE) => {
@@ -187,7 +194,7 @@ const generate = (grid, level) => {
     // For generated roomValues
     roomValues.forEach(room => {
       // if the room is valid relative to existing grid
-      if (isValidRoomPlacement(grid, room)) {
+      if (isValidRoomPlacement(grid, room, c.GRID_HEIGHT, c.GRID_WIDTH, tileTypes(level, 'path'))) {
         // update existing grid with room placement
         grid = placeRoom(grid, room, tileTypes(level, 'path'));
         // update existing grid with door placement

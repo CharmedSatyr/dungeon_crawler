@@ -77,12 +77,59 @@ describe('`placeRoom` generate grid reducer function', () => {
 });
 
 describe('`isValidRoomPlacement` generate grid reducer function', () => {
-  it(
-    'should return true if the placement would leave one cell margin around the grid edges and not overlap or be adjacent to other cells with the indicated type'
-  );
-  it('should return false if the room would extend from the top or to the bottom of the grid');
-  it('should return false if the room would extend from the left or to the right of the grid');
-  it('should return false if the room would overlap other cells of the same type');
+  // A 3x3 grid, where the only valid placement would be a 1x1 room at the center
+  const gridHeight = 3;
+  const gridWidth = 3;
+  const obj = { type: 'other' };
+  const grid = [obj, obj, obj, obj, obj, obj, obj, obj, obj];
+
+  it('should return true if the placement would leave one cell margin around the grid edges and not overlap or be adjacent to other cells with the indicated type', () => {
+    const testRoom = { x: 1, y: 1, width: 1, height: 1 };
+    expect(
+      generate.isValidRoomPlacement(grid, testRoom, gridHeight, gridWidth, 'room')
+    ).toBeTruthy();
+  });
+
+  it('should return false if the room would extend from the top or to the bottom of the grid', () => {
+    const testRoom0 = { x: 1, y: 0, width: 1, height: 1 };
+    const testRoom1 = { x: 1, y: 2, width: 1, height: 1 };
+    const testRoom2 = { x: 1, y: 1, width: 1, height: 2 };
+    expect(
+      generate.isValidRoomPlacement(grid, testRoom0, gridHeight, gridWidth, 'room')
+    ).toBeFalsy();
+    expect(
+      generate.isValidRoomPlacement(grid, testRoom1, gridHeight, gridWidth, 'room')
+    ).toBeFalsy();
+    expect(
+      generate.isValidRoomPlacement(grid, testRoom2, gridHeight, gridWidth, 'room')
+    ).toBeFalsy();
+  });
+
+  it('should return false if the room would extend from the left or to the right of the grid', () => {
+    const testRoom0 = { x: 0, y: 1, width: 1, height: 1 };
+    const testRoom1 = { x: 2, y: 1, width: 1, height: 1 };
+    const testRoom2 = { x: 1, y: 1, width: 2, height: 1 };
+    expect(
+      generate.isValidRoomPlacement(grid, testRoom0, gridHeight, gridWidth, 'room')
+    ).toBeFalsy();
+    expect(
+      generate.isValidRoomPlacement(grid, testRoom1, gridHeight, gridWidth, 'room')
+    ).toBeFalsy();
+    expect(
+      generate.isValidRoomPlacement(grid, testRoom2, gridHeight, gridWidth, 'room')
+    ).toBeFalsy();
+  });
+
+  it('should return false if the room would overlap other cells of the same type', () => {
+    const placedRoom = { coordinates: { x: 1, y: 1 }, type: 'room' };
+    const occupiedGrid = [obj, obj, obj, obj, placedRoom, obj, obj, obj, obj];
+
+    // This is an acceptable room placement, but there's already a placedRoom in the occupiedGrid
+    const testRoom = { x: 1, y: 1, width: 1, height: 1 };
+    expect(
+      generate.isValidRoomPlacement(occupiedGrid, testRoom, gridHeight, gridWidth, 'room')
+    ).toBeFalsy();
+  });
 });
 
 // describe('`createRoomsFromSeed` generate grid reducer function');
