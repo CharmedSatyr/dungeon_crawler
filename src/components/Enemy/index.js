@@ -2,8 +2,6 @@ import React from 'react';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
-// Enemy Sprite URL:
-// http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/#?body=orc&=eyes_brown&eyes=yellow&legs=pants_red&clothes=none&mail=chain&armor=chest_leather&jacket=none&hair=none&arms=plate&shoulders=leather&spikes=gold&bracers=leather&greaves=none&shoes=boots_metal&hat=none&belt=leather&weapon=spear
 import sprite from './orc-sprite-40x40.png';
 
 const faceDirection = facing => {
@@ -44,6 +42,8 @@ const Enemy = ({ facing, stats }) => (
 
 Enemy.propTypes = {
   facing: PropTypes.string,
-  stats: PropTypes.object.isRequired
+  stats: PropTypes.shape({
+    health: PropTypes.number.isRequired
+  })
 };
 export default Enemy;
