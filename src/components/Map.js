@@ -10,7 +10,7 @@ const Map = ({ cells }) => (
 );
 
 Map.propTypes = {
-  cells: PropTypes.array.isRequired
+  cells: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default Map;
