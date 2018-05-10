@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Message = ({ message }) => <span>{message}</span>;
+export const Message = ({ message }) => <span>{message}</span>;
 
 Message.propTypes = {
   message: PropTypes.string.isRequired
