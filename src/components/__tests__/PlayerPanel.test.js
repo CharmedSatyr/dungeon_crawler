@@ -2,7 +2,7 @@ import React from 'react';
 import PlayerPanel from '../PlayerPanel';
 import { shallow } from 'enzyme';
 
-describe('PlayerPanel component', () => {
+describe('`PlayerPanel` component', () => {
   const props = {
     stats: {
       level: 1,
