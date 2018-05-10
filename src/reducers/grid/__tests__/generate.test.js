@@ -61,12 +61,18 @@ describe('`makeSeed` generate grid reducer function', () => {
   });
 });
 
-describe('`placeCells` generate grid reducer function', () => {
+describe('`placeRoom` generate grid reducer function', () => {
   it('should modify the type of each grid cell that meets coordinate/height/width specs', () => {
-    //     const seed = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'other' };
-    //
-    //     const seededGrid = [seed, obj1, obj2, obj3];
-    //     expect(generate.placeCells(grid, seed, seededGrid));
+    const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'vines' };
+    const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: 'vines' };
+    const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: 'vines' };
+    const obj3 = { coordinates: { x: 1, y: 1 }, index: 3, payload: {}, type: 'vines' };
+
+    const grid = [obj0, obj1, obj2, obj3];
+
+    const seed = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'other' };
+    const seededGrid = [seed, obj1, obj2, obj3];
+    expect(generate.placeRoom(grid, seed, 'other')).toEqual(seededGrid);
   });
 });
 
