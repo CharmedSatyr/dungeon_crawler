@@ -185,8 +185,7 @@ describe('`doorFinder` generate grid reducer function', () => {
      *  | PAR | DOR | CHI |
      *  |-----+-----+-----|
      ***/
-    expect(generate.doorFinder(0, 3, 1, 2)).toBeGreaterThanOrEqual(1);
-    expect(generate.doorFinder(0, 3, 1, 2)).toBeLessThanOrEqual(2);
+    expect(generate.doorFinder(0, 3, 1, 2).toString()).toMatch(/[1-2]/);
   });
 
   it('should throw an error if no door placement is possible', () => {
@@ -214,6 +213,10 @@ describe('`doorFinder` generate grid reducer function', () => {
      ***/
     expect(() => generate.doorFinder(0, 2, 2, 1)).toThrow();
   });
+});
+
+describe('`east` generate grid reducer function', () => {
+  it('should generate specs for a child room right of the parent but connected by one cell');
 });
 
 describe('`north` generate grid reducer function', () => {
@@ -257,12 +260,33 @@ describe('`north` generate grid reducer function', () => {
     expect(generate.north(...seed2, range2).height.toString()).toMatch(/[1-2]/);
     expect(generate.north(...seed2, range2).width.toString()).toMatch(/[1-2]/);
     expect(generate.north(...seed2, range2).door).toEqual({ x: 1, y: 2 });
+    // Further tests could make the parent bigger and test additional child placement opportunities,
+    // but if this works and doorFinder works, the child should be OK.
   });
 });
 
-// describe('`south` generate grid reducer function');
-// describe('`east` generate grid reducer function');
-// describe('`west` generate grid reducer function');
+describe('`south` generate grid reducer function', () => {
+  it('should generate specs for a child room below the parent but connected by one cell');
+  // , () => {
+  //    const seed = [1, 2, 1, 1];
+  //    const range = [1, 1];
+  //    const child = { x: 1, y: 0, height: 1, width: 1, door: { x: 1, y: 1 } };
+  //    expect(generate.north(...seed, range)).toEqual(child);
+  //
+  //    const seed2 = [1, 3, 1, 1];
+  //    const range2 = [1, 2];
+  //    expect(generate.north(...seed2, range2).x.toString()).toMatch(/[0-1]/);
+  //    expect(generate.north(...seed2, range2).y.toString()).toMatch(/[0,1]/);
+  //    expect(generate.north(...seed2, range2).height.toString()).toMatch(/[1-2]/);
+  //    expect(generate.north(...seed2, range2).width.toString()).toMatch(/[1-2]/);
+  //    expect(generate.north(...seed2, range2).door).toEqual({ x: 1, y: 2 });
+  //});
+});
+
+describe('`west` generate grid reducer function', () => {
+  it('should generate specs for a child room left of the parent but connected by one cell');
+});
+
 // describe('`repeatFunc` generate grid reducer function');
 // describe('`growMap` generate grid reducer function');
 // describe('`addHorizontalDoors` generate grid reducer function');
