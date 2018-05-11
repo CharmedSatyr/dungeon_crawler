@@ -135,9 +135,60 @@ describe('`isValidRoomPlacement` generate grid reducer function', () => {
 // describe('`createRoomsFromSeed` generate grid reducer function');
 
 describe('`doorFinder` generate grid reducer function', () => {
-  it(
-    'should return a random set of coordinates within the range of cells that are adjacent to and between two rooms with given starting coordinates and extensions'
-  );
+  it('should return a coordinate value within the range of cells that are adjacent to and between two rooms with given starting coordinates and extensions', () => {
+    // Arguments are: parentStart, parentExtension, childStart, childExtension
+    // Child room has been generated East of Parent room. Determine Y coordinate of Door
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----|
+     *  | PAR | DOR | CHI |
+     *  |-----+-----+-----|
+     *  | PAR | 1,1 | 2,1 |
+     *  |-----+-----+-----|
+     *  | PAR | 1,2 | 2,2 |
+     *  |-----+-----+-----|
+     ***/
+    expect(generate.doorFinder(0, 3, 0, 1)).toBe(0);
+
+    // Child room has been generated South of Parent room. Determine X coordinate of Door
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----|
+     *  | PAR | PAR | 2,0 |
+     *  |-----+-----+-----|
+     *  | 0,1 | DOR | 2,1 |
+     *  |-----+-----+-----|
+     *  | 0,2 | CHI | CHI |
+     *  |-----+-----+-----|
+     ***/
+    expect(generate.doorFinder(0, 2, 1, 2)).toBe(1);
+  });
+
+  it('should throw an error if no door placement is possible', () => {
+    // Hopefully this Child will not be generated offset from the Parent
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----|
+     *  | PAR | PAR | 2,0 |
+     *  |=====+=====+=====|
+     *  | 0,1 | 1,1 | 2,1 | // No door placement possible
+     *  |-----+-----+-----|
+     *  | 0,2 | 1,2 | CHI |
+     *  |-----+-----+-----|
+     ***/
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----|
+     *  | PAR | 1,0 | 2,0 |
+     *  |=====+=====+=====|
+     *  | PAR | 1,1 | 2,1 |
+     *  |-----+-----+-----|
+     *  | 0,2 | 1,2 | CHI |
+     *  |-----+-----+-----|
+     *          ???
+     ***/
+    expect(() => generate.doorFinder(0, 2, 2, 1)).toThrow();
+  });
 });
 
 describe('`north` generate grid reducer function', () => {

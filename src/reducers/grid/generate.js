@@ -2,6 +2,7 @@ import _ from 'lodash';
 import * as c from '../../constants/settings';
 import tileTypes from '../../constants/tile-types';
 
+// makeGrid
 // Create an empty grid with the desired keys
 export const makeGrid = (height, width, type, grid = []) => {
   let index = 0;
@@ -22,11 +23,14 @@ export const makeGrid = (height, width, type, grid = []) => {
   return grid;
 };
 
+// makeSeed
 // Set random values for the first room
 export const makeSeed = (gridHeight, gridWidth, range) => {
   const [min, max] = range;
   if (max + 2 > gridHeight || max + 2 > gridWidth) {
-    throw new Error('Error: Invalid range. Seed room must fit entirely on non-edge grid cells.');
+    throw new Error(
+      'makeSeed Error: Invalid range. Seed room must fit entirely on non-edge grid cells.'
+    );
   }
   return {
     x: _.random(1, gridWidth - max - 1), // x top left corner placement
@@ -36,6 +40,7 @@ export const makeSeed = (gridHeight, gridWidth, range) => {
   };
 };
 
+// placeRoom
 // This function changes the type of the cluster of cells that fits that coordinates/dimensions specs
 export const placeRoom = (grid, { x = 0, y = 0, height = 1, width = 1 }, type) => {
   for (let i in grid) {
@@ -51,6 +56,7 @@ export const placeRoom = (grid, { x = 0, y = 0, height = 1, width = 1 }, type) =
   return grid;
 };
 
+// isValidRoomPlacement
 // This function returns a Boolean based on placement criteria
 // True if room can be placed entirely on interior grid cells that are
 // not adjacent to or overlapping other room cells, false otherwise
@@ -87,6 +93,25 @@ export const isValidRoomPlacement = (
   return true;
 };
 
+// doorFinder
+// This finds an appropriate, random value for door placement between rooms
+// It takes either x coordinates + widths or y coordinates + heights
+// start = parent (seed) top left corner x or y value
+// extension = parent width or height
+// childStart = child top left corner x or y value
+// childExtension = child width or height
+export const doorFinder = (parentStart, parentExtension, childStart, childExtension) => {
+  const parent = _.range(parentStart, parentStart + parentExtension);
+  const child = _.range(childStart, childStart + childExtension);
+  const doorRange = child.filter(val => parent.includes(val));
+  if (doorRange[0] === undefined) {
+    throw new Error(
+      'doorFinder Error: It is not possible to connect these two rooms with a single cell'
+    );
+  }
+  return _.random(doorRange[0], doorRange[doorRange.length - 1]);
+};
+
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
 const generate = (grid, level) => {
@@ -104,19 +129,6 @@ const generate = (grid, level) => {
   // that contains modified grid and a record of placed rooms
   const createRoomsFromSeed = (grid, { x, y, height, width }, range = c.ROOM_SIZE_RANGE) => {
     const [min, max] = range;
-
-    // This finds an appropriate, random value for door placement between rooms
-    // It works with either x coordinates + widths or y coordinates + heights
-    // start = parent (seed) top left corner x or y value
-    // extension = parent width or height
-    // childStart = child top left corner x or y value
-    // childExtension = child width or height
-    const doorFinder = (start, extension, childStart, childExtension) => {
-      const parent = _.range(start, start + extension);
-      const child = _.range(childStart, childStart + childExtension);
-      const doorRange = child.filter(val => parent.includes(val));
-      return _.random(doorRange[0], doorRange[doorRange.length - 1]);
-    };
 
     // Make a room north of the seed
     // All argument values are values of the room being used as a seed
