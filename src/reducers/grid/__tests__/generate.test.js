@@ -217,9 +217,47 @@ describe('`doorFinder` generate grid reducer function', () => {
 });
 
 describe('`north` generate grid reducer function', () => {
-  it(
-    'should generate random coordinates and extension for a group of cells, all with y coordinates more than one less than those of the seed room, and with at least one column sharing an x coordinate with the seed room, and one cell on that column having a y value of exactly one less than the top of the seed room'
-  );
+  it('should generate specs for a child room above the parent but connected by one cell', () => {
+    // Keep in mind that this will only generate a room; it will NOT ensure that the room sticks to the containing grid's boundaries
+
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----|
+     *  | 0,0 | CHI | 2,0 |
+     *  |=====+=====+=====|
+     *  | 0,1 | DOR | 2,1 |
+     *  |-----+-----+-----|
+     *  | 0,2 | PAR | 2,2 |
+     *  |-----+-----+-----|
+     ***/
+    const seed = [1, 2, 1, 1];
+    const range = [1, 1];
+    const child = { x: 1, y: 0, height: 1, width: 1, door: { x: 1, y: 1 } };
+    expect(generate.north(...seed, range)).toEqual(child);
+
+    // However, at was a boring example, so we can test some basic ranges with a more interesting example.
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----+-----+-----|
+     *  | CHI | CHI | CHI | 3,0 | 4,0 | The child room could be 1x1 at [1,1]
+     *  |=====+=====+=====+=====+=====|
+     *  | CHI | CHI | CHI | 3,1 | 4,1 | However, it could also be 2x2 and start at [0,0] or [1,0]
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,2 | DOR | 2,2 | 3,2 | 4,2 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,3 | PAR | 2,3 | 3,3 | 4,3 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,4 | 1,4 | 2,4 | 3,4 | 4,4 |
+     *  |-----+-----+-----+-----+-----|
+     ***/
+    const seed2 = [1, 3, 1, 1];
+    const range2 = [1, 2];
+    expect(generate.north(...seed2, range2).x.toString()).toMatch(/[0-1]/);
+    expect(generate.north(...seed2, range2).y.toString()).toMatch(/[0,1]/);
+    expect(generate.north(...seed2, range2).height.toString()).toMatch(/[1-2]/);
+    expect(generate.north(...seed2, range2).width.toString()).toMatch(/[1-2]/);
+    expect(generate.north(...seed2, range2).door).toEqual({ x: 1, y: 2 });
+  });
 });
 
 // describe('`south` generate grid reducer function');

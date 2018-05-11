@@ -112,6 +112,65 @@ export const doorFinder = (parentStart, parentExtension, childStart, childExtens
   return _.random(doorRange[0], doorRange[doorRange.length - 1]);
 };
 
+// Make a room north of a seed
+// First four arguments are values of the room being used as a seed
+// Range is array of [min, max] number of cells per side of new room
+export const north = (x, y, height, width, range) => {
+  const [min, max] = range;
+  const n = {
+    height: _.random(min, max),
+    width: _.random(min, max),
+    door: { y: y - 1 }
+  };
+  n.x = _.random(x - n.width + 1, x + width - 1);
+  n.y = y - n.height - 1;
+  n.door.x = doorFinder(x, width, n.x, n.width);
+  return n;
+};
+
+// Make a room east of a seed
+export const east = (x, y, height, width, range) => {
+  const [min, max] = range;
+  const e = {
+    x: x + width + 1,
+    height: _.random(min, max),
+    width: _.random(min, max),
+    door: {}
+  };
+  e.y = _.random(y - e.height + 1, height + y - 1);
+  e.door.x = e.x - 1;
+  e.door.y = doorFinder(y, height, e.y, e.height);
+  return e;
+};
+
+// Make a room south of a seed
+export const south = (x, y, height, width, range) => {
+  const [min, max] = range;
+  const s = {
+    y: y + height + 1,
+    height: _.random(min, max),
+    width: _.random(min, max),
+    door: { y: y + height }
+  };
+  s.x = _.random(x - s.width + 1, width + x - 1);
+  s.door.x = doorFinder(x, width, s.x, s.width);
+  return s;
+};
+
+// Make a room west of a seed
+export const west = (x, y, height, width, range) => {
+  const [min, max] = range;
+  const w = {
+    height: _.random(min, max),
+    width: _.random(min, max),
+    door: { x: x - 1 }
+  };
+  w.x = x - w.width - 1;
+  w.y = _.random(y - w.height + 1, height + y - 1);
+  w.door.y = doorFinder(y, height, w.y, w.height);
+  return w;
+};
+
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
 const generate = (grid, level) => {
@@ -128,69 +187,13 @@ const generate = (grid, level) => {
   // This function takes grid, a seed room, and a room size range and returns and object
   // that contains modified grid and a record of placed rooms
   const createRoomsFromSeed = (grid, { x, y, height, width }, range = c.ROOM_SIZE_RANGE) => {
-    const [min, max] = range;
-
-    // Make a room north of the seed
-    // All argument values are values of the room being used as a seed
-    const north = (x, y, height, width) => {
-      const n = {
-        height: _.random(min, max),
-        width: _.random(min, max),
-        door: { y: y - 1 }
-      };
-      n.x = _.random(x - n.width + 1, x + width - 1);
-      n.y = y - n.height - 1;
-      n.door.x = doorFinder(x, width, n.x, n.width);
-      return n;
-    };
-
-    // Make a room east of the seed
-    const east = (x, y, height, width) => {
-      const e = {
-        x: x + width + 1,
-        height: _.random(min, max),
-        width: _.random(min, max),
-        door: {}
-      };
-      e.y = _.random(y - e.height + 1, height + y - 1);
-      e.door.x = e.x - 1;
-      e.door.y = doorFinder(y, height, e.y, e.height);
-      return e;
-    };
-
-    // Make a room south of the seed
-    const south = (x, y, height, width) => {
-      const s = {
-        y: y + height + 1,
-        height: _.random(min, max),
-        width: _.random(min, max),
-        door: { y: y + height }
-      };
-      s.x = _.random(x - s.width + 1, width + x - 1);
-      s.door.x = doorFinder(x, width, s.x, s.width);
-      return s;
-    };
-
-    // Make a room west of the seed
-    const west = (x, y, height, width) => {
-      const w = {
-        height: _.random(min, max),
-        width: _.random(min, max),
-        door: { x: x - 1 }
-      };
-      w.x = x - w.width - 1;
-      w.y = _.random(y - w.height + 1, height + y - 1);
-      w.door.y = doorFinder(y, height, w.y, w.height);
-      return w;
-    };
-
     // Generate room values for each edge of the seed room
     // repeatFunc adds `num` versions of a direction function to roomValues,
     // permitting `num` paths from the seed room in that direction.
-    const repeatFunc = (num, func, args) => {
+    const repeatFunc = (num, func, seedSpecs, range) => {
       const arr = [];
       for (let i = 0; i < num; i++) {
-        arr.push(func(...args)); // The ...args must be reintroduced each time or _.random values won't be recalculated
+        arr.push(func(...seedSpecs, range)); // The ...args must be reintroduced each time or _.random values won't be recalculated
       }
       return arr;
     };
@@ -199,7 +202,9 @@ const generate = (grid, level) => {
     const roomValues = [];
     const num = 5; // Number of possible branches from the seed in one direction
     const seed = [x, y, height, width];
-    [north, east, south, west].map(func => roomValues.push(...repeatFunc(num, func, seed)));
+    [north, east, south, west].map(func =>
+      roomValues.push(...repeatFunc(num, func, seed, c.ROOM_SIZE_RANGE))
+    );
 
     // placedRooms contains data for `roomValues` items that made the cut
     const placedRooms = [];
