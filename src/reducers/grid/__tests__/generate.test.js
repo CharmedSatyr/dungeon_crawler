@@ -148,20 +148,45 @@ describe('`doorFinder` generate grid reducer function', () => {
      *  | PAR | 1,2 | 2,2 |
      *  |-----+-----+-----|
      ***/
-    expect(generate.doorFinder(0, 3, 0, 1)).toBe(0);
 
     // Child room has been generated South of Parent room. Determine X coordinate of Door
     /***
      *  Sample Grid
      *  |-----+-----+-----|
-     *  | PAR | PAR | 2,0 |
+     *  | PAR | PAR | PAR |
      *  |-----+-----+-----|
-     *  | 0,1 | DOR | 2,1 |
+     *  | DOR | 1,1 | 2,1 |
+     *  |-----+-----+-----|
+     *  | CHI | 1,2 | 2,2 |
+     *  |-----+-----+-----|
+     ***/
+    expect(generate.doorFinder(0, 3, 0, 1)).toBe(0);
+
+    // Child room has been generated South of Parent room. Determine X coordinate of Door (multiple values possible)
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----|
+     *  | PAR | PAR | PAR |
+     *  |-----+-----+-----|
+     *  | 0,1 | DOR | DOR |
      *  |-----+-----+-----|
      *  | 0,2 | CHI | CHI |
      *  |-----+-----+-----|
      ***/
-    expect(generate.doorFinder(0, 2, 1, 2)).toBe(1);
+
+    // Child room has been generated East of Parent room. Determine Y coordinate of Door (multiple values possible)
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----|
+     *  | PAR | 0,1 | 2,1 |
+     *  |-----+-----+-----|
+     *  | PAR | DOR | CHI |
+     *  |-----+-----+-----|
+     *  | PAR | DOR | CHI |
+     *  |-----+-----+-----|
+     ***/
+    expect(generate.doorFinder(0, 3, 1, 2)).toBeGreaterThanOrEqual(1);
+    expect(generate.doorFinder(0, 3, 1, 2)).toBeLessThanOrEqual(2);
   });
 
   it('should throw an error if no door placement is possible', () => {
