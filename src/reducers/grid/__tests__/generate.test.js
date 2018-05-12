@@ -216,7 +216,30 @@ describe('`doorFinder` generate grid reducer function', () => {
 });
 
 describe('`east` generate grid reducer function', () => {
-  it('should generate specs for a child room right of the parent but connected by one cell');
+  // `north` has more complete notes
+  it('should generate specs for a child room right of the parent but connected by one cell', () => {
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,0 | 1,0 | 2,0 | 3,0 | 4,0 |
+     *  |=====+=====+=====+=====+=====|
+     *  | 0,1 | 1,1 | 2,1 | 3,1 | 4,1 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,2 | 1,2 | 2,2 | CHI | CHI |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,3 | PAR | DOR | CHI | CHI | The child room could be 1x1 at [3,3]
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,4 | 1,4 | 2,4 | CHI | CHI | However, it could also be 2x2 and start at [3,2] or [3,3]
+     *  |-----+-----+-----+-----+-----|
+     ***/
+    const seed = [1, 3, 1, 1];
+    const range = [1, 2];
+    expect(generate.east(...seed, range).x).toBe(3);
+    expect(generate.east(...seed, range).y.toString()).toMatch(/[2,3]/);
+    expect(generate.east(...seed, range).height.toString()).toMatch(/[1,2]/);
+    expect(generate.east(...seed, range).width.toString()).toMatch(/[1,2]/);
+    expect(generate.east(...seed, range).door).toEqual({ x: 2, y: 3 });
+  });
 });
 
 describe('`north` generate grid reducer function', () => {
@@ -266,25 +289,55 @@ describe('`north` generate grid reducer function', () => {
 });
 
 describe('`south` generate grid reducer function', () => {
-  it('should generate specs for a child room below the parent but connected by one cell');
-  // , () => {
-  //    const seed = [1, 2, 1, 1];
-  //    const range = [1, 1];
-  //    const child = { x: 1, y: 0, height: 1, width: 1, door: { x: 1, y: 1 } };
-  //    expect(generate.north(...seed, range)).toEqual(child);
-  //
-  //    const seed2 = [1, 3, 1, 1];
-  //    const range2 = [1, 2];
-  //    expect(generate.north(...seed2, range2).x.toString()).toMatch(/[0-1]/);
-  //    expect(generate.north(...seed2, range2).y.toString()).toMatch(/[0,1]/);
-  //    expect(generate.north(...seed2, range2).height.toString()).toMatch(/[1-2]/);
-  //    expect(generate.north(...seed2, range2).width.toString()).toMatch(/[1-2]/);
-  //    expect(generate.north(...seed2, range2).door).toEqual({ x: 1, y: 2 });
-  //});
+  it('should generate specs for a child room below the parent but connected by one cell', () => {
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,0 | 1,0 | 2,0 | 3,0 | 4,0 |
+     *  |=====+=====+=====+=====+=====|
+     *  | 0,1 | 1,1 | 2,1 | PAR | 4,1 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,2 | 1,2 | 2,2 | DOR | 4,2 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,3 | 1,3 | CHI | CHI | CHI | The child room could be 1x1 at [3,3]
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,4 | 1,4 | CHI | CHI | CHI | However, it could also be 2x2 and start at [2,3] or [3,3]
+     *  |-----+-----+-----+-----+-----|
+     ***/
+    const seed = [3, 1, 1, 1];
+    const range = [1, 2];
+    expect(generate.south(...seed, range).x.toString()).toMatch(/[2,3]/);
+    expect(generate.south(...seed, range).y).toBe(3);
+    expect(generate.south(...seed, range).height.toString()).toMatch(/[1,2]/);
+    expect(generate.south(...seed, range).width.toString()).toMatch(/[1,2]/);
+    expect(generate.south(...seed, range).door).toEqual({ x: 3, y: 2 });
+  });
 });
 
 describe('`west` generate grid reducer function', () => {
-  it('should generate specs for a child room left of the parent but connected by one cell');
+  it('should generate specs for a child room left of the parent but connected by one cell', () => {
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----+-----+-----|
+     *  | CHI | CHI | 2,0 | 3,0 | 4,0 |
+     *  |=====+=====+=====+=====+=====|
+     *  | CHI | CHI | DOR | PAR | 4,1 | The child room could be 1x1 at [1,1]
+     *  |-----+-----+-----+-----+-----|
+     *  | CHI | CHI | 2,2 | 3,2 | 4,2 | However, it could also be 2x2 and start at [0,0] or [0,1]
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,3 | 1,3 | 2,3 | 3,3 | 4,3 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,4 | 1,4 | 2,4 | 3,4 | 4,4 |
+     *  |-----+-----+-----+-----+-----|
+     ***/
+    const seed = [3, 1, 1, 1];
+    const range = [1, 2];
+    expect(generate.west(...seed, range).x.toString()).toMatch(/[0,1]/);
+    expect(generate.west(...seed, range).y.toString()).toMatch(/[0,1]/);
+    expect(generate.west(...seed, range).height.toString()).toMatch(/[1,2]/);
+    expect(generate.west(...seed, range).width.toString()).toMatch(/[1,2]/);
+    expect(generate.west(...seed, range).door).toEqual({ x: 2, y: 1 });
+  });
 });
 
 // describe('`repeatFunc` generate grid reducer function');
