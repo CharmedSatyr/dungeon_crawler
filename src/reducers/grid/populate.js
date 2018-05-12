@@ -28,7 +28,7 @@ const populate = (data, level) => {
       const enemy = {
         weapon: l.weapons.spear,
         facing: direction(),
-        level: _.random(1, 5)
+        level: _.random(1, 5),
       };
       enemy.health = g.healthCalc(enemy.level);
 
@@ -191,7 +191,7 @@ const populate = (data, level) => {
       const player = {
         facing: 'south',
         level: 1,
-        health: 20
+        health: 20,
       };
       if (
         Object.keys(data[i].payload).length === 0 &&
@@ -205,7 +205,7 @@ const populate = (data, level) => {
           // Save playerPosition as a variable
           playerPosition = {
             coordinates: { x: data[i].coordinates.x, y: data[i].coordinates.y },
-            index: i
+            index: i,
           };
         }
       }

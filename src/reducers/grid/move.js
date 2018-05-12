@@ -28,8 +28,8 @@ const move = (data, playerPosition, targetObj) => {
     data: newData,
     playerPosition: {
       coordinates: targetObj.coordinates,
-      index: targetObj.index
-    }
+      index: targetObj.index,
+    },
   };
 };
 

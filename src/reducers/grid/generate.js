@@ -15,7 +15,7 @@ export const makeGrid = (height, width, type, grid = []) => {
         coordinates: { x, y },
         index,
         payload: {},
-        type
+        type,
       });
       index++;
     }
@@ -36,7 +36,7 @@ export const makeSeed = (gridHeight, gridWidth, range) => {
     x: _.random(1, gridWidth - max - 1), // x top left corner placement
     y: _.random(1, gridHeight - max - 1), // y top left corner placement
     height: _.random(min, max), // height of first room
-    width: _.random(min, max) // width of first room
+    width: _.random(min, max), // width of first room
   };
 };
 
@@ -120,7 +120,7 @@ export const north = (x, y, height, width, range) => {
   const n = {
     height: _.random(min, max),
     width: _.random(min, max),
-    door: { y: y - 1 }
+    door: { y: y - 1 },
   };
   n.x = _.random(x - n.width + 1, x + width - 1);
   n.y = y - n.height - 1;
@@ -135,7 +135,7 @@ export const east = (x, y, height, width, range) => {
     x: x + width + 1,
     height: _.random(min, max),
     width: _.random(min, max),
-    door: {}
+    door: {},
   };
   e.y = _.random(y - e.height + 1, height + y - 1);
   e.door.x = e.x - 1;
@@ -150,7 +150,7 @@ export const south = (x, y, height, width, range) => {
     y: y + height + 1,
     height: _.random(min, max),
     width: _.random(min, max),
-    door: { y: y + height }
+    door: { y: y + height },
   };
   s.x = _.random(x - s.width + 1, width + x - 1);
   s.door.x = doorFinder(x, width, s.x, s.width);
@@ -163,7 +163,7 @@ export const west = (x, y, height, width, range) => {
   const w = {
     height: _.random(min, max),
     width: _.random(min, max),
-    door: { x: x - 1 }
+    door: { x: x - 1 },
   };
   w.x = x - w.width - 1;
   w.y = _.random(y - w.height + 1, height + y - 1);
