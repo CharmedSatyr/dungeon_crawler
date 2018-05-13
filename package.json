@@ -1,8 +1,7 @@
 {
   "name": "dungeon_crawler",
   "version": "0.0.1",
-  "description":
-    "\"Build a Roguelike Dungeon Crawler Game\" is a project required for freeCodeCamp's Data Visualization Certificate.",
+  "description": "\"Build a Roguelike Dungeon Crawler Game\" is a project required for freeCodeCamp's Data Visualization Certificate.",
   "repository": "https://github.com/CharmedSatyr/dungeon_crawler",
   "author": "CharmedSatyr <z@charmed.tech>",
   "license": "GPL-3.0",
@@ -31,7 +30,8 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "prettier": "^1.12.1",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "redux-mock-store": "^1.5.1"
   },
   "eslintConfig": {
     "extends": "react-app"
