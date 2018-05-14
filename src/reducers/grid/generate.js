@@ -129,7 +129,7 @@ export const north = (x, y, height, width, range) => {
   return n;
 };
 
-// east// north
+// east
 // Make a room east of a seed
 export const east = (x, y, height, width, range) => {
   const [min, max] = range;
@@ -186,6 +186,43 @@ export const repeatDirectionalRoomGeneration = (num, func, seedSpecs, range) => 
   return arr;
 };
 
+// createRoomsFromSeed
+// This function takes grid, a seed room, and a room size range and returns an object
+// with `grid` and `placedRooms` arrays as properties
+export const createRoomsFromSeed = (
+  grid,
+  { x, y, height, width },
+  level,
+  num = 5, // num is the number of possible branches from the seed in one direction
+  range = c.ROOM_SIZE_RANGE
+) => {
+  // Push the directional objects to array roomValues
+  const roomValues = [];
+  const seed = [x, y, height, width];
+  [north, east, south, west].map(func =>
+    roomValues.push(...repeatDirectionalRoomGeneration(num, func, seed, c.ROOM_SIZE_RANGE))
+  );
+
+  // placedRooms contains data for `roomValues` items that made the cut
+  const placedRooms = [];
+  // For generated roomValues
+  roomValues.forEach(room => {
+    // if the room is valid relative to existing grid
+    if (isValidRoomPlacement(grid, room, c.GRID_HEIGHT, c.GRID_WIDTH, tileTypes(level, 'path'))) {
+      // update existing grid with room placement
+      grid = placeRoom(grid, room, tileTypes(level, 'path'));
+      // update existing grid with door placement
+      grid = placeRoom(grid, { x: room.door.x, y: room.door.y }, tileTypes(level, 'path'));
+      // record placedRoom values for the next seeds
+      placedRooms.push(room);
+    }
+    // Note the lack of a working `else` statement. If the randomly generated room placement is invalid, tough luck!
+    // This is the motivation behind repeatDirectionalRoomGeneration above.
+  });
+  // Return the updated grid and placedRooms in an object
+  return { grid, placedRooms };
+};
+
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
 const generate = (grid, level) => {
@@ -199,37 +236,6 @@ const generate = (grid, level) => {
   grid = placeRoom(grid, seedRoom, tileTypes(level, 'path'));
 
   // 4. place additional rooms based on that seed.
-  // This function takes grid, a seed room, and a room size range and returns and object
-  // that contains modified grid and a record of placed rooms
-  const createRoomsFromSeed = (grid, { x, y, height, width }, range = c.ROOM_SIZE_RANGE) => {
-    // Push the directional objects to array roomValues
-    const roomValues = [];
-    const num = 5; // Number of possible branches from the seed in one direction
-    const seed = [x, y, height, width];
-    [north, east, south, west].map(func =>
-      roomValues.push(...repeatDirectionalRoomGeneration(num, func, seed, c.ROOM_SIZE_RANGE))
-    );
-
-    // placedRooms contains data for `roomValues` items that made the cut
-    const placedRooms = [];
-    // For generated roomValues
-    roomValues.forEach(room => {
-      // if the room is valid relative to existing grid
-      if (isValidRoomPlacement(grid, room, c.GRID_HEIGHT, c.GRID_WIDTH, tileTypes(level, 'path'))) {
-        // update existing grid with room placement
-        grid = placeRoom(grid, room, tileTypes(level, 'path'));
-        // update existing grid with door placement
-        grid = placeRoom(grid, { x: room.door.x, y: room.door.y }, tileTypes(level, 'path'));
-        // record placedRoom values for the next seeds
-        placedRooms.push(room);
-      }
-      // Note the lack of a working `else` statement. If the randomly generated room placement is invalid, tough luck!
-      // This is the motivation behind repeatDirectionalRoomGeneration above.
-    });
-    // Return the updated grid and placedRooms in an object
-    return { grid, placedRooms };
-  };
-
   // This function places rooms around a seed room.
   // It takes grid, seed rooms, a counter, and a maxRooms constant.
   // It takes a seedRoom array and places rooms based on that.
@@ -240,7 +246,7 @@ const generate = (grid, level) => {
       return grid; // Final output is the straight grid array that is read by the reducer.
     }
 
-    grid = createRoomsFromSeed(grid, seedRooms.pop());
+    grid = createRoomsFromSeed(grid, seedRooms.pop(), level);
     seedRooms.push(...grid.placedRooms);
     counter++;
 

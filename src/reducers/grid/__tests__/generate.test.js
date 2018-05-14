@@ -132,8 +132,6 @@ describe('`isValidRoomPlacement` generate grid reducer function', () => {
   });
 });
 
-// describe('`createRoomsFromSeed` generate grid reducer function');
-
 describe('`doorFinder` generate grid reducer function', () => {
   it('should return a coordinate value within the range of cells that are adjacent to and between two rooms with given starting coordinates and extensions', () => {
     // Arguments are: parentStart, parentExtension, childStart, childExtension
@@ -358,6 +356,31 @@ describe('`repeatDirectionalRoomGeneration` generate grid reducer function', () 
     expect(mockFn.mock.calls).toEqual(expected);
   });
 });
+
+describe('`createRoomsFromSeed` generate grid reducer function', () => {
+  // This function takes a seed room and runs directional room generation helper functions to create an array of possible child rooms in each direction
+  // Then, it iterates through the created array. If a child room passes `isValidRoomPlacement`, the function runs `placeRoom` once to place the room and again to place the door (treating the door like a separate room).
+  // The function keeps track of an array of rooms that have been placed, for later use.
+  // Rather than performing integration tests of the component functions, this test just ensures the right sort of output
+  const seed = { x: 2, y: 2, height: 1, width: 1, door: { x: 3, y: 3 } };
+  let gridSize = 25;
+  let grid = Array(gridSize).fill({ type: 'default' });
+  let args = [grid, seed, 1, [1, 1]];
+  it('should return an object that includes a property `grid` that is an array of the same length as the `grid` argument', () => {
+    expect(Array.isArray(generate.createRoomsFromSeed(grid, seed, 1, [1, 1]).grid)).toBeTruthy();
+    expect(generate.createRoomsFromSeed(...args).grid).toHaveLength(gridSize);
+
+    gridSize = 90;
+    grid = Array(gridSize).fill({ type: 'default' });
+    args = [grid, seed, 1, [1, 1]];
+    expect(generate.createRoomsFromSeed(...args).grid).toHaveLength(gridSize);
+  });
+
+  it('should return an object that includes an array `placedRooms`', () => {
+    expect(Array.isArray(generate.createRoomsFromSeed(...args).placedRooms)).toBeTruthy();
+  });
+});
+
 // describe('`growMap` generate grid reducer function');
 // describe('`addHorizontalDoors` generate grid reducer function');
 // describe('`addVerticalDoors` generate grid reducer function');
