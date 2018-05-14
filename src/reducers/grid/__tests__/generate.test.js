@@ -340,7 +340,24 @@ describe('`west` generate grid reducer function', () => {
   });
 });
 
-// describe('`repeatFunc` generate grid reducer function');
+describe('`repeatDirectionalRoomGeneration` generate grid reducer function', () => {
+  const num = 5;
+  const seedSpecs = [0, 0, 1, 1];
+  const range = [1, 2];
+  const mockFn = jest.fn();
+  const calledFn = generate.repeatDirectionalRoomGeneration(num, mockFn, seedSpecs, range);
+  it('should call the `func` `num` times', () => {
+    expect(mockFn).toHaveBeenCalledTimes(num);
+  });
+  it('should return an array of length `num`', () => {
+    expect(Array.isArray(calledFn)).toBeTruthy();
+    expect(calledFn).toHaveLength(num);
+  });
+  it('the argument `func` should be called using the arguments...', () => {
+    const expected = Array(num).fill([...seedSpecs, range]);
+    expect(mockFn.mock.calls).toEqual(expected);
+  });
+});
 // describe('`growMap` generate grid reducer function');
 // describe('`addHorizontalDoors` generate grid reducer function');
 // describe('`addVerticalDoors` generate grid reducer function');

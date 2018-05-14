@@ -112,6 +112,7 @@ export const doorFinder = (parentStart, parentExtension, childStart, childExtens
   return _.random(doorRange[0], doorRange[doorRange.length - 1]);
 };
 
+// north
 // Make a room north of a seed
 // First four arguments are values of the room being used as a seed
 // Range is array of [min, max] number of cells per side of new room
@@ -128,6 +129,7 @@ export const north = (x, y, height, width, range) => {
   return n;
 };
 
+// east// north
 // Make a room east of a seed
 export const east = (x, y, height, width, range) => {
   const [min, max] = range;
@@ -143,6 +145,7 @@ export const east = (x, y, height, width, range) => {
   return e;
 };
 
+// south
 // Make a room south of a seed
 export const south = (x, y, height, width, range) => {
   const [min, max] = range;
@@ -171,6 +174,18 @@ export const west = (x, y, height, width, range) => {
   return w;
 };
 
+// repeatDirectionalRoomGeneration
+// Generate room values for each edge of the seed room
+// repeatDirectionalRoomGeneration adds `num` versions of a direction function to roomValues,
+// permitting `num` paths from the seed room in that direction.
+export const repeatDirectionalRoomGeneration = (num, func, seedSpecs, range) => {
+  const arr = [];
+  for (let i = 0; i < num; i++) {
+    arr.push(func(...seedSpecs, range)); // The ...args must be reintroduced each time or _.random values won't be recalculated
+  }
+  return arr;
+};
+
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
 const generate = (grid, level) => {
@@ -187,23 +202,12 @@ const generate = (grid, level) => {
   // This function takes grid, a seed room, and a room size range and returns and object
   // that contains modified grid and a record of placed rooms
   const createRoomsFromSeed = (grid, { x, y, height, width }, range = c.ROOM_SIZE_RANGE) => {
-    // Generate room values for each edge of the seed room
-    // repeatFunc adds `num` versions of a direction function to roomValues,
-    // permitting `num` paths from the seed room in that direction.
-    const repeatFunc = (num, func, seedSpecs, range) => {
-      const arr = [];
-      for (let i = 0; i < num; i++) {
-        arr.push(func(...seedSpecs, range)); // The ...args must be reintroduced each time or _.random values won't be recalculated
-      }
-      return arr;
-    };
-
     // Push the directional objects to array roomValues
     const roomValues = [];
     const num = 5; // Number of possible branches from the seed in one direction
     const seed = [x, y, height, width];
     [north, east, south, west].map(func =>
-      roomValues.push(...repeatFunc(num, func, seed, c.ROOM_SIZE_RANGE))
+      roomValues.push(...repeatDirectionalRoomGeneration(num, func, seed, c.ROOM_SIZE_RANGE))
     );
 
     // placedRooms contains data for `roomValues` items that made the cut
@@ -220,7 +224,7 @@ const generate = (grid, level) => {
         placedRooms.push(room);
       }
       // Note the lack of a working `else` statement. If the randomly generated room placement is invalid, tough luck!
-      // This is the motivation behind repeatFunc above.
+      // This is the motivation behind repeatDirectionalRoomGeneration above.
     });
     // Return the updated grid and placedRooms in an object
     return { grid, placedRooms };
