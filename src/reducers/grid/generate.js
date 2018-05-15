@@ -223,37 +223,41 @@ export const createRoomsFromSeed = (
   return { grid, placedRooms };
 };
 
+// growMap
+// This function places rooms around a seed room.
+// It takes grid, seed rooms, a counter, and a maxRooms constant.
+// It takes a seedRoom array and places rooms based on that.
+// Items in the `placedRooms` array recursively become seeds for future rooms.
+export const growMap = (grid, seedRooms, level, counter = 0, maxRooms = c.MAX_ROOMS) => {
+  // `growMap` runs recursively until maxRooms is reached or there are no more seedRooms.
+  if (counter >= maxRooms || !seedRooms.length) {
+    return grid; // Output is the grid array used by components
+  }
+
+  // create an object with `grid` and `placedRooms` keys
+  const dataInProgress = createRoomsFromSeed(grid, seedRooms.pop(), level);
+  // The placedRooms items pushed into the seedRooms argument array
+  seedRooms.push(...dataInProgress.placedRooms);
+  // Increment the counter
+  counter++;
+
+  return growMap(dataInProgress.grid, seedRooms, level, counter);
+};
+
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
 const generate = (grid, level) => {
   // 1. Make a grid
   grid = makeGrid(c.GRID_HEIGHT, c.GRID_WIDTH, tileTypes(level), grid);
 
-  // 2. Set random values for the first, seed room
+  // 2. Set random values for the seed room
   const seedRoom = makeSeed(c.GRID_HEIGHT, c.GRID_WIDTH, c.ROOM_SIZE_RANGE);
 
-  // 3. place the first room onto the grid
+  // 3. place the seed room onto the grid
   grid = placeRoom(grid, seedRoom, tileTypes(level, 'path'));
 
   // 4. place additional rooms based on that seed.
-  // This function places rooms around a seed room.
-  // It takes grid, seed rooms, a counter, and a maxRooms constant.
-  // It takes a seedRoom array and places rooms based on that.
-  // Then, items in the `placedRooms` array become seeds for future rooms.
-  const growMap = (grid, seedRooms, counter = 1, maxRooms = c.MAX_ROOMS) => {
-    // It runs the createRoomsFromSeed function recursively until maxRooms is reached or there are no more seedRooms.
-    if (counter >= maxRooms || !seedRooms.length) {
-      return grid; // Final output is the straight grid array that is read by the reducer.
-    }
-
-    grid = createRoomsFromSeed(grid, seedRooms.pop(), level);
-    seedRooms.push(...grid.placedRooms);
-    counter++;
-
-    return growMap(grid.grid, seedRooms, counter);
-  };
-  // `seedRoom` from step 2 is the mother seedRoom.
-  grid = growMap(grid, [seedRoom]);
+  grid = growMap(grid, [seedRoom], level);
 
   // 5. Add more doors
   // Now that the rooms are placed, we will loop through and add a few more doors to reduce map linearity

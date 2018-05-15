@@ -1,11 +1,21 @@
 import * as generate from '../generate';
 
 describe('`makeGrid` generate grid reducer function', () => {
-  it('should create an array `grid` of objects, each with a property `coordinates` that corresponds to an x/y grid position, an array `index` position, a `payload` that is an empty object, and a `type`', () => {
+  it('should return an array of `height` * `width` objects', () => {
+    let height = 2;
+    let width = 2;
+    expect(generate.makeGrid(height, width, 'default', [])).toHaveLength(height * width);
+
+    height = 10;
+    width = 12;
+    expect(generate.makeGrid(height, width, 'default', [])).toHaveLength(height * width);
+  });
+
+  it('should create an array `grid` of objects, each with a property `coordinates` that corresponds to an x/y grid position, an `index`, a `payload` that is an empty object, and a `type`', () => {
     const height = 2;
     const width = 2;
-    const type = 'vines';
     const grid = [];
+    const type = 'vines';
     const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'vines' };
     const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: 'vines' };
     const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: 'vines' };
@@ -381,6 +391,93 @@ describe('`createRoomsFromSeed` generate grid reducer function', () => {
   });
 });
 
-// describe('`growMap` generate grid reducer function');
+describe('`growMap` generate grid reducer function', () => {
+  const seed = { x: 1, y: 1, height: 1, width: 1, door: { x: 3, y: 3 } };
+  it('should return a `grid` array of unmodified length', () => {
+    let gridSize = 9;
+    let grid = Array(gridSize).fill({ coordinates: { x: 0, y: 0 }, type: 'default' });
+    expect(generate.growMap(grid, [seed], 1, 1)).toHaveLength(gridSize);
+    gridSize = 90;
+    grid = Array(gridSize).fill({ coordinates: { x: 0, y: 0 }, type: 'default' });
+    expect(generate.growMap(grid, [seed], 1, 1)).toHaveLength(gridSize);
+  });
+  it('should place rooms around the seed in every direction and recursively from those rooms', () => {
+    /***
+     *  Sample Grid
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,0 | 1,0 | 2,0 | 3,0 | 4,0 |
+     *  |=====+=====+=====+=====+=====|
+     *  | 0,1 | 1,1 | ROM | 3,1 | 4,1 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,2 | ROM | SED | ROM | 4,2 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,3 | 1,3 | ROM | 3,3 | 4,3 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,4 | 1,4 | DOR | 3,4 | 4,4 |
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,5 | 1,5 | ROM | 3,5 | 4,5 | // room generated off [2,3]
+     *  |-----+-----+-----+-----+-----|
+     *  | 0,6 | 1,6 | 2,6 | 3,6 | 4,6 |
+     *  |-----+-----+-----+-----+-----|
+     ***/
+    const seed = { x: 1, y: 1, height: 1, width: 1 };
+    const grid = [
+      // Row
+      { coordinates: { x: 0, y: 0 }, type: 'default' },
+      { coordinates: { x: 1, y: 0 }, type: 'default' },
+      { coordinates: { x: 2, y: 0 }, type: 'default' },
+      { coordinates: { x: 3, y: 0 }, type: 'default' },
+      { coordinates: { x: 4, y: 0 }, type: 'default' },
+      // Row
+      { coordinates: { x: 0, y: 1 }, type: 'default' },
+      { coordinates: { x: 1, y: 1 }, type: 'default' },
+      { coordinates: { x: 2, y: 1 }, type: 'default' },
+      { coordinates: { x: 3, y: 1 }, type: 'default' },
+      { coordinates: { x: 4, y: 1 }, type: 'default' },
+      // Row
+      { coordinates: { x: 0, y: 2 }, type: 'default' },
+      { coordinates: { x: 1, y: 2 }, type: 'default' },
+      { coordinates: { x: 2, y: 2 }, type: 'seed' },
+      { coordinates: { x: 3, y: 2 }, type: 'default' },
+      { coordinates: { x: 4, y: 2 }, type: 'default' },
+      // Row
+      { coordinates: { x: 0, y: 3 }, type: 'default' },
+      { coordinates: { x: 1, y: 3 }, type: 'default' },
+      { coordinates: { x: 2, y: 3 }, type: 'default' },
+      { coordinates: { x: 3, y: 3 }, type: 'default' },
+      { coordinates: { x: 4, y: 3 }, type: 'default' },
+      // Row
+      { coordinates: { x: 0, y: 4 }, type: 'default' },
+      { coordinates: { x: 1, y: 4 }, type: 'default' },
+      { coordinates: { x: 2, y: 4 }, type: 'default' },
+      { coordinates: { x: 3, y: 4 }, type: 'default' },
+      { coordinates: { x: 4, y: 4 }, type: 'default' },
+      // Row
+      { coordinates: { x: 0, y: 5 }, type: 'default' },
+      { coordinates: { x: 1, y: 5 }, type: 'default' },
+      { coordinates: { x: 2, y: 5 }, type: 'default' },
+      { coordinates: { x: 3, y: 5 }, type: 'default' },
+      { coordinates: { x: 4, y: 5 }, type: 'default' },
+      // Row
+      { coordinates: { x: 0, y: 6 }, type: 'default' },
+      { coordinates: { x: 1, y: 6 }, type: 'default' },
+      { coordinates: { x: 2, y: 6 }, type: 'default' },
+      { coordinates: { x: 3, y: 6 }, type: 'default' },
+      { coordinates: { x: 4, y: 6 }, type: 'default' },
+    ];
+
+    const updatedGrid = grid;
+    const roomType = 'dirtPath';
+    updatedGrid[7].type = roomType;
+    updatedGrid[11].type = roomType;
+    updatedGrid[13].type = roomType;
+    updatedGrid[17].type = roomType;
+    updatedGrid[22].type = roomType;
+    updatedGrid[27].type = roomType;
+
+    expect(generate.growMap(grid, [seed], 1, 9)).toEqual(updatedGrid);
+  });
+});
+
 // describe('`addHorizontalDoors` generate grid reducer function');
 // describe('`addVerticalDoors` generate grid reducer function');
