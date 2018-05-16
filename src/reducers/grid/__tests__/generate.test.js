@@ -2,27 +2,30 @@ import * as generate from '../generate';
 
 describe('`makeGrid` generate grid reducer function', () => {
   it('should return an array of `height` * `width` objects', () => {
+    let grid = [];
     let height = 2;
     let width = 2;
-    expect(generate.makeGrid(height, width, 'default', [])).toHaveLength(height * width);
+    const defaultType = 'default';
+    expect(generate.makeGrid(grid, height, width, defaultType)).toHaveLength(height * width);
 
+    grid = [];
     height = 10;
     width = 12;
-    expect(generate.makeGrid(height, width, 'default', [])).toHaveLength(height * width);
+    expect(generate.makeGrid(grid, height, width, defaultType)).toHaveLength(height * width);
   });
 
   it('should create an array `grid` of objects, each with a property `coordinates` that corresponds to an x/y grid position, an `index`, a `payload` that is an empty object, and a `type`', () => {
+    const grid = [];
     const height = 2;
     const width = 2;
-    const grid = [];
-    const type = 'vines';
-    const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'vines' };
-    const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: 'vines' };
-    const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: 'vines' };
-    const obj3 = { coordinates: { x: 1, y: 1 }, index: 3, payload: {}, type: 'vines' };
+    const defaultType = 'default';
+    const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: defaultType };
+    const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: defaultType };
+    const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: defaultType };
+    const obj3 = { coordinates: { x: 1, y: 1 }, index: 3, payload: {}, type: defaultType };
 
     const createdGrid = [obj0, obj1, obj2, obj3];
-    expect(generate.makeGrid(height, width, type, grid)).toEqual(createdGrid);
+    expect(generate.makeGrid(grid, height, width, defaultType)).toEqual(createdGrid);
   });
 });
 

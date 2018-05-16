@@ -4,7 +4,7 @@ import tileTypes from '../../constants/tile-types';
 
 // makeGrid
 // Create an empty grid with the desired keys
-export const makeGrid = (height, width, type, grid = []) => {
+export const makeGrid = (grid, height, width, defaultType) => {
   let index = 0;
   for (let i = 0; i < height; i++) {
     let x,
@@ -15,7 +15,7 @@ export const makeGrid = (height, width, type, grid = []) => {
         coordinates: { x, y },
         index,
         payload: {},
-        type,
+        type: defaultType,
       });
       index++;
     }
@@ -296,9 +296,15 @@ export const addVerticalDoors = (grid, level, probability, gridWidth = c.GRID_WI
 
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
-const generate = (grid, level) => {
+const generate = (
+  grid,
+  level,
+  gridHeight = c.GRID_HEIGHT,
+  gridWidth = c.GRID_WIDTH,
+  defaultType = tileTypes(level)
+) => {
   // 1. Make a grid
-  grid = makeGrid(c.GRID_HEIGHT, c.GRID_WIDTH, tileTypes(level), grid);
+  grid = makeGrid(grid, gridHeight, gridWidth, defaultType);
 
   // 2. Set random values for the seed room
   const seedRoom = makeSeed(c.GRID_HEIGHT, c.GRID_WIDTH, c.ROOM_SIZE_RANGE);
