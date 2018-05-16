@@ -76,16 +76,19 @@ describe('`makeSeed` generate grid reducer function', () => {
 
 describe('`placeRoom` generate grid reducer function', () => {
   it('should modify the type of each grid cell that meets coordinate/height/width specs', () => {
-    const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'vines' };
-    const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: 'vines' };
-    const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: 'vines' };
-    const obj3 = { coordinates: { x: 1, y: 1 }, index: 3, payload: {}, type: 'vines' };
+    const defaultType = 'default';
+    const pathType = 'path';
+    const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: defaultType };
+    const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: defaultType };
+    const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: defaultType };
+    const obj3 = { coordinates: { x: 1, y: 1 }, index: 3, payload: {}, type: defaultType };
 
     const grid = [obj0, obj1, obj2, obj3];
 
-    const seed = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: 'other' };
-    const seededGrid = [seed, obj1, obj2, obj3];
-    expect(generate.placeRoom(grid, seed, 'other')).toEqual(seededGrid);
+    const seedSpecs = { x: 0, y: 0, height: 1, width: 1 };
+    const seedRoom = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType };
+    const seededGrid = [seedRoom, obj1, obj2, obj3];
+    expect(generate.placeRoom(grid, seedSpecs, pathType)).toEqual(seededGrid);
   });
 });
 
@@ -249,7 +252,7 @@ describe('`east` generate grid reducer function', () => {
     expect(generate.east(...seed, range).y.toString()).toMatch(/[2,3]/);
     expect(generate.east(...seed, range).height.toString()).toMatch(/[1,2]/);
     expect(generate.east(...seed, range).width.toString()).toMatch(/[1,2]/);
-    expect(generate.east(...seed, range).door).toEqual({ x: 2, y: 3 });
+    expect(generate.east(...seed, range).door).toEqual({ x: 2, y: 3, height: 1, width: 1 });
   });
 });
 
@@ -269,10 +272,10 @@ describe('`north` generate grid reducer function', () => {
      ***/
     const seed = [1, 2, 1, 1];
     const range = [1, 1];
-    const child = { x: 1, y: 0, height: 1, width: 1, door: { x: 1, y: 1 } };
+    const child = { x: 1, y: 0, height: 1, width: 1, door: { x: 1, y: 1, height: 1, width: 1 } };
     expect(generate.north(...seed, range)).toEqual(child);
 
-    // However, at was a boring example, so we can test some basic ranges with a more interesting example.
+    // However, that was a boring example, so we can test some basic ranges with a more interesting example.
     /***
      *  Sample Grid
      *  |-----+-----+-----+-----+-----|
@@ -293,7 +296,7 @@ describe('`north` generate grid reducer function', () => {
     expect(generate.north(...seed2, range2).y.toString()).toMatch(/[0,1]/);
     expect(generate.north(...seed2, range2).height.toString()).toMatch(/[1-2]/);
     expect(generate.north(...seed2, range2).width.toString()).toMatch(/[1-2]/);
-    expect(generate.north(...seed2, range2).door).toEqual({ x: 1, y: 2 });
+    expect(generate.north(...seed2, range2).door).toEqual({ x: 1, y: 2, height: 1, width: 1 });
     // Further tests could make the parent bigger and test additional child placement opportunities,
     // but if this works and doorFinder works, the child should be OK.
   });
@@ -321,7 +324,7 @@ describe('`south` generate grid reducer function', () => {
     expect(generate.south(...seed, range).y).toBe(3);
     expect(generate.south(...seed, range).height.toString()).toMatch(/[1,2]/);
     expect(generate.south(...seed, range).width.toString()).toMatch(/[1,2]/);
-    expect(generate.south(...seed, range).door).toEqual({ x: 3, y: 2 });
+    expect(generate.south(...seed, range).door).toEqual({ x: 3, y: 2, height: 1, width: 1 });
   });
 });
 
@@ -347,7 +350,7 @@ describe('`west` generate grid reducer function', () => {
     expect(generate.west(...seed, range).y.toString()).toMatch(/[0,1]/);
     expect(generate.west(...seed, range).height.toString()).toMatch(/[1,2]/);
     expect(generate.west(...seed, range).width.toString()).toMatch(/[1,2]/);
-    expect(generate.west(...seed, range).door).toEqual({ x: 2, y: 1 });
+    expect(generate.west(...seed, range).door).toEqual({ x: 2, y: 1, height: 1, width: 1 });
   });
 });
 

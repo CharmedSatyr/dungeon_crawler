@@ -42,7 +42,7 @@ export const makeSeed = (gridHeight, gridWidth, range) => {
 
 // placeRoom
 // This function changes the type of the cluster of cells that fits that coordinates/dimensions specs
-export const placeRoom = (grid, { x = 0, y = 0, height = 1, width = 1 }, type) => {
+export const placeRoom = (grid, { x, y, height, width }, pathType) => {
   for (let i in grid) {
     if (
       grid[i].coordinates.x >= x &&
@@ -50,7 +50,7 @@ export const placeRoom = (grid, { x = 0, y = 0, height = 1, width = 1 }, type) =
       grid[i].coordinates.y >= y &&
       grid[i].coordinates.y < y + height
     ) {
-      grid[i].type = type;
+      grid[i].type = pathType;
     }
   }
   return grid;
@@ -121,7 +121,7 @@ export const north = (x, y, height, width, range) => {
   const n = {
     height: _.random(min, max),
     width: _.random(min, max),
-    door: { y: y - 1 },
+    door: { y: y - 1, height: 1, width: 1 },
   };
   n.x = _.random(x - n.width + 1, x + width - 1);
   n.y = y - n.height - 1;
@@ -137,7 +137,7 @@ export const east = (x, y, height, width, range) => {
     x: x + width + 1,
     height: _.random(min, max),
     width: _.random(min, max),
-    door: {},
+    door: { height: 1, width: 1 },
   };
   e.y = _.random(y - e.height + 1, height + y - 1);
   e.door.x = e.x - 1;
@@ -153,7 +153,7 @@ export const south = (x, y, height, width, range) => {
     y: y + height + 1,
     height: _.random(min, max),
     width: _.random(min, max),
-    door: { y: y + height },
+    door: { y: y + height, height: 1, width: 1 },
   };
   s.x = _.random(x - s.width + 1, width + x - 1);
   s.door.x = doorFinder(x, width, s.x, s.width);
@@ -166,7 +166,7 @@ export const west = (x, y, height, width, range) => {
   const w = {
     height: _.random(min, max),
     width: _.random(min, max),
-    door: { x: x - 1 },
+    door: { x: x - 1, height: 1, width: 1 },
   };
   w.x = x - w.width - 1;
   w.y = _.random(y - w.height + 1, height + y - 1);
@@ -212,7 +212,7 @@ export const createRoomsFromSeed = (
       // update existing grid with room placement
       grid = placeRoom(grid, room, tileTypes(level, 'path'));
       // update existing grid with door placement
-      grid = placeRoom(grid, { x: room.door.x, y: room.door.y }, tileTypes(level, 'path'));
+      grid = placeRoom(grid, room.door, tileTypes(level, 'path'));
       // record placedRoom values for the next seeds
       placedRooms.push(room);
     }
