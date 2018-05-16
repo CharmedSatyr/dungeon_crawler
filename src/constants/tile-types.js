@@ -1,7 +1,7 @@
 // Determine tile types given a level
-const tileTypes = (level, type = 'barrier') => {
+const tileTypes = (level, type = 'default') => {
   if (type === 'path') {
-    // The path type is dirt until level 2, when it's stone
+    // The floor type is dirt until level 2, when it's stone
     return level < 2 ? 'dirtPath' : 'stonePath';
   }
   if (level < 2) {
