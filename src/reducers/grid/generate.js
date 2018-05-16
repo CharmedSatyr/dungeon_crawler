@@ -244,6 +244,56 @@ export const growMap = (grid, seedRooms, level, counter = 0, maxRooms = c.MAX_RO
   return growMap(dataInProgress.grid, seedRooms, level, counter);
 };
 
+// addHorizontalDoors
+// Doors connecting horizontally
+export const addHorizontalDoors = (grid, level, probability) => {
+  for (let i = 0; i < grid.length; i++) {
+    if (
+      // If cells on either side exist
+      grid[i - 1] &&
+      grid[i + 1] &&
+      // If three cells are adjacent in a row
+      grid[i - 1].coordinates.y === grid[i].coordinates.y &&
+      grid[i + 1].coordinates.y === grid[i].coordinates.y &&
+      // And the one in the middle isn't a floow but has floors on either side
+      grid[i].type === tileTypes(level) &&
+      grid[i - 1].type === tileTypes(level, 'path') &&
+      grid[i + 1].type === tileTypes(level, 'path')
+    ) {
+      // There's a `probability` it will be converted into a floor
+      if (probability >= Math.random()) {
+        grid[i].type = tileTypes(level, 'path');
+      }
+    }
+  }
+  return grid;
+};
+
+// addVerticalDoors
+// Doors connecting vertically
+export const addVerticalDoors = (grid, level, probability, gridWidth = c.GRID_WIDTH) => {
+  for (let i = 0; i < grid.length; i++) {
+    if (
+      // If cells above and below exist
+      grid[i - gridWidth] &&
+      grid[i + gridWidth] &&
+      // If three cells are adjacent in a column
+      grid[i - gridWidth].coordinates.x === grid[i].coordinates.x &&
+      grid[i + gridWidth].coordinates.x === grid[i].coordinates.x &&
+      // And the cell isn't a floor but has floors above and below
+      grid[i].type === tileTypes(level) &&
+      grid[i - gridWidth].type === tileTypes(level, 'path') &&
+      grid[i + gridWidth].type === tileTypes(level, 'path')
+    ) {
+      // There's a `probability` it will be converted into a floor
+      if (probability >= Math.random()) {
+        grid[i].type = tileTypes(level, 'path');
+      }
+    }
+  }
+  return grid;
+};
+
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
 const generate = (grid, level) => {
@@ -259,51 +309,9 @@ const generate = (grid, level) => {
   // 4. place additional rooms based on that seed.
   grid = growMap(grid, [seedRoom], level);
 
-  // 5. Add more doors
-  // Now that the rooms are placed, we will loop through and add a few more doors to reduce map linearity
-  // Doors connecting horizontally
-  const addHorizontalDoors = grid => {
-    for (let i = 1; i < grid.length - 1; i++) {
-      if (
-        // If three cells are adjacent in a row
-        grid[i - 1].coordinates.y === grid[i].coordinates.y &&
-        grid[i + 1].coordinates.y === grid[i].coordinates.y &&
-        // And the one in the middle has floors on either side but isn't a floor
-        grid[i - 1].type === tileTypes(level, 'path') &&
-        grid[i + 1].type === tileTypes(level, 'path') &&
-        grid[i].type === tileTypes(level)
-      ) {
-        // There's a 10% chance it will be converted into a floor
-        if (Math.random() > 0.9) {
-          grid[i].type = tileTypes(level, 'path');
-        }
-      }
-    }
-    return grid;
-  };
-  grid = addHorizontalDoors(grid);
-
-  // Doors connecting vertically
-  const addVerticalDoors = grid => {
-    for (let i = c.GRID_WIDTH; i < c.GRID_HEIGHT - 1; i++) {
-      if (
-        // If three cells are adjacent in a column
-        grid[i - c.GRID_WIDTH].coordinates.x === grid[i].coordinates.x &&
-        grid[i + c.GRID_WIDTH].coordinates.x === grid[i].coordinates.x &&
-        // And the one in the middle has floors above and below but isn't a floor
-        grid[i - c.GRID_WIDTH].type === tileTypes(level, 'path') &&
-        grid[i + c.GRID_WIDTH].type === tileTypes(level, 'path') &&
-        grid[i].type === tileTypes(level)
-      ) {
-        // There's a 10% chance it will be converted into a floor
-        if (Math.random() > 0.9) {
-          grid[i].type = tileTypes(level, 'path');
-        }
-      }
-    }
-    return grid;
-  };
-  grid = addVerticalDoors(grid);
+  // 5. Probabilistically add more doors to reduce map linearity
+  grid = addHorizontalDoors(grid, level, 0.1);
+  grid = addVerticalDoors(grid, level, 0.1);
 
   return grid;
 };

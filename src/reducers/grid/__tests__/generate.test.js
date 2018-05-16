@@ -401,6 +401,7 @@ describe('`growMap` generate grid reducer function', () => {
     grid = Array(gridSize).fill({ coordinates: { x: 0, y: 0 }, type: 'default' });
     expect(generate.growMap(grid, [seed], 1, 1)).toHaveLength(gridSize);
   });
+
   it('should place rooms around the seed in every direction and recursively from those rooms', () => {
     /***
      *  Sample Grid
@@ -479,5 +480,91 @@ describe('`growMap` generate grid reducer function', () => {
   });
 });
 
-// describe('`addHorizontalDoors` generate grid reducer function');
-// describe('`addVerticalDoors` generate grid reducer function');
+describe('`addHorizontalDoors` generate grid reducer function', () => {
+  /***
+   *  Sample Grid
+   *  |-----+-----+-----|
+   *  | ROM | 1,0 | ROM |
+   *  |=====+=====+=====|
+   ***/
+  /***
+   *  Updated Grid
+   *  |-----+-----+-----|
+   *  | ROM | DOR | ROM |
+   *  |=====+=====+=====|
+   ***/
+
+  const barrierType = 'vines';
+  const roomType = 'dirtPath';
+  const grid = [
+    // Row
+    { coordinates: { x: 0, y: 0 }, type: roomType },
+    { coordinates: { x: 1, y: 0 }, type: barrierType },
+    { coordinates: { x: 2, y: 0 }, type: roomType },
+  ];
+  const updatedGrid = [
+    // Row
+    { coordinates: { x: 0, y: 0 }, type: roomType },
+    { coordinates: { x: 1, y: 0 }, type: roomType },
+    { coordinates: { x: 2, y: 0 }, type: roomType },
+  ];
+
+  it('should not modify `grid` cell types if `probability` is `0`', () => {
+    expect(generate.addHorizontalDoors(grid, 1, 0)).toEqual(grid);
+  });
+  it('should modify `grid` cell types to connect to close rooms horizontally if `probability` is `1`', () => {
+    expect(generate.addHorizontalDoors(grid, 1, 1)).toEqual(updatedGrid);
+  });
+});
+
+describe('`addVerticalDoors` generate grid reducer function', () => {
+  /***
+   *  Sample Grid
+   *  |-----|
+   *  | ROM |
+   *  |=====|
+   *  | 0,1 |
+   *  |-----|
+   *  | ROM |
+   *  |-----|
+   ***/
+  /***
+   *  Updated Grid
+   *  |-----|
+   *  | ROM |
+   *  |=====|
+   *  | DOR |
+   *  |-----|
+   *  | ROM |
+   *  |-----|
+   ***/
+  const barrierType = 'vines';
+  const roomType = 'dirtPath';
+  const grid = [
+    // Row
+    { coordinates: { x: 0, y: 0 }, type: roomType },
+    // Row
+    { coordinates: { x: 0, y: 1 }, type: barrierType },
+    // Row
+    { coordinates: { x: 0, y: 2 }, type: roomType },
+  ];
+  const updatedGrid = [
+    // Row
+    { coordinates: { x: 0, y: 0 }, type: roomType },
+    // Row
+    { coordinates: { x: 0, y: 1 }, type: roomType },
+    // Row
+    { coordinates: { x: 0, y: 2 }, type: roomType },
+  ];
+
+  it('should not modify `grid` cell types if `probability` is `0`', () => {
+    expect(generate.addVerticalDoors(grid, 1, 0)).toEqual(grid);
+  });
+  it('should modify `grid` cell types to connect to close rooms vertically if `probability` is `1`', () => {
+    expect(generate.addVerticalDoors(grid, 1, 1, 1)).toEqual(updatedGrid);
+  });
+});
+
+// describe('`generate` grid reducer function', () => {
+//
+// })
