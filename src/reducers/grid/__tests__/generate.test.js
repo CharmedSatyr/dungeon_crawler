@@ -1,11 +1,14 @@
 import * as generate from '../generate';
 
+// Global values
+const defaultType = 'default';
+const floorType = 'floor';
+
 describe('`makeGrid` generate grid reducer function', () => {
   it('should return an array of `height` * `width` objects', () => {
     let grid = [];
     let height = 2;
     let width = 2;
-    const defaultType = 'default';
     expect(generate.makeGrid(grid, height, width, defaultType)).toHaveLength(height * width);
 
     grid = [];
@@ -18,7 +21,6 @@ describe('`makeGrid` generate grid reducer function', () => {
     const grid = [];
     const height = 2;
     const width = 2;
-    const defaultType = 'default';
     const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: defaultType };
     const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: defaultType };
     const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: defaultType };
@@ -76,8 +78,6 @@ describe('`makeSeed` generate grid reducer function', () => {
 
 describe('`placeRoom` generate grid reducer function', () => {
   it('should modify the type of each grid cell that meets coordinate/height/width specs', () => {
-    const defaultType = 'default';
-    const pathType = 'path';
     const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: defaultType };
     const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: defaultType };
     const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: defaultType };
@@ -86,9 +86,9 @@ describe('`placeRoom` generate grid reducer function', () => {
     const grid = [obj0, obj1, obj2, obj3];
 
     const seedSpecs = { x: 0, y: 0, height: 1, width: 1 };
-    const seedRoom = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType };
+    const seedRoom = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: floorType };
     const seededGrid = [seedRoom, obj1, obj2, obj3];
-    expect(generate.placeRoom(grid, seedSpecs, pathType)).toEqual(seededGrid);
+    expect(generate.placeRoom(grid, seedSpecs, floorType)).toEqual(seededGrid);
   });
 });
 
@@ -102,7 +102,7 @@ describe('`isValidRoomPlacement` generate grid reducer function', () => {
   it('should return true if the placement would leave one cell margin around the grid edges and not overlap or be adjacent to other cells with the indicated type', () => {
     const testRoom = { x: 1, y: 1, width: 1, height: 1 };
     expect(
-      generate.isValidRoomPlacement(grid, testRoom, gridHeight, gridWidth, 'room')
+      generate.isValidRoomPlacement(grid, testRoom, gridHeight, gridWidth, floorType)
     ).toBeTruthy();
   });
 
@@ -111,13 +111,13 @@ describe('`isValidRoomPlacement` generate grid reducer function', () => {
     const testRoom1 = { x: 1, y: 2, width: 1, height: 1 };
     const testRoom2 = { x: 1, y: 1, width: 1, height: 2 };
     expect(
-      generate.isValidRoomPlacement(grid, testRoom0, gridHeight, gridWidth, 'room')
+      generate.isValidRoomPlacement(grid, testRoom0, gridHeight, gridWidth, floorType)
     ).toBeFalsy();
     expect(
-      generate.isValidRoomPlacement(grid, testRoom1, gridHeight, gridWidth, 'room')
+      generate.isValidRoomPlacement(grid, testRoom1, gridHeight, gridWidth, floorType)
     ).toBeFalsy();
     expect(
-      generate.isValidRoomPlacement(grid, testRoom2, gridHeight, gridWidth, 'room')
+      generate.isValidRoomPlacement(grid, testRoom2, gridHeight, gridWidth, floorType)
     ).toBeFalsy();
   });
 
@@ -126,24 +126,24 @@ describe('`isValidRoomPlacement` generate grid reducer function', () => {
     const testRoom1 = { x: 2, y: 1, width: 1, height: 1 };
     const testRoom2 = { x: 1, y: 1, width: 2, height: 1 };
     expect(
-      generate.isValidRoomPlacement(grid, testRoom0, gridHeight, gridWidth, 'room')
+      generate.isValidRoomPlacement(grid, testRoom0, gridHeight, gridWidth, floorType)
     ).toBeFalsy();
     expect(
-      generate.isValidRoomPlacement(grid, testRoom1, gridHeight, gridWidth, 'room')
+      generate.isValidRoomPlacement(grid, testRoom1, gridHeight, gridWidth, floorType)
     ).toBeFalsy();
     expect(
-      generate.isValidRoomPlacement(grid, testRoom2, gridHeight, gridWidth, 'room')
+      generate.isValidRoomPlacement(grid, testRoom2, gridHeight, gridWidth, floorType)
     ).toBeFalsy();
   });
 
   it('should return false if the room would overlap other cells of the same type', () => {
-    const placedRoom = { coordinates: { x: 1, y: 1 }, type: 'room' };
+    const placedRoom = { coordinates: { x: 1, y: 1 }, type: floorType };
     const occupiedGrid = [obj, obj, obj, obj, placedRoom, obj, obj, obj, obj];
 
     // This is an acceptable room placement, but there's already a placedRoom in the occupiedGrid
     const testRoom = { x: 1, y: 1, width: 1, height: 1 };
     expect(
-      generate.isValidRoomPlacement(occupiedGrid, testRoom, gridHeight, gridWidth, 'room')
+      generate.isValidRoomPlacement(occupiedGrid, testRoom, gridHeight, gridWidth, floorType)
     ).toBeFalsy();
   });
 });
@@ -378,34 +378,56 @@ describe('`createRoomsFromSeed` generate grid reducer function', () => {
   // Then, it iterates through the created array. If a child room passes `isValidRoomPlacement`, the function runs `placeRoom` once to place the room and again to place the door (treating the door like a separate room).
   // The function keeps track of an array of rooms that have been placed, for later use.
   // Rather than performing integration tests of the component functions, this test just ensures the right sort of output
-  const seed = { x: 2, y: 2, height: 1, width: 1, door: { x: 3, y: 3 } };
-  let gridSize = 25;
-  let grid = Array(gridSize).fill({ type: 'default' });
-  let args = [grid, seed, 1, [1, 1]];
+  let grid = [
+    { coordinates: { x: 0, y: 0 }, type: defaultType },
+    { coordinates: { x: 1, y: 0 }, type: defaultType },
+    { coordinates: { x: 0, y: 1 }, type: defaultType },
+    { coordinates: { x: 1, y: 1 }, type: defaultType },
+  ];
+  let gridSize = grid.length;
+  const seedSpecs = { x: 2, y: 2, height: 1, width: 1 };
+  const level = 1;
+  const num = 5;
+  const roomSideSizeRange = [1, 1];
+
   it('should return an object that includes a property `grid` that is an array of the same length as the `grid` argument', () => {
-    expect(Array.isArray(generate.createRoomsFromSeed(grid, seed, 1, [1, 1]).grid)).toBeTruthy();
+    let args = [grid, seedSpecs, level, floorType, num, roomSideSizeRange];
+    expect(Array.isArray(generate.createRoomsFromSeed(...args).grid)).toBeTruthy();
     expect(generate.createRoomsFromSeed(...args).grid).toHaveLength(gridSize);
 
-    gridSize = 90;
-    grid = Array(gridSize).fill({ type: 'default' });
-    args = [grid, seed, 1, [1, 1]];
+    grid = [
+      { coordinates: { x: 0, y: 0 }, type: defaultType },
+      { coordinates: { x: 1, y: 0 }, type: defaultType },
+      { coordinates: { x: 0, y: 1 }, type: defaultType },
+      { coordinates: { x: 1, y: 1 }, type: defaultType },
+      { coordinates: { x: 0, y: 2 }, type: defaultType },
+      { coordinates: { x: 1, y: 2 }, type: defaultType },
+    ];
+    gridSize = grid.length;
+    args = [grid, seedSpecs, level, floorType, num, roomSideSizeRange];
     expect(generate.createRoomsFromSeed(...args).grid).toHaveLength(gridSize);
   });
 
   it('should return an object that includes an array `placedRooms`', () => {
+    let args = [grid, seedSpecs, level, floorType, num, roomSideSizeRange];
     expect(Array.isArray(generate.createRoomsFromSeed(...args).placedRooms)).toBeTruthy();
   });
 });
 
 describe('`growMap` generate grid reducer function', () => {
+  const level = 1;
+  const roomSideSizeRange = [2, 4];
+  const maxRooms = 25;
   const seed = { x: 1, y: 1, height: 1, width: 1, door: { x: 3, y: 3 } };
+  const lastFourArgs = [level, floorType, roomSideSizeRange, maxRooms];
+
   it('should return a `grid` array of unmodified length', () => {
     let gridSize = 9;
-    let grid = Array(gridSize).fill({ coordinates: { x: 0, y: 0 }, type: 'default' });
-    expect(generate.growMap(grid, [seed], 1, 1)).toHaveLength(gridSize);
+    let grid = Array(gridSize).fill({ coordinates: { x: 0, y: 0 }, type: defaultType });
+    expect(generate.growMap(grid, [seed], ...lastFourArgs)).toHaveLength(gridSize);
     gridSize = 90;
-    grid = Array(gridSize).fill({ coordinates: { x: 0, y: 0 }, type: 'default' });
-    expect(generate.growMap(grid, [seed], 1, 1)).toHaveLength(gridSize);
+    grid = Array(gridSize).fill({ coordinates: { x: 0, y: 0 }, type: defaultType });
+    expect(generate.growMap(grid, [seed], ...lastFourArgs)).toHaveLength(gridSize);
   });
 
   it('should place rooms around the seed in every direction and recursively from those rooms', () => {
@@ -430,59 +452,59 @@ describe('`growMap` generate grid reducer function', () => {
     const seed = { x: 1, y: 1, height: 1, width: 1 };
     const grid = [
       // Row
-      { coordinates: { x: 0, y: 0 }, type: 'default' },
-      { coordinates: { x: 1, y: 0 }, type: 'default' },
-      { coordinates: { x: 2, y: 0 }, type: 'default' },
-      { coordinates: { x: 3, y: 0 }, type: 'default' },
-      { coordinates: { x: 4, y: 0 }, type: 'default' },
+      { coordinates: { x: 0, y: 0 }, type: defaultType },
+      { coordinates: { x: 1, y: 0 }, type: defaultType },
+      { coordinates: { x: 2, y: 0 }, type: defaultType },
+      { coordinates: { x: 3, y: 0 }, type: defaultType },
+      { coordinates: { x: 4, y: 0 }, type: defaultType },
       // Row
-      { coordinates: { x: 0, y: 1 }, type: 'default' },
-      { coordinates: { x: 1, y: 1 }, type: 'default' },
-      { coordinates: { x: 2, y: 1 }, type: 'default' },
-      { coordinates: { x: 3, y: 1 }, type: 'default' },
-      { coordinates: { x: 4, y: 1 }, type: 'default' },
+      { coordinates: { x: 0, y: 1 }, type: defaultType },
+      { coordinates: { x: 1, y: 1 }, type: defaultType },
+      { coordinates: { x: 2, y: 1 }, type: defaultType },
+      { coordinates: { x: 3, y: 1 }, type: defaultType },
+      { coordinates: { x: 4, y: 1 }, type: defaultType },
       // Row
-      { coordinates: { x: 0, y: 2 }, type: 'default' },
-      { coordinates: { x: 1, y: 2 }, type: 'default' },
-      { coordinates: { x: 2, y: 2 }, type: 'seed' },
-      { coordinates: { x: 3, y: 2 }, type: 'default' },
-      { coordinates: { x: 4, y: 2 }, type: 'default' },
+      { coordinates: { x: 0, y: 2 }, type: defaultType },
+      { coordinates: { x: 1, y: 2 }, type: defaultType },
+      { coordinates: { x: 2, y: 2 }, type: 'floor' }, // It is mysterious that variable floorType can't go here
+      { coordinates: { x: 3, y: 2 }, type: defaultType },
+      { coordinates: { x: 4, y: 2 }, type: defaultType },
       // Row
-      { coordinates: { x: 0, y: 3 }, type: 'default' },
-      { coordinates: { x: 1, y: 3 }, type: 'default' },
-      { coordinates: { x: 2, y: 3 }, type: 'default' },
-      { coordinates: { x: 3, y: 3 }, type: 'default' },
-      { coordinates: { x: 4, y: 3 }, type: 'default' },
+      { coordinates: { x: 0, y: 3 }, type: defaultType },
+      { coordinates: { x: 1, y: 3 }, type: defaultType },
+      { coordinates: { x: 2, y: 3 }, type: defaultType },
+      { coordinates: { x: 3, y: 3 }, type: defaultType },
+      { coordinates: { x: 4, y: 3 }, type: defaultType },
       // Row
-      { coordinates: { x: 0, y: 4 }, type: 'default' },
-      { coordinates: { x: 1, y: 4 }, type: 'default' },
-      { coordinates: { x: 2, y: 4 }, type: 'default' },
-      { coordinates: { x: 3, y: 4 }, type: 'default' },
-      { coordinates: { x: 4, y: 4 }, type: 'default' },
+      { coordinates: { x: 0, y: 4 }, type: defaultType },
+      { coordinates: { x: 1, y: 4 }, type: defaultType },
+      { coordinates: { x: 2, y: 4 }, type: defaultType },
+      { coordinates: { x: 3, y: 4 }, type: defaultType },
+      { coordinates: { x: 4, y: 4 }, type: defaultType },
       // Row
-      { coordinates: { x: 0, y: 5 }, type: 'default' },
-      { coordinates: { x: 1, y: 5 }, type: 'default' },
-      { coordinates: { x: 2, y: 5 }, type: 'default' },
-      { coordinates: { x: 3, y: 5 }, type: 'default' },
-      { coordinates: { x: 4, y: 5 }, type: 'default' },
+      { coordinates: { x: 0, y: 5 }, type: defaultType },
+      { coordinates: { x: 1, y: 5 }, type: defaultType },
+      { coordinates: { x: 2, y: 5 }, type: defaultType },
+      { coordinates: { x: 3, y: 5 }, type: defaultType },
+      { coordinates: { x: 4, y: 5 }, type: defaultType },
       // Row
-      { coordinates: { x: 0, y: 6 }, type: 'default' },
-      { coordinates: { x: 1, y: 6 }, type: 'default' },
-      { coordinates: { x: 2, y: 6 }, type: 'default' },
-      { coordinates: { x: 3, y: 6 }, type: 'default' },
-      { coordinates: { x: 4, y: 6 }, type: 'default' },
+      { coordinates: { x: 0, y: 6 }, type: defaultType },
+      { coordinates: { x: 1, y: 6 }, type: defaultType },
+      { coordinates: { x: 2, y: 6 }, type: defaultType },
+      { coordinates: { x: 3, y: 6 }, type: defaultType },
+      { coordinates: { x: 4, y: 6 }, type: defaultType },
     ];
 
     const updatedGrid = grid;
-    const roomType = 'dirtPath';
-    updatedGrid[7].type = roomType;
-    updatedGrid[11].type = roomType;
-    updatedGrid[13].type = roomType;
-    updatedGrid[17].type = roomType;
-    updatedGrid[22].type = roomType;
-    updatedGrid[27].type = roomType;
+    const floorType = 'dirtPath';
+    updatedGrid[7].type = floorType;
+    updatedGrid[11].type = floorType;
+    updatedGrid[13].type = floorType;
+    updatedGrid[17].type = floorType;
+    updatedGrid[22].type = floorType;
+    updatedGrid[27].type = floorType;
 
-    expect(generate.growMap(grid, [seed], 1, 9)).toEqual(updatedGrid);
+    expect(generate.growMap(grid, [seed], ...lastFourArgs)).toEqual(updatedGrid);
   });
 });
 
@@ -500,26 +522,24 @@ describe('`addHorizontalDoors` generate grid reducer function', () => {
    *  |=====+=====+=====|
    ***/
 
-  const barrierType = 'vines';
-  const roomType = 'dirtPath';
   const grid = [
     // Row
-    { coordinates: { x: 0, y: 0 }, type: roomType },
-    { coordinates: { x: 1, y: 0 }, type: barrierType },
-    { coordinates: { x: 2, y: 0 }, type: roomType },
+    { coordinates: { x: 0, y: 0 }, type: floorType },
+    { coordinates: { x: 1, y: 0 }, type: defaultType },
+    { coordinates: { x: 2, y: 0 }, type: floorType },
   ];
   const updatedGrid = [
     // Row
-    { coordinates: { x: 0, y: 0 }, type: roomType },
-    { coordinates: { x: 1, y: 0 }, type: roomType },
-    { coordinates: { x: 2, y: 0 }, type: roomType },
+    { coordinates: { x: 0, y: 0 }, type: floorType },
+    { coordinates: { x: 1, y: 0 }, type: floorType },
+    { coordinates: { x: 2, y: 0 }, type: floorType },
   ];
 
   it('should not modify `grid` cell types if `probability` is `0`', () => {
-    expect(generate.addHorizontalDoors(grid, 1, 0)).toEqual(grid);
+    expect(generate.addHorizontalDoors(grid, 1, 0, defaultType, floorType)).toEqual(grid);
   });
   it('should modify `grid` cell types to connect to close rooms horizontally if `probability` is `1`', () => {
-    expect(generate.addHorizontalDoors(grid, 1, 1)).toEqual(updatedGrid);
+    expect(generate.addHorizontalDoors(grid, 1, 1, defaultType, floorType)).toEqual(updatedGrid);
   });
 });
 
@@ -544,30 +564,28 @@ describe('`addVerticalDoors` generate grid reducer function', () => {
    *  | ROM |
    *  |-----|
    ***/
-  const barrierType = 'vines';
-  const roomType = 'dirtPath';
   const grid = [
     // Row
-    { coordinates: { x: 0, y: 0 }, type: roomType },
+    { coordinates: { x: 0, y: 0 }, type: floorType },
     // Row
-    { coordinates: { x: 0, y: 1 }, type: barrierType },
+    { coordinates: { x: 0, y: 1 }, type: defaultType },
     // Row
-    { coordinates: { x: 0, y: 2 }, type: roomType },
+    { coordinates: { x: 0, y: 2 }, type: floorType },
   ];
   const updatedGrid = [
     // Row
-    { coordinates: { x: 0, y: 0 }, type: roomType },
+    { coordinates: { x: 0, y: 0 }, type: floorType },
     // Row
-    { coordinates: { x: 0, y: 1 }, type: roomType },
+    { coordinates: { x: 0, y: 1 }, type: floorType },
     // Row
-    { coordinates: { x: 0, y: 2 }, type: roomType },
+    { coordinates: { x: 0, y: 2 }, type: floorType },
   ];
 
   it('should not modify `grid` cell types if `probability` is `0`', () => {
-    expect(generate.addVerticalDoors(grid, 1, 0)).toEqual(grid);
+    expect(generate.addVerticalDoors(grid, 1, 0, defaultType, floorType)).toEqual(grid);
   });
   it('should modify `grid` cell types to connect to close rooms vertically if `probability` is `1`', () => {
-    expect(generate.addVerticalDoors(grid, 1, 1, 1)).toEqual(updatedGrid);
+    expect(generate.addVerticalDoors(grid, 1, 1, defaultType, floorType, 1)).toEqual(updatedGrid);
   });
 });
 

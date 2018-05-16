@@ -25,8 +25,8 @@ export const makeGrid = (grid, height, width, defaultType) => {
 
 // makeSeed
 // Set random values for the first room
-export const makeSeed = (gridHeight, gridWidth, range) => {
-  const [min, max] = range;
+export const makeSeed = (gridHeight, gridWidth, roomSideSizeRange) => {
+  const [min, max] = roomSideSizeRange;
   if (max + 2 > gridHeight || max + 2 > gridWidth) {
     throw new Error(
       'makeSeed Error: Invalid range. Seed room must fit entirely on non-edge grid cells.'
@@ -42,7 +42,7 @@ export const makeSeed = (gridHeight, gridWidth, range) => {
 
 // placeRoom
 // This function changes the type of the cluster of cells that fits that coordinates/dimensions specs
-export const placeRoom = (grid, { x, y, height, width }, pathType) => {
+export const placeRoom = (grid, { x, y, height, width }, floorType) => {
   for (let i in grid) {
     if (
       grid[i].coordinates.x >= x &&
@@ -50,7 +50,7 @@ export const placeRoom = (grid, { x, y, height, width }, pathType) => {
       grid[i].coordinates.y >= y &&
       grid[i].coordinates.y < y + height
     ) {
-      grid[i].type = pathType;
+      grid[i].type = floorType;
     }
   }
   return grid;
@@ -62,10 +62,10 @@ export const placeRoom = (grid, { x, y, height, width }, pathType) => {
 // not adjacent to or overlapping other room cells, false otherwise
 export const isValidRoomPlacement = (
   grid,
-  { x = 0, y = 0, width = 1, height = 1 },
+  { x, y, width, height },
   gridHeight,
   gridWidth,
-  type
+  floorType
 ) => {
   // check if on the edge of or outside of the grid
   // statements are top || bottom
@@ -80,7 +80,7 @@ export const isValidRoomPlacement = (
   // check if on or adjacent to existing room
   for (let i in grid) {
     if (
-      grid[i].type === type && // primary criterion
+      grid[i].type === floorType && // primary criterion
       grid[i].coordinates.x >= x - 1 &&
       grid[i].coordinates.x <= x + width &&
       grid[i].coordinates.y >= y - 1 &&
@@ -193,14 +193,15 @@ export const createRoomsFromSeed = (
   grid,
   { x, y, height, width },
   level,
-  num = 5, // num is the number of possible branches from the seed in one direction
-  range = c.ROOM_SIZE_RANGE
+  floorType,
+  roomSideSizeRange,
+  num = 5 // num is the number of possible branches from the seed in one direction
 ) => {
   // Push the directional objects to array roomValues
   const roomValues = [];
   const seed = [x, y, height, width];
   [north, east, south, west].map(func =>
-    roomValues.push(...repeatDirectionalRoomGeneration(num, func, seed, c.ROOM_SIZE_RANGE))
+    roomValues.push(...repeatDirectionalRoomGeneration(num, func, seed, roomSideSizeRange))
   );
 
   // placedRooms contains data for `roomValues` items that made the cut
@@ -208,11 +209,11 @@ export const createRoomsFromSeed = (
   // For generated roomValues
   roomValues.forEach(room => {
     // if the room is valid relative to existing grid
-    if (isValidRoomPlacement(grid, room, c.GRID_HEIGHT, c.GRID_WIDTH, tileTypes(level, 'path'))) {
+    if (isValidRoomPlacement(grid, room, c.GRID_HEIGHT, c.GRID_WIDTH, floorType)) {
       // update existing grid with room placement
-      grid = placeRoom(grid, room, tileTypes(level, 'path'));
+      grid = placeRoom(grid, room, floorType);
       // update existing grid with door placement
-      grid = placeRoom(grid, room.door, tileTypes(level, 'path'));
+      grid = placeRoom(grid, room.door, floorType);
       // record placedRoom values for the next seeds
       placedRooms.push(room);
     }
@@ -228,25 +229,47 @@ export const createRoomsFromSeed = (
 // It takes grid, seed rooms, a counter, and a maxRooms constant.
 // It takes a seedRoom array and places rooms based on that.
 // Items in the `placedRooms` array recursively become seeds for future rooms.
-export const growMap = (grid, seedRooms, level, counter = 0, maxRooms = c.MAX_ROOMS) => {
+export const growMap = (
+  grid,
+  seedRooms,
+  level,
+  floorType,
+  roomSideSizeRange,
+  maxRooms,
+  counter = 0
+) => {
   // `growMap` runs recursively until maxRooms is reached or there are no more seedRooms.
   if (counter >= maxRooms || !seedRooms.length) {
     return grid; // Output is the grid array used by components
   }
 
   // create an object with `grid` and `placedRooms` keys
-  const dataInProgress = createRoomsFromSeed(grid, seedRooms.pop(), level);
+  const dataInProgress = createRoomsFromSeed(
+    grid,
+    seedRooms.pop(),
+    level,
+    floorType,
+    roomSideSizeRange
+  );
   // The placedRooms items pushed into the seedRooms argument array
   seedRooms.push(...dataInProgress.placedRooms);
   // Increment the counter
   counter++;
 
-  return growMap(dataInProgress.grid, seedRooms, level, counter);
+  return growMap(
+    dataInProgress.grid,
+    seedRooms,
+    level,
+    floorType,
+    roomSideSizeRange,
+    maxRooms,
+    counter
+  );
 };
 
 // addHorizontalDoors
 // Doors connecting horizontally
-export const addHorizontalDoors = (grid, level, probability) => {
+export const addHorizontalDoors = (grid, level, probability, defaultType, floorType) => {
   for (let i = 0; i < grid.length; i++) {
     if (
       // If cells on either side exist
@@ -256,13 +279,13 @@ export const addHorizontalDoors = (grid, level, probability) => {
       grid[i - 1].coordinates.y === grid[i].coordinates.y &&
       grid[i + 1].coordinates.y === grid[i].coordinates.y &&
       // And the one in the middle isn't a floow but has floors on either side
-      grid[i].type === tileTypes(level) &&
-      grid[i - 1].type === tileTypes(level, 'path') &&
-      grid[i + 1].type === tileTypes(level, 'path')
+      grid[i].type === defaultType &&
+      grid[i - 1].type === floorType &&
+      grid[i + 1].type === floorType
     ) {
       // There's a `probability` it will be converted into a floor
       if (probability >= Math.random()) {
-        grid[i].type = tileTypes(level, 'path');
+        grid[i].type = floorType;
       }
     }
   }
@@ -271,7 +294,7 @@ export const addHorizontalDoors = (grid, level, probability) => {
 
 // addVerticalDoors
 // Doors connecting vertically
-export const addVerticalDoors = (grid, level, probability, gridWidth = c.GRID_WIDTH) => {
+export const addVerticalDoors = (grid, level, probability, defaultType, floorType, gridWidth) => {
   for (let i = 0; i < grid.length; i++) {
     if (
       // If cells above and below exist
@@ -281,13 +304,13 @@ export const addVerticalDoors = (grid, level, probability, gridWidth = c.GRID_WI
       grid[i - gridWidth].coordinates.x === grid[i].coordinates.x &&
       grid[i + gridWidth].coordinates.x === grid[i].coordinates.x &&
       // And the cell isn't a floor but has floors above and below
-      grid[i].type === tileTypes(level) &&
-      grid[i - gridWidth].type === tileTypes(level, 'path') &&
-      grid[i + gridWidth].type === tileTypes(level, 'path')
+      grid[i].type === defaultType &&
+      grid[i - gridWidth].type === floorType &&
+      grid[i + gridWidth].type === floorType
     ) {
       // There's a `probability` it will be converted into a floor
       if (probability >= Math.random()) {
-        grid[i].type = tileTypes(level, 'path');
+        grid[i].type = floorType;
       }
     }
   }
@@ -297,27 +320,30 @@ export const addVerticalDoors = (grid, level, probability, gridWidth = c.GRID_WI
 /*** FUNCTIONS FOR GENERATING THE GRID ***/
 // generate makes an unpopulated map from an empty array
 const generate = (
-  grid,
   level,
+  grid = [],
   gridHeight = c.GRID_HEIGHT,
   gridWidth = c.GRID_WIDTH,
-  defaultType = tileTypes(level)
+  defaultType = tileTypes(level),
+  floorType = tileTypes(level, 'path'),
+  roomSideSizeRange = c.ROOM_SIZE_RANGE,
+  maxRooms = c.MAX_ROOMS
 ) => {
   // 1. Make a grid
   grid = makeGrid(grid, gridHeight, gridWidth, defaultType);
 
   // 2. Set random values for the seed room
-  const seedRoom = makeSeed(c.GRID_HEIGHT, c.GRID_WIDTH, c.ROOM_SIZE_RANGE);
+  const seedRoom = makeSeed(gridHeight, gridWidth, roomSideSizeRange);
 
   // 3. place the seed room onto the grid
-  grid = placeRoom(grid, seedRoom, tileTypes(level, 'path'));
+  grid = placeRoom(grid, seedRoom, floorType);
 
   // 4. place additional rooms based on that seed.
-  grid = growMap(grid, [seedRoom], level);
+  grid = growMap(grid, [seedRoom], level, floorType, roomSideSizeRange, maxRooms);
 
   // 5. Probabilistically add more doors to reduce map linearity
-  grid = addHorizontalDoors(grid, level, 0.1);
-  grid = addVerticalDoors(grid, level, 0.1);
+  grid = addHorizontalDoors(grid, level, 0.1, defaultType, floorType);
+  grid = addVerticalDoors(grid, level, 0.1, defaultType, floorType, gridWidth);
 
   return grid;
 };
