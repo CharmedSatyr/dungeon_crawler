@@ -329,6 +329,17 @@ const generate = (
   roomSideSizeRange = c.ROOM_SIZE_RANGE,
   maxRooms = c.MAX_ROOMS
 ) => {
+  if (gridHeight < 3) {
+    throw new Error('generate Error: `gridHeight` must be `3` or greater');
+  }
+  if (gridWidth < 3) {
+    throw new Error('generate Error: `gridWidth` must be `3` or greater');
+  }
+  if (roomSideSizeRange[0] < 1 || roomSideSizeRange[1] < 1) {
+    throw new Error(
+      'generate Error: `roomSideSizeRange` must be an array [min, max], where both `min` and `max` values are greater than 0'
+    );
+  }
   // 1. Make a grid
   grid = makeGrid(grid, gridHeight, gridWidth, defaultType);
 
