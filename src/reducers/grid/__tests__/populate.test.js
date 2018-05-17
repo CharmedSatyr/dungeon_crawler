@@ -13,6 +13,7 @@ describe('`direction` populate grid reducer function', () => {
 describe('`addEnemies` populate grid reducer function', () => {
   const pathType = 'floor';
   const data = [{ payload: {}, type: pathType }];
+
   it('should return an array', () => {
     const probability = 0;
     expect(Array.isArray(p.addEnemies(data, pathType, probability))).toBeTruthy();
@@ -103,5 +104,35 @@ describe('`clearTheDoor` populate grid reducer function', () => {
     [11, 12, 13, 18].forEach(i =>
       expect(p.clearTheDoor(data, i, gridWidth, defaultType, pathType)).toBeFalsy()
     );
+  });
+});
+
+describe('`setLoot` populate grid reducer function', () => {
+  it('should return a full barrel payload', () => {
+    const fullBarrel = { barrel: { full: true } };
+    expect(p.setLoot(Math.random())).toMatchObject(fullBarrel);
+  });
+});
+
+describe('`addLoot` populate grid reducer function', () => {
+  const data = [{ payload: {}, type: pathType }];
+  const gridWidth = 5;
+  it('should return an array', () => {
+    expect(Array.isArray(p.addLoot(data, gridWidth, pathType, Math.random()))).toBeTruthy();
+  });
+
+  it('should give data objects a `loot` payload if `probability` is 1', () => {
+    const loot = { barrel: { full: true } };
+    const updatedData = [{ payload: { loot }, type: pathType }];
+    expect(p.addLoot(data, gridWidth, pathType, 1)).toEqual(updatedData);
+  });
+
+  it('should return the data argument if `probability` is 0', () => {
+    expect(p.addLoot(data, gridWidth, pathType, 0)).toEqual(data);
+  });
+
+  it('should not modify objects that already have payloads', () => {
+    const hasPayload = [{ payload: { thingy: 1 }, type: pathType }];
+    expect(p.addLoot(hasPayload, gridWidth, pathType, 1)).toEqual(hasPayload);
   });
 });

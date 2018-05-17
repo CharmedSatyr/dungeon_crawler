@@ -134,6 +134,30 @@ export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
   return true;
 };
 
+// Set the type of loot in a square
+export const setLoot = chances => {
+  switch (true) {
+    default:
+      return { barrel: { full: true } };
+  }
+};
+
+// Add loot
+export const addLoot = (data, gridWidth, pathType, probability) => {
+  for (let i = 0; i < data.length; i++) {
+    const loot = setLoot(Math.random());
+    if (
+      Object.keys(data[i].payload).length === 0 &&
+      data[i].type === pathType &&
+      clearTheDoor(data, i) &&
+      probability >= Math.random()
+    ) {
+      data[i].payload = { loot };
+    }
+  }
+  return data;
+};
+
 // Populate the data with payloads (player, enemies, etc.)
 const populate = (
   data,
@@ -144,31 +168,7 @@ const populate = (
   // Add enemies
   data = addEnemies(data, pathType, 0.975);
 
-  // Add loot
-  const addLoot = (data, gridWidth) => {
-    for (let i = 0; i < data.length; i++) {
-      // Loot
-      const setLoot = chances => {
-        switch (true) {
-          default:
-            return { barrel: { full: true } };
-        }
-      };
-
-      const loot = setLoot(Math.random());
-      // 1% chance of a cell being occupied by loot
-      if (
-        Object.keys(data[i].payload).length === 0 &&
-        data[i].type === pathType &&
-        clearTheDoor(data, i) &&
-        Math.random() > 0.99
-      ) {
-        data[i].payload = { loot };
-      }
-    }
-    return data;
-  };
-  data = addLoot(data, c.GRID_WIDTH);
+  data = addLoot(data, c.GRID_WIDTH, 0.01);
 
   // Add portal just west of the southeast corner
   const addPortal = (data, count = 0) => {
