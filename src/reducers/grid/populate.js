@@ -4,46 +4,56 @@ import * as l from '../../constants/loot';
 import * as g from '../../constants/gameplay';
 import tileTypes from '../../constants/tile-types';
 
-// Populate the data with payloads (player, enemies, etc.)
-const populate = (data, level) => {
-  // Add enemies
-  const addEnemies = data => {
-    for (let i in data) {
-      // Enemy
-      const direction = () => {
-        const n = Math.random();
-        switch (true) {
-          case n < 0.25:
-            return 'north';
-          case n < 0.5:
-            return 'east';
-          case n < 0.75:
-            return 'south';
-          case n <= 1.0:
-            return 'west';
-          default:
-            return 'south';
-        }
-      };
-      const enemy = {
-        weapon: l.weapons.spear,
-        facing: direction(),
-        level: _.random(1, 5),
-      };
-      enemy.health = g.healthCalc(enemy.level);
+/*** Enemy functions ***/
+// direction
+// Returns a random cardinal direction
+export const direction = () => {
+  const n = Math.random();
+  switch (true) {
+    case n < 0.25:
+      return 'north';
+    case n < 0.5:
+      return 'east';
+    case n < 0.75:
+      return 'south';
+    case n <= 1.0:
+      return 'west';
+    default:
+      return 'south';
+  }
+};
 
-      // 2.5% chance of a cell being occupied by an enemy
-      if (
-        Object.keys(data[i].payload).length === 0 &&
-        data[i].type === tileTypes(level, 'path') &&
-        Math.random() > 0.975
-      ) {
-        data[i].payload = { enemy };
-      }
+// Add enemies
+export const addEnemies = (data, pathType, probability) => {
+  for (let i in data) {
+    const enemy = {
+      weapon: l.weapons.spear,
+      facing: direction(),
+      level: _.random(1, 5),
+    };
+    enemy.health = g.healthCalc(enemy.level);
+
+    // `probability` of an empty path being occupied by an enemy
+    if (
+      probability >= Math.random() &&
+      Object.keys(data[i].payload).length === 0 &&
+      data[i].type === pathType
+    ) {
+      data[i].payload = { enemy };
     }
-    return data;
-  };
-  data = addEnemies(data);
+  }
+  return data;
+};
+
+// Populate the data with payloads (player, enemies, etc.)
+const populate = (
+  data,
+  level,
+  defaultType = tileTypes(level),
+  pathType = tileTypes(level, 'path')
+) => {
+  // Add enemies
+  data = addEnemies(data, pathType, 0.975);
 
   // Add loot
   const addLoot = data => {
@@ -58,9 +68,6 @@ const populate = (data, level) => {
 
       // Don't block a door with loot
       const clearTheDoor = (data, i) => {
-        const barrier = tileTypes(level);
-        const path = tileTypes(level, 'path');
-
         // No door to the right
         const right = data[i + 1];
         const upRight = data[i + 1 - c.GRID_WIDTH];
@@ -70,9 +77,9 @@ const populate = (data, level) => {
           upRight &&
           right &&
           downRight &&
-          upRight.type === barrier &&
-          right.type === path &&
-          downRight.type === barrier
+          upRight.type === defaultType &&
+          right.type === pathType &&
+          downRight.type === defaultType
         ) {
           return false;
         }
@@ -84,9 +91,9 @@ const populate = (data, level) => {
           upLeft &&
           up &&
           upRight &&
-          upLeft.type === barrier &&
-          up.type === path &&
-          upRight.type === barrier
+          upLeft.type === defaultType &&
+          up.type === pathType &&
+          upRight.type === defaultType
         ) {
           return false;
         }
@@ -98,9 +105,9 @@ const populate = (data, level) => {
           upLeft &&
           left &&
           downLeft &&
-          upLeft.type === barrier &&
-          left.type === path &&
-          downLeft.type === barrier
+          upLeft.type === defaultType &&
+          left.type === pathType &&
+          downLeft.type === defaultType
         ) {
           return false;
         }
@@ -111,9 +118,9 @@ const populate = (data, level) => {
           downLeft &&
           down &&
           downRight &&
-          downLeft.type === barrier &&
-          down.type === path &&
-          downRight.type === barrier
+          downLeft.type === defaultType &&
+          down.type === pathType &&
+          downRight.type === defaultType
         ) {
           return false;
         }
@@ -124,10 +131,10 @@ const populate = (data, level) => {
           down &&
           left &&
           right &&
-          up.type !== path &&
-          down.type !== path &&
-          left.type === path &&
-          right.type === path
+          up.type !== pathType &&
+          down.type !== pathType &&
+          left.type === pathType &&
+          right.type === pathType
         ) {
           return false;
         }
@@ -137,10 +144,10 @@ const populate = (data, level) => {
           down &&
           left &&
           right &&
-          up.type === path &&
-          down.type === path &&
-          left.type === barrier &&
-          right.type === barrier
+          up.type === pathType &&
+          down.type === pathType &&
+          left.type === defaultType &&
+          right.type === defaultType
         ) {
           return false;
         }
@@ -151,7 +158,7 @@ const populate = (data, level) => {
       // 1% chance of a cell being occupied by loot
       if (
         Object.keys(data[i].payload).length === 0 &&
-        data[i].type === tileTypes(level, 'path') &&
+        data[i].type === pathType &&
         clearTheDoor(data, i) &&
         Math.random() > 0.99
       ) {
@@ -168,11 +175,7 @@ const populate = (data, level) => {
       // portal
       const portal = { open: false };
 
-      if (
-        Object.keys(data[i].payload).length === 0 &&
-        data[i].type === tileTypes(level, 'path') &&
-        count <= 2
-      ) {
+      if (Object.keys(data[i].payload).length === 0 && data[i].type === pathType && count <= 2) {
         count++;
         if (count === 2) {
           data[i].payload = { portal };
@@ -193,11 +196,7 @@ const populate = (data, level) => {
         level: 1,
         health: 20,
       };
-      if (
-        Object.keys(data[i].payload).length === 0 &&
-        data[i].type === tileTypes(level, 'path') &&
-        count <= 2
-      ) {
+      if (Object.keys(data[i].payload).length === 0 && data[i].type === pathType && count <= 2) {
         count++;
         if (count === 2) {
           data[i].payload = { player };
