@@ -45,6 +45,95 @@ export const addEnemies = (data, pathType, probability) => {
   return data;
 };
 
+/*** Loot functions ***/
+// Don't block a door with loot
+export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
+  // No door to the right
+  const right = data[i + 1];
+  const upRight = data[i + 1 - gridWidth];
+  const downRight = data[i + 1 + gridWidth];
+
+  if (
+    upRight &&
+    right &&
+    downRight &&
+    upRight.type === defaultType &&
+    right.type === pathType &&
+    downRight.type === defaultType
+  ) {
+    return false;
+  }
+
+  // No door above
+  const up = data[i - gridWidth];
+  const upLeft = data[i - 1 - gridWidth];
+  if (
+    upLeft &&
+    up &&
+    upRight &&
+    upLeft.type === defaultType &&
+    up.type === pathType &&
+    upRight.type === defaultType
+  ) {
+    return false;
+  }
+
+  // No door left
+  const left = data[i - 1];
+  const downLeft = data[i - 1 + gridWidth];
+  if (
+    upLeft &&
+    left &&
+    downLeft &&
+    upLeft.type === defaultType &&
+    left.type === pathType &&
+    downLeft.type === defaultType
+  ) {
+    return false;
+  }
+
+  // No door below
+  const down = data[i + gridWidth];
+  if (
+    downLeft &&
+    down &&
+    downRight &&
+    downLeft.type === defaultType &&
+    down.type === pathType &&
+    downRight.type === defaultType
+  ) {
+    return false;
+  }
+
+  // Not in a doorway
+  if (
+    up &&
+    down &&
+    left &&
+    right &&
+    up.type === defaultType &&
+    down.type === defaultType &&
+    left.type === pathType &&
+    right.type === pathType
+  ) {
+    return false;
+  }
+
+  if (
+    up &&
+    down &&
+    left &&
+    right &&
+    up.type === pathType &&
+    down.type === pathType &&
+    left.type === defaultType &&
+    right.type === defaultType
+  ) {
+    return false;
+  }
+  return true;
+};
+
 // Populate the data with payloads (player, enemies, etc.)
 const populate = (
   data,
@@ -56,7 +145,7 @@ const populate = (
   data = addEnemies(data, pathType, 0.975);
 
   // Add loot
-  const addLoot = data => {
+  const addLoot = (data, gridWidth) => {
     for (let i = 0; i < data.length; i++) {
       // Loot
       const setLoot = chances => {
@@ -64,94 +153,6 @@ const populate = (
           default:
             return { barrel: { full: true } };
         }
-      };
-
-      // Don't block a door with loot
-      const clearTheDoor = (data, i) => {
-        // No door to the right
-        const right = data[i + 1];
-        const upRight = data[i + 1 - c.GRID_WIDTH];
-        const downRight = data[i + 1 + c.GRID_WIDTH];
-
-        if (
-          upRight &&
-          right &&
-          downRight &&
-          upRight.type === defaultType &&
-          right.type === pathType &&
-          downRight.type === defaultType
-        ) {
-          return false;
-        }
-
-        // No door above
-        const up = data[i - c.GRID_WIDTH];
-        const upLeft = data[i - 1 - c.GRID_WIDTH];
-        if (
-          upLeft &&
-          up &&
-          upRight &&
-          upLeft.type === defaultType &&
-          up.type === pathType &&
-          upRight.type === defaultType
-        ) {
-          return false;
-        }
-
-        // No door left
-        const left = data[i - 1];
-        const downLeft = data[i - 1 + c.GRID_WIDTH];
-        if (
-          upLeft &&
-          left &&
-          downLeft &&
-          upLeft.type === defaultType &&
-          left.type === pathType &&
-          downLeft.type === defaultType
-        ) {
-          return false;
-        }
-
-        // No door below
-        const down = data[i + c.GRID_WIDTH];
-        if (
-          downLeft &&
-          down &&
-          downRight &&
-          downLeft.type === defaultType &&
-          down.type === pathType &&
-          downRight.type === defaultType
-        ) {
-          return false;
-        }
-
-        // Not in a doorway
-        if (
-          up &&
-          down &&
-          left &&
-          right &&
-          up.type !== pathType &&
-          down.type !== pathType &&
-          left.type === pathType &&
-          right.type === pathType
-        ) {
-          return false;
-        }
-
-        if (
-          up &&
-          down &&
-          left &&
-          right &&
-          up.type === pathType &&
-          down.type === pathType &&
-          left.type === defaultType &&
-          right.type === defaultType
-        ) {
-          return false;
-        }
-        return true;
       };
 
       const loot = setLoot(Math.random());
@@ -167,7 +168,7 @@ const populate = (
     }
     return data;
   };
-  data = addLoot(data);
+  data = addLoot(data, c.GRID_WIDTH);
 
   // Add portal just west of the southeast corner
   const addPortal = (data, count = 0) => {
