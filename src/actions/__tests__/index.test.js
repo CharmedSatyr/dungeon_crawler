@@ -1,8 +1,18 @@
 import * as a from '../index';
 import * as g from '../../constants/gameplay';
 import * as t from '../../constants/action-types';
+import * as l from '../../constants/loot';
 
 /*** SIMPLE ACTION CREATORS ***/
+describe('`add_item` action creator', () => {
+  it('should return an action to add an item to the player inventory', () => {
+    const item = { testy: 'placeholder' };
+    const targetObj = {};
+    const action = { type: t.ADD_ITEM, item, targetObj };
+    expect(a.add_item(item, targetObj)).toEqual(action);
+  });
+});
+
 describe('`add_xp` action creator', () => {
   it('should return an action to add experience to the player', () => {
     const args = 56;
@@ -18,7 +28,7 @@ describe('`attack` action creator', () => {
     const action = {
       type: t.ATTACK,
       targetObj,
-      damage: d
+      damage: d,
     };
     expect(a.attack(targetObj, d)).toMatchObject(action);
   });
@@ -27,24 +37,24 @@ describe('`attack` action creator', () => {
 describe('`clear_animation` action creator', () => {
   it('should return an action to remove an animated CSS style class', () => {
     const action = {
-      type: t.CLEAR_ANIMATION
+      type: t.CLEAR_ANIMATION,
     };
     expect(a.clear_animation()).toMatchObject(action);
   });
 });
 
 describe('`drink` action creator', () => {
-  it('should return an action to drink from a water barrel', () => {
+  it('should return an action to drink from a full barrel', () => {
     const targetObj = {
       payload: {
-        loot: {}
-      }
+        loot: l.fullBarrel,
+      },
     };
     const amount = expect.any(Number);
     const action = {
       type: t.DRINK,
       targetObj,
-      amount
+      amount,
     };
     expect(a.drink(targetObj, amount)).toEqual(action);
   });
@@ -56,27 +66,27 @@ describe('`facing` action creator', () => {
       coordinates: { x: 0, y: 0 },
       payload: {
         enemy: {
-          facing: 'south'
-        }
-      }
+          facing: 'south',
+        },
+      },
     };
     expect(a.facing(enemyObj, 'enemy')).toMatchObject({
       type: t.FACING,
       targetObj: enemyObj,
-      flag: 'enemy'
+      flag: 'enemy',
     });
     const playerObj = {
       coordinates: { x: 0, y: 0 },
       payload: {
         player: {
-          facing: 'north'
-        }
-      }
+          facing: 'north',
+        },
+      },
     };
     expect(a.facing(playerObj)).toMatchObject({
       type: t.FACING,
       targetObj: playerObj,
-      flag: 'player'
+      flag: 'player',
     });
   });
 });
@@ -86,7 +96,7 @@ describe('`move` action creator', () => {
     const args = [{ x: 0, y: 0 }];
     const action = {
       type: t.MOVE,
-      targetObj: args[0]
+      targetObj: args[0],
     };
     expect(a.move(...args)).toEqual(action);
   });
@@ -104,7 +114,7 @@ describe('`message` action creator', () => {
     const args = 'test!';
     const action = {
       type: t.MESSAGE,
-      msg: args
+      msg: args,
     };
     expect(a.message(args)).toEqual(action);
   });
@@ -122,7 +132,7 @@ describe('`open` action creator', () => {
     const args = [{ x: 0, y: 0 }];
     const action = {
       type: t.OPEN,
-      targetObj: args[0]
+      targetObj: args[0],
     };
     expect(a.open(...args)).toEqual(action);
   });
@@ -147,18 +157,18 @@ describe('`hostile_enemies` action creator thunk', () => {
         enemy: {
           weapon: {
             min_damage: expect.any(Number),
-            max_damage: expect.any(Number)
-          }
-        }
-      }
+            max_damage: expect.any(Number),
+          },
+        },
+      },
     };
     const batchAction = {
       payload: [
         { type: t.FACING, targetObj },
         { type: t.MESSAGE, msg: expect.any(String) },
-        { type: t.TAKE_DAMAGE, damage: expect.any(Number) }
+        { type: t.TAKE_DAMAGE, damage: expect.any(Number) },
       ],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     };
     expect(a.hostile_enemies(targetObj)).toMatchObject(batchAction);
   });
@@ -171,14 +181,14 @@ describe('`level_check` action creator thunk', () => {
     const xp = 1000000;
     expect(a.level_check(xp, player)).toMatchObject({
       payload: [{ type: t.LEVEL_UP }, { type: t.MESSAGE }],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     });
   });
   it('should return a `null` type action if the player should not level up', () => {
     const xp = 0;
     expect(a.level_check(xp, player)).toMatchObject({
       payload: [{ type: null }],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     });
   });
 });
@@ -188,7 +198,7 @@ describe('`player_input` action creator thunk', () => {
   it('should trigger `move` action creator if the argument type is `dirtPath`', () => {
     const pathTargetObj = {
       payload: {},
-      type: 'dirtPath'
+      type: 'dirtPath',
     };
     expect(a.player_input(pathTargetObj)).toMatchObject({ type: t.MOVE });
   });
@@ -197,24 +207,43 @@ describe('`player_input` action creator thunk', () => {
     const enemyDeadTargetObj = {
       payload: {
         enemy: {
-          health: -10
-        }
-      }
+          health: -10,
+        },
+      },
     };
     expect(a.player_input(enemyDeadTargetObj)).toMatchObject({ type: t.MOVE });
+  });
+
+  it('should trigger batched `add_item`, `move`, and `message` action creators if the argument payload is an item', () => {
+    const itemTargetObj = {
+      payload: {
+        loot: {
+          item: l.weapons.spear,
+        },
+      },
+    };
+
+    expect(a.player_input(itemTargetObj)).toMatchObject({
+      payload: [
+        { type: t.MOVE },
+        { type: t.ADD_ITEM, item: l.weapons.spear, targetObj: itemTargetObj },
+        { type: t.MESSAGE },
+      ],
+      type: 'BATCHING_REDUCER.BATCH',
+    });
   });
 
   it('should trigger batched `attack`, `message`, and `facing` action creators if the argument payload is a living enemy', () => {
     const enemyAliveTargetObj = {
       payload: {
         enemy: {
-          health: 10
-        }
-      }
+          health: 10,
+        },
+      },
     };
     expect(a.player_input(enemyAliveTargetObj)).toMatchObject({
       payload: [{ type: t.ATTACK }, { type: t.MESSAGE }, { type: t.FACING }],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     });
   });
 
@@ -223,9 +252,9 @@ describe('`player_input` action creator thunk', () => {
       payload: {
         enemy: {
           level: 1,
-          health: 10
-        }
-      }
+          health: 10,
+        },
+      },
     };
     const player = { weapon: { min_damage: 10, max_damage: 10 }, level: 1 };
     expect(a.player_input(enemyWillDieTargetObj, player)).toMatchObject({
@@ -233,72 +262,68 @@ describe('`player_input` action creator thunk', () => {
         { type: t.ADD_XP, amount: g.xpCalc(enemyWillDieTargetObj.payload.enemy.level) },
         {
           type: t.ATTACK,
-          damage: g.damageCalc(player.weapon.min_damage, player.weapon.max_damage, player.level)
+          damage: g.damageCalc(player.weapon.min_damage, player.weapon.max_damage, player.level),
         },
         { type: t.FACING },
         { type: 'BATCHING_REDUCER.BATCH' }, // level_check is a thunk
-        { type: t.MESSAGE }
+        { type: t.MESSAGE },
       ],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     });
   });
 
-  it('should trigger batched `drink`, `message`, and `facing` action creators if the targetObj is a full water barrel', () => {
+  it('should trigger batched `drink`, `message`, and `facing` action creators if the targetObj is a full barrel', () => {
     const waterBarrel = {
       payload: {
-        loot: {
-          barrel: { full: true }
-        }
-      }
+        loot: l.fullBarrel,
+      },
     };
     expect(a.player_input(waterBarrel)).toMatchObject({
       payload: [{ type: t.DRINK }, { type: t.MESSAGE }, { type: t.FACING }],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     });
   });
 
-  it('should trigger batched `message` and `facing` action creators if the targetObj is an empty water barrel', () => {
+  it('should trigger batched `message` and `facing` action creators if the targetObj is an empty barrel', () => {
     const emptyBarrel = {
       payload: {
-        loot: {
-          barrel: { full: false }
-        }
-      }
+        loot: l.emptyBarrel,
+      },
     };
     expect(a.player_input(emptyBarrel)).toMatchObject({
       payload: [{ type: t.MESSAGE }, { type: t.FACING }],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     });
   });
 
   it('should trigger batched `open`, `message`, and `facing` action creators if the targetObj is a closed portal', () => {
     const closedPortal = {
       payload: {
-        portal: { open: false }
-      }
+        portal: { open: false },
+      },
     };
     expect(a.player_input(closedPortal)).toMatchObject({
       payload: [{ type: t.OPEN }, { type: t.MESSAGE }, { type: t.FACING }],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     });
   });
 
   it('should trigger batched `next_level` and `message` action creators if the targetObj is an open portal', () => {
     const openPortal = {
       payload: {
-        portal: { open: true }
-      }
+        portal: { open: true },
+      },
     };
     expect(a.player_input(openPortal)).toMatchObject({
       payload: [{ type: t.NEXT_LEVEL }, { type: t.MESSAGE }],
-      type: 'BATCHING_REDUCER.BATCH'
+      type: 'BATCHING_REDUCER.BATCH',
     });
   });
 
   it('should trigger `facing` action creator if argument type is `vines`', () => {
     const barrierTargetObj = {
       payload: {},
-      type: 'vines'
+      type: 'vines',
     };
     expect(a.player_input(barrierTargetObj)).toMatchObject({ type: t.FACING });
   });

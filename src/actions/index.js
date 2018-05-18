@@ -5,10 +5,19 @@ import { getState } from '../store';
 import { batchActions } from 'redux-batched-actions';
 
 /*** ACTION CREATORS ***/
+export const add_item = (item, targetObj) => {
+  const action = {
+    type: t.ADD_ITEM,
+    item,
+    targetObj,
+  };
+  return action;
+};
+
 export const add_xp = amount => {
   const action = {
     type: t.ADD_XP,
-    amount
+    amount,
   };
   return action;
 };
@@ -17,14 +26,14 @@ export const attack = (targetObj, d) => {
   const action = {
     type: t.ATTACK,
     targetObj,
-    damage: d
+    damage: d,
   };
   return action;
 };
 
 export const clear_animation = () => {
   const action = {
-    type: t.CLEAR_ANIMATION
+    type: t.CLEAR_ANIMATION,
   };
   return action;
 };
@@ -33,7 +42,7 @@ export const drink = (targetObj, amount) => {
   const action = {
     type: t.DRINK,
     targetObj,
-    amount
+    amount,
   };
   return action;
 };
@@ -42,7 +51,7 @@ export const facing = (targetObj, flag = 'player') => {
   const action = {
     type: t.FACING,
     targetObj,
-    flag
+    flag,
   };
   return action;
 };
@@ -50,14 +59,14 @@ export const facing = (targetObj, flag = 'player') => {
 export const move = targetObj => {
   const action = {
     type: t.MOVE,
-    targetObj
+    targetObj,
   };
   return action;
 };
 
 export const level_up = () => {
   const action = {
-    type: t.LEVEL_UP
+    type: t.LEVEL_UP,
   };
   return action;
 };
@@ -65,7 +74,7 @@ export const level_up = () => {
 export const message = msg => {
   const action = {
     type: t.MESSAGE,
-    msg
+    msg,
   };
   return action;
 };
@@ -73,7 +82,7 @@ export const message = msg => {
 // This affects game level, not player level
 export const next_level = () => {
   const action = {
-    type: t.NEXT_LEVEL
+    type: t.NEXT_LEVEL,
   };
   return action;
 };
@@ -82,7 +91,7 @@ export const next_level = () => {
 export const open = targetObj => {
   const action = {
     type: t.OPEN,
-    targetObj
+    targetObj,
   };
   return action;
 };
@@ -90,7 +99,7 @@ export const open = targetObj => {
 export const take_damage = damage => {
   const action = {
     type: t.TAKE_DAMAGE,
-    damage
+    damage,
   };
   return action;
 };
@@ -103,7 +112,7 @@ export const hostile_enemies = targetObj => {
   return batchActions([
     facing(targetObj, 'enemy'),
     message('An enemy assails you and does ' + d + ' damage!'),
-    take_damage(d)
+    take_damage(d),
   ]);
 };
 
@@ -152,7 +161,7 @@ export const player_input = (targetObj, player = getState().player) => {
         attack(targetObj, d),
         facing(targetObj),
         level_check(xp),
-        message(msg)
+        message(msg),
       ]);
     } else {
       // Otherwise keep fighting
@@ -170,6 +179,12 @@ export const player_input = (targetObj, player = getState().player) => {
   if (loot && loot.barrel && !loot.barrel.full) {
     const msg = 'Not a drop remains in this container...';
     return batchActions([message(msg), facing(targetObj)]);
+  }
+
+  // If the target is an item, move there, pick it up and see a message
+  if (loot && loot.item) {
+    const msg = `You have picked up a ${loot.item.name}!`;
+    return batchActions([move(targetObj), add_item(loot.item, targetObj), message(msg)]);
   }
 
   // If the target is a closed portal, open the door
