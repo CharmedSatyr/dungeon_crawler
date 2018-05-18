@@ -25,6 +25,8 @@ class Game extends Component {
     this.getTargetObj = this.getTargetObj.bind(this);
   }
   handleKeyPress(e) {
+    const { change_weapon } = this.props;
+    console.log('event:', e);
     switch (e.keyCode) {
       // North
       case 38:
@@ -44,7 +46,7 @@ class Game extends Component {
         return this.setDispatch('west');
       case 32:
         console.log('spacebar');
-        break;
+        return change_weapon();
       default:
         return;
     }
@@ -99,26 +101,28 @@ class Game extends Component {
 }
 
 Game.propTypes = {
+  change_weapon: PropTypes.func.isRequired,
   gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
   hostile_enemies: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
   next_level: PropTypes.func.isRequired,
   player: PropTypes.object.isRequired,
   playerPosition: PropTypes.object.isRequired,
-  player_input: PropTypes.func.isRequired
+  player_input: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ grid, player, messages }) => ({
   gridData: grid.data,
   messages,
   playerPosition: grid.playerPosition,
-  player
+  player,
 });
 
 const mapDispatchToProps = dispatch => ({
+  change_weapon: () => dispatch(a.change_weapon()),
   hostile_enemies: targetObj => dispatch(a.hostile_enemies(targetObj)),
   next_level: () => dispatch(a.next_level()),
-  player_input: targetObj => dispatch(a.player_input(targetObj))
+  player_input: targetObj => dispatch(a.player_input(targetObj)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
