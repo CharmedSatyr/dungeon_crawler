@@ -47,6 +47,7 @@ describe('levelCheck', () => {
     expect(g.levelCheck(60, 2)).toBeFalsy();
     expect(g.levelCheck(80, 5)).toBeFalsy();
     expect(g.levelCheck(80, 2)).toBeTruthy();
+    expect(g.levelCheck(120, 3)).toBeTruthy();
     expect(g.levelCheck(220, 4)).toBeTruthy();
   });
 });
