@@ -1,4 +1,5 @@
 import * as t from '../../constants/action-types';
+import add_item from './add_item';
 import attack from './attack';
 import drink from './drink';
 import facing from './facing';
@@ -19,6 +20,10 @@ const initialState = {
 // Grid reducers
 const grid = (state = initialState, { damage, direction, flag, targetObj, type }) => {
   switch (type) {
+    case t.ADD_ITEM:
+      return Object.assign({}, state, {
+        data: add_item(state.data, targetObj),
+      });
     case t.ATTACK:
       return Object.assign({}, state, {
         data: attack(state.data, targetObj, damage),

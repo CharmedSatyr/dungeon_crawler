@@ -20,6 +20,16 @@ describe('`grid` reducer', () => {
     expect(grid(undefined, action)).toEqual(expect.objectContaining(expected));
   });
 
+  it('should preserve state shape on `ADD_ITEM` action type', () => {
+    const action = {
+      targetObj: {
+        payload: { loot: { item: { name: 'example' } } },
+      },
+      type: t.ADD_ITEM,
+    };
+    expect(grid(undefined, action)).toEqual(expect.objectContaining(expected));
+  });
+
   it('should preserve state shape on `ATTACK` action type', () => {
     const action = {
       damage: expect.any(Number),
