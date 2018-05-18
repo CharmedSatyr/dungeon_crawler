@@ -26,7 +26,6 @@ class Game extends Component {
   }
   handleKeyPress(e) {
     const { change_weapon } = this.props;
-    console.log('event:', e);
     switch (e.keyCode) {
       // North
       case 38:
