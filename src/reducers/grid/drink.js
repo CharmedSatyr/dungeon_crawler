@@ -5,7 +5,8 @@ const drink = (data, targetObj) => {
 
   const oldTarget = Object.assign({}, targetObj);
   oldTarget.payload.loot.barrel.full = false;
-  const newTarget = oldTarget;
+
+  const newTarget = Object.assign({}, oldTarget);
 
   newData.splice(targetObj.index, 1, newTarget);
 
