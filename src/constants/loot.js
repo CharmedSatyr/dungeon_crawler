@@ -21,4 +21,5 @@ class Weapon {
 }
 
 weapons.fists = new Weapon('Fists', 1, 3);
-weapons.spear = new Weapon('Spear', 3, 7);
+weapons.dagger = new Weapon('Dagger', 3, 5);
+weapons.spear = new Weapon('Spear', 4, 9);
