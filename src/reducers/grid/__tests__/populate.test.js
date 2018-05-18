@@ -1,5 +1,6 @@
 import * as p from '../populate';
 import populate from '../populate';
+import * as l from '../../../constants/loot';
 
 const defaultType = 'default';
 const pathType = 'path';
@@ -110,9 +111,14 @@ describe('`clearTheDoor` populate grid reducer function', () => {
 
 /*** setLootType ***/
 describe('`setLootType` populate grid reducer function', () => {
-  it('should return a full barrel payload', () => {
-    const fullBarrel = { barrel: { full: true } };
-    expect(p.setLootType(Math.random())).toMatchObject(fullBarrel);
+  it('should return a full barrel payload if the argument <0.75', () => {
+    const { fullBarrel } = l;
+    expect(p.setLootType(0)).toMatchObject(fullBarrel);
+  });
+
+  it('should return a spear payload if the argument is >=0.75', () => {
+    const spear = { item: l.weapons.spear };
+    expect(p.setLootType(0.75)).toMatchObject(spear);
   });
 });
 
@@ -127,9 +133,7 @@ describe('`addLoot` populate grid reducer function', () => {
   });
 
   it('should give data objects a `loot` payload if `probability` is 1', () => {
-    const loot = { barrel: { full: true } };
-    const updatedData = [{ payload: { loot }, type: pathType }];
-    expect(p.addLoot(data, gridWidth, pathType, 1)).toEqual(updatedData);
+    expect(p.addLoot(data, gridWidth, pathType, 1)[0].payload).toHaveProperty('loot');
   });
 
   it('should return the data argument if `probability` is 0', () => {
