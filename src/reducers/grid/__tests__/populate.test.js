@@ -3,13 +3,16 @@ import populate from '../populate';
 
 const defaultType = 'default';
 const pathType = 'path';
+const cardinalDirections = /[north||south||east||west]/;
 
+/*** direction ***/
 describe('`direction` populate grid reducer function', () => {
   it('should return a string matching a cardinal direction', () => {
-    expect(p.direction()).toMatch(/[north||south||east||west]/);
+    expect(p.direction()).toMatch(cardinalDirections);
   });
 });
 
+/*** addEnemies ***/
 describe('`addEnemies` populate grid reducer function', () => {
   const pathType = 'floor';
   const data = [{ payload: {}, type: pathType }];
@@ -21,7 +24,7 @@ describe('`addEnemies` populate grid reducer function', () => {
 
   it('should give data objects an `enemy` payload if `probability` is 1', () => {
     const enemy = {
-      facing: expect.any(String),
+      facing: expect.stringMatching(cardinalDirections),
       health: expect.any(Number),
       level: expect.any(Number),
       weapon: expect.any(Object),
@@ -40,6 +43,7 @@ describe('`addEnemies` populate grid reducer function', () => {
   });
 });
 
+/*** clearTheDoor ***/
 describe('`clearTheDoor` populate grid reducer function', () => {
   /*
    * SAMPLE GRID
@@ -86,39 +90,40 @@ describe('`clearTheDoor` populate grid reducer function', () => {
     { index: 23, type: pathType },
     { index: 24, type: defaultType },
   ];
+
   const gridWidth = 5;
   it('should return a Boolean', () => {
     for (let i; i < data.length; i++) {
-      expect(
-        typeof p.clearTheDoor(data, i, gridWidth, defaultType, pathType) === Boolean
-      ).toBeTruthy();
+      expect(typeof p.clearTheDoor(data, i, gridWidth, pathType) === Boolean).toBeTruthy();
     }
   });
 
   it('should return true on a path away from a doorway', () => {
-    expect(p.clearTheDoor(data, 7, gridWidth, defaultType, pathType)).toBeTruthy();
-    expect(p.clearTheDoor(data, 8, gridWidth, defaultType, pathType)).toBeTruthy();
+    expect(p.clearTheDoor(data, 7, gridWidth, pathType)).toBeTruthy();
+    expect(p.clearTheDoor(data, 8, gridWidth, pathType)).toBeTruthy();
   });
 
   it('should return false on a path in or beside a doorway', () => {
-    [11, 12, 13, 18].forEach(i =>
-      expect(p.clearTheDoor(data, i, gridWidth, defaultType, pathType)).toBeFalsy()
-    );
+    [11, 12, 13, 18].forEach(i => expect(p.clearTheDoor(data, i, gridWidth, pathType)).toBeFalsy());
   });
 });
 
-describe('`setLoot` populate grid reducer function', () => {
+/*** setLootType ***/
+describe('`setLootType` populate grid reducer function', () => {
   it('should return a full barrel payload', () => {
     const fullBarrel = { barrel: { full: true } };
-    expect(p.setLoot(Math.random())).toMatchObject(fullBarrel);
+    expect(p.setLootType(Math.random())).toMatchObject(fullBarrel);
   });
 });
 
+/*** addLoot ***/
 describe('`addLoot` populate grid reducer function', () => {
   const data = [{ payload: {}, type: pathType }];
   const gridWidth = 5;
+  const result = p.addLoot(data, gridWidth, pathType, Math.random());
+
   it('should return an array', () => {
-    expect(Array.isArray(p.addLoot(data, gridWidth, pathType, Math.random()))).toBeTruthy();
+    expect(Array.isArray(result)).toBeTruthy();
   });
 
   it('should give data objects a `loot` payload if `probability` is 1', () => {
@@ -135,4 +140,132 @@ describe('`addLoot` populate grid reducer function', () => {
     const hasPayload = [{ payload: { thingy: 1 }, type: pathType }];
     expect(p.addLoot(hasPayload, gridWidth, pathType, 1)).toEqual(hasPayload);
   });
+});
+
+/*** addPortal ***/
+describe('`addPortal` populate grid reducer function', () => {
+  const data = [{ payload: {}, type: pathType }, { payload: {}, type: pathType }];
+
+  const result = p.addPortal(data, pathType);
+
+  it('should return an array', () => {
+    expect(Array.isArray(result)).toBeTruthy();
+  });
+
+  it('should give the second to last data object with type: pathType a `portal` payload', () => {
+    const portal = { open: false };
+    const updatedData = [{ payload: { portal }, type: pathType }, { payload: {}, type: pathType }];
+    expect(result).toEqual(updatedData);
+  });
+
+  it('should not modify objects that already have payloads', () => {
+    const hasPayload = [{ payload: { thingy: 1 }, type: pathType }];
+    expect(p.addPortal(hasPayload, pathType)).toEqual(hasPayload);
+  });
+});
+
+/*** addPlayer ***/
+describe('`addPlayer` populate grid reducer function', () => {
+  const data = [
+    { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: pathType },
+  ];
+
+  const result = p.addPlayer(data, pathType);
+
+  it('should return an object with `data` and `playerPosition` properties', () => {
+    expect(result).toMatchObject({
+      data: expect.any(Object),
+      playerPosition: {
+        coordinates: {
+          x: expect.any(Number),
+          y: expect.any(Number),
+        },
+        index: expect.any(Number),
+      },
+    });
+  });
+
+  it('should give the second data object with type: pathType a `player` payload and return the coordinates and index of the object as playerPosition', () => {
+    const player = {
+      facing: expect.stringMatching('south'),
+      level: expect.any(Number),
+      health: expect.any(Number),
+    };
+
+    const updatedData = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: { player }, type: pathType },
+    ];
+
+    expect(result.data).toEqual(updatedData);
+  });
+
+  it('should return the coordinates and index of the object with the `player` payload', () => {
+    const expectedPosition = {
+      coordinates: {
+        x: 1,
+        y: 0,
+      },
+      index: 1,
+    };
+    expect(result.playerPosition).toEqual(expectedPosition);
+  });
+  it('should not modify objects that already have payloads', () => {
+    const hasPayload = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: { thingy: 1 }, type: pathType },
+    ];
+    expect(p.addPlayer(hasPayload, pathType).data).toEqual(hasPayload);
+  });
+});
+
+/*** populate ***/
+describe('`populate` grid reducer function', () => {
+  const data = [
+    { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: pathType },
+    { coordinates: { x: 2, y: 0 }, index: 2, payload: {}, type: pathType },
+    { coordinates: { x: 3, y: 0 }, index: 3, payload: {}, type: pathType },
+  ];
+  const result = populate(data, 1, 4, pathType);
+
+  it('should return an object with `data` and `playerPosition` properties', () => {
+    expect(result).toHaveProperty('data');
+    expect(result).toHaveProperty('playerPosition');
+  });
+
+  it('should return `playerPosition` coordinates and index', () => {
+    const playerPosition = {
+      coordinates: {
+        x: expect.any(Number),
+        y: expect.any(Number),
+      },
+      index: expect.any(Number),
+    };
+
+    expect(result.playerPosition).toMatchObject(playerPosition);
+  });
+
+  it('should return `data` array that includes an object with a `player` payload,', () => {
+    const playerObj = {
+      coordinates: { x: expect.any(Number), y: expect.any(Number) },
+      index: expect.any(Number),
+      payload: { player: expect.any(Object) },
+      type: pathType,
+    };
+    expect(result.data).toContainEqual(playerObj);
+  });
+
+  it('should return `data` array that includes an object with a `portal` payload,', () => {
+    const portalObj = {
+      coordinates: { x: expect.any(Number), y: expect.any(Number) },
+      index: expect.any(Number),
+      payload: { portal: { open: false } },
+      type: pathType,
+    };
+    expect(result.data).toContainEqual(portalObj);
+  });
+
+  // Loot and Enemies are not guaranteed
 });

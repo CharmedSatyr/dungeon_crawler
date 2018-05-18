@@ -47,7 +47,7 @@ export const addEnemies = (data, pathType, probability) => {
 
 /*** Loot functions ***/
 // Don't block a door with loot
-export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
+export const clearTheDoor = (data, i, gridWidth, pathType) => {
   // No door to the right
   const right = data[i + 1];
   const upRight = data[i + 1 - gridWidth];
@@ -57,9 +57,9 @@ export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
     upRight &&
     right &&
     downRight &&
-    upRight.type === defaultType &&
+    upRight.type !== pathType &&
     right.type === pathType &&
-    downRight.type === defaultType
+    downRight.type !== pathType
   ) {
     return false;
   }
@@ -71,9 +71,9 @@ export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
     upLeft &&
     up &&
     upRight &&
-    upLeft.type === defaultType &&
+    upLeft.type !== pathType &&
     up.type === pathType &&
-    upRight.type === defaultType
+    upRight.type !== pathType
   ) {
     return false;
   }
@@ -85,9 +85,9 @@ export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
     upLeft &&
     left &&
     downLeft &&
-    upLeft.type === defaultType &&
+    upLeft.type !== pathType &&
     left.type === pathType &&
-    downLeft.type === defaultType
+    downLeft.type !== pathType
   ) {
     return false;
   }
@@ -98,9 +98,9 @@ export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
     downLeft &&
     down &&
     downRight &&
-    downLeft.type === defaultType &&
+    downLeft.type !== pathType &&
     down.type === pathType &&
-    downRight.type === defaultType
+    downRight.type !== pathType
   ) {
     return false;
   }
@@ -111,8 +111,8 @@ export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
     down &&
     left &&
     right &&
-    up.type === defaultType &&
-    down.type === defaultType &&
+    up.type !== pathType &&
+    down.type !== pathType &&
     left.type === pathType &&
     right.type === pathType
   ) {
@@ -126,8 +126,8 @@ export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
     right &&
     up.type === pathType &&
     down.type === pathType &&
-    left.type === defaultType &&
-    right.type === defaultType
+    left.type !== pathType &&
+    right.type !== pathType
   ) {
     return false;
   }
@@ -135,7 +135,7 @@ export const clearTheDoor = (data, i, gridWidth, defaultType, pathType) => {
 };
 
 // Set the type of loot in a square
-export const setLoot = chances => {
+export const setLootType = chances => {
   switch (true) {
     default:
       return { barrel: { full: true } };
@@ -145,11 +145,11 @@ export const setLoot = chances => {
 // Add loot
 export const addLoot = (data, gridWidth, pathType, probability) => {
   for (let i = 0; i < data.length; i++) {
-    const loot = setLoot(Math.random());
+    const loot = setLootType(Math.random());
     if (
       Object.keys(data[i].payload).length === 0 &&
       data[i].type === pathType &&
-      clearTheDoor(data, i) &&
+      clearTheDoor(data, i, gridWidth, pathType) &&
       probability >= Math.random()
     ) {
       data[i].payload = { loot };
@@ -158,63 +158,66 @@ export const addLoot = (data, gridWidth, pathType, probability) => {
   return data;
 };
 
-// Populate the data with payloads (player, enemies, etc.)
-const populate = (
-  data,
-  level,
-  defaultType = tileTypes(level),
-  pathType = tileTypes(level, 'path')
-) => {
-  // Add enemies
-  data = addEnemies(data, pathType, 0.975);
+/*** ADD PORTAL ***/
+export const addPortal = (data, pathType) => {
+  let count = 0;
+  for (let i = data.length - 1; i >= 0; i--) {
+    // portal
+    const portal = { open: false };
 
-  data = addLoot(data, c.GRID_WIDTH, 0.01);
+    if (Object.keys(data[i].payload).length === 0 && data[i].type === pathType && count <= 2) {
+      count++;
+      if (count === 2) {
+        data[i].payload = { portal };
+      }
+    }
+  }
+  return data;
+};
+
+/*** ADD PLAYER ***/
+// addPlayer
+export const addPlayer = (data, pathType) => {
+  let count = 0;
+  let playerPosition;
+  for (let i = 0; i <= data.length - 1; i++) {
+    // Player
+    const player = {
+      facing: 'south',
+      level: 1,
+      health: 20,
+    };
+    if (Object.keys(data[i].payload).length === 0 && data[i].type === pathType && count <= 2) {
+      count++;
+      if (count === 2) {
+        data[i].payload = { player };
+
+        // Save playerPosition as a variable
+        playerPosition = {
+          coordinates: { x: data[i].coordinates.x, y: data[i].coordinates.y },
+          index: i,
+        };
+      }
+    }
+  }
+  return { data, playerPosition };
+};
+
+// Populate the data with payloads (player, enemies, etc.)
+const populate = (data, level, gridWidth = c.GRID_WIDTH, pathType = tileTypes(level, 'path')) => {
+  // Add enemies
+  data = addEnemies(data, pathType, 0.025);
+
+  // Add loot
+  data = addLoot(data, gridWidth, pathType, 0.01);
 
   // Add portal just west of the southeast corner
-  const addPortal = (data, count = 0) => {
-    for (let i = c.TOTAL_CELLS - 1; i >= 0; i--) {
-      // portal
-      const portal = { open: false };
-
-      if (Object.keys(data[i].payload).length === 0 && data[i].type === pathType && count <= 2) {
-        count++;
-        if (count === 2) {
-          data[i].payload = { portal };
-        }
-      }
-    }
-    return data;
-  };
-  data = addPortal(data);
+  data = addPortal(data, pathType);
 
   // Position player just east of the northwest corner
-  let playerPosition;
-  const addPlayer = (data, count = 0) => {
-    for (let i = 0; i <= c.TOTAL_CELLS - 1; i++) {
-      // Player
-      const player = {
-        facing: 'south',
-        level: 1,
-        health: 20,
-      };
-      if (Object.keys(data[i].payload).length === 0 && data[i].type === pathType && count <= 2) {
-        count++;
-        if (count === 2) {
-          data[i].payload = { player };
+  const p = addPlayer(data, pathType);
 
-          // Save playerPosition as a variable
-          playerPosition = {
-            coordinates: { x: data[i].coordinates.x, y: data[i].coordinates.y },
-            index: i,
-          };
-        }
-      }
-    }
-    return data;
-  };
-  data = addPlayer(data);
-
-  return { data, playerPosition };
+  return { data: p.data, playerPosition: p.playerPosition };
 };
 
 export default populate;
