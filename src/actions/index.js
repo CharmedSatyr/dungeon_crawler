@@ -31,6 +31,13 @@ export const attack = (targetObj, d) => {
   return action;
 };
 
+export const change_weapon = () => {
+  const action = {
+    type: t.CHANGE_WEAPON,
+  };
+  return action;
+};
+
 export const clear_animation = () => {
   const action = {
     type: t.CLEAR_ANIMATION,

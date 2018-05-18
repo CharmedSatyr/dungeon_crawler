@@ -34,6 +34,15 @@ describe('`attack` action creator', () => {
   });
 });
 
+describe('`change_weapon` action creator', () => {
+  it('should return an action to cycle through items in the player inventory', () => {
+    const action = {
+      type: t.CHANGE_WEAPON,
+    };
+    expect(a.change_weapon()).toMatchObject(action);
+  });
+});
+
 describe('`clear_animation` action creator', () => {
   it('should return an action to remove an animated CSS style class', () => {
     const action = {
