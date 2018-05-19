@@ -1,10 +1,11 @@
 import _ from 'lodash';
+import * as l from '../../constants/loot';
 
 const drink = (data, targetObj) => {
   const newData = _.clone(data);
 
   const oldTarget = Object.assign({}, targetObj);
-  oldTarget.payload.loot.barrel.full = false;
+  oldTarget.payload.loot = l.emptyBarrel;
 
   const newTarget = Object.assign({}, oldTarget);
 
