@@ -1,26 +1,29 @@
 import React from 'react';
 import * as c from '../../constants/settings';
+import * as l from '../../constants/loot';
 import PropTypes from 'prop-types';
 
 import tiles from './Loot.png';
 
-export const emptyBarrel = '0px 0px';
-export const fullBarrel = '-40px 0px';
-export const spear = '0px -40px';
-export const warningSquare = '0px 40px';
+export const emptyBarrelPosition = '0px 0px';
+export const fullBarrelPosition = '-40px 0px';
+export const spearPosition = '0px -40px';
+export const warningSquarePosition = '0px 40px';
 
 export const setBGPosition = variety => {
-  if (variety && variety.barrel && variety.barrel.full) {
-    return fullBarrel;
-  } else if (variety && variety.barrel && !variety.barrel.full) {
-    return emptyBarrel;
+  if (variety === l.fullBarrel) {
+    return fullBarrelPosition;
   }
 
-  if (variety && variety.item && variety.item.name === 'Spear') {
-    return spear;
+  if (variety === l.emptyBarrel) {
+    return emptyBarrelPosition;
   }
 
-  return warningSquare;
+  if (variety.item && variety.item === l.weapons.spear) {
+    return spearPosition;
+  }
+
+  return warningSquarePosition;
 };
 
 const Loot = ({ variety }) => {
