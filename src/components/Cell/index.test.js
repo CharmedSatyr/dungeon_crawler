@@ -1,11 +1,31 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Cell from './index';
+import * as i from './index';
+import Enemy from '../Enemy';
+import Loot from '../Loot';
+import Portal from './index';
+import Player from '../Player';
+
+describe('`cellBG` Cell component function', () => {
+  it('should return a `backgroundPosition` dependent on the `type` argument', () => {
+    expect(i.cellBG('dirtPath')).toBe(i.dirtPath);
+    expect(i.cellBG('stonePath')).toBe(i.stonePath);
+    expect(i.cellBG('vines')).toBe(i.vines);
+    expect(i.cellBG('rock1')).toBe(i.rock1);
+    expect(i.cellBG('lava')).toBe(i.lava);
+    expect(i.cellBG(undefined)).toBe(i.vines);
+  });
+});
+
+describe('`display` Cell component function', () => {
+  it('should return a component dependent upon the `payload` argument');
+});
 
 const setup = () => {
   const props = {
     payload: {},
-    type: ''
+    type: '',
   };
   const cell = shallow(<Cell {...props} />);
 
