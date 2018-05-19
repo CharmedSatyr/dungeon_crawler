@@ -1,5 +1,6 @@
 import * as t from '../constants/action-types';
 import * as g from '../constants/gameplay';
+import * as l from '../constants/loot';
 import tileTypes from '../constants/tile-types';
 import { getState } from '../store';
 import { batchActions } from 'redux-batched-actions';
@@ -176,14 +177,14 @@ export const player_input = (targetObj, player = getState().player) => {
     }
   }
   // If the target is a full water barrel, drink it
-  if (loot && loot.barrel && loot.barrel.full) {
+  if (loot && loot === l.fullBarrel) {
     const amount = g.healingCalc(level);
     const msg = 'You drink from the enchanted spring water and feel refreshed.';
     return batchActions([drink(targetObj, amount), message(msg), facing(targetObj)]);
   }
 
   // If the target is an empty barrel, see a message
-  if (loot && loot.barrel && !loot.barrel.full) {
+  if (loot && loot === l.emptyBarrel) {
     const msg = 'Not a drop remains in this container...';
     return batchActions([message(msg), facing(targetObj)]);
   }
