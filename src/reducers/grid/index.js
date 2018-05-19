@@ -43,8 +43,7 @@ const grid = (state = initialState, { damage, direction, flag, targetObj, type }
         playerPosition: updated.playerPosition,
       });
     case t.NEXT_LEVEL:
-      // New levels should be created on an empty data array
-      let level = populate(generate(state.level + 1), state.level + 1);
+      const level = populate(generate(state.level + 1), state.level + 1);
       return Object.assign({}, state, {
         data: level.data,
         level: state.level + 1,
