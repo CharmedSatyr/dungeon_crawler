@@ -111,14 +111,14 @@ describe('`clearTheDoor` populate grid reducer function', () => {
 
 /*** setLootType ***/
 describe('`setLootType` populate grid reducer function', () => {
-  it('should return a full barrel payload if the argument <0.75', () => {
+  it('should return a full barrel payload if the argument <0.90', () => {
     const { fullBarrel } = l;
     expect(p.setLootType(0)).toMatchObject(fullBarrel);
   });
 
-  it('should return a spear payload if the argument is >=0.75', () => {
+  it('should return a spear payload if the argument is >=0.90', () => {
     const spear = { item: l.weapons.spear };
-    expect(p.setLootType(0.75)).toMatchObject(spear);
+    expect(p.setLootType(0.9)).toMatchObject(spear);
   });
 });
 

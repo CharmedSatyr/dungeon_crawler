@@ -136,13 +136,11 @@ export const clearTheDoor = (data, i, gridWidth, pathType) => {
 
 // Set the type of loot in a square
 export const setLootType = chances => {
-  const fullBarrel = l.fullBarrel;
-  const spear = l.weapons.spear;
   switch (true) {
-    case chances < 0.75:
-      return fullBarrel;
-    case chances >= 0.75:
-      return { item: spear };
+    case chances < 0.9:
+      return l.fullBarrel;
+    case chances >= 0.9:
+      return { item: l.weapons.spear };
     default:
       return l.fullBarrel;
   }
@@ -215,7 +213,7 @@ const populate = (data, level, gridWidth = c.GRID_WIDTH, pathType = tileTypes(le
   data = addEnemies(data, pathType, 0.025);
 
   // Add loot
-  data = addLoot(data, gridWidth, pathType, 0.01);
+  data = addLoot(data, gridWidth, pathType, 0.02);
 
   // Add portal just west of the southeast corner
   data = addPortal(data, pathType);
