@@ -33,6 +33,7 @@ class Game extends Component {
     window.removeEventListener('keydown', this.listenFunc);
 
     setTimeout(() => {
+      this.props.clear_animation();
       window.addEventListener('keydown', this.listenFunc);
     }, c.ANIMATION_DURATION);
   }
@@ -120,6 +121,7 @@ class Game extends Component {
 
 Game.propTypes = {
   change_weapon: PropTypes.func.isRequired,
+  clear_animation: PropTypes.func.isRequired,
   gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
   hostile_enemies: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -138,6 +140,7 @@ const mapStateToProps = ({ grid, player, messages }) => ({
 
 const mapDispatchToProps = dispatch => ({
   change_weapon: () => dispatch(a.change_weapon()),
+  clear_animation: () => dispatch(a.clear_animation()),
   hostile_enemies: targetObj => dispatch(a.hostile_enemies(targetObj)),
   next_level: () => dispatch(a.next_level()),
   player_input: targetObj => dispatch(a.player_input(targetObj)),

@@ -39,9 +39,10 @@ export const setSpriteSheet = weapon => {
 class Player extends Component {
   render() {
     const { playerAnimation, facing, weapon } = this.props;
+    console.log('playerAnimation:', playerAnimation);
     let playerClass;
     playerAnimation.length
-      ? (playerClass = `sprite ${playerAnimation[playerAnimation.length - 1]}-${facing}`)
+      ? (playerClass = `sprite ${playerAnimation}-${facing}`)
       : (playerClass = 'sprite');
     return (
       <div
@@ -58,8 +59,8 @@ class Player extends Component {
 }
 
 Player.propTypes = {
-  playerAnimation: PropTypes.arrayOf(PropTypes.string),
   facing: PropTypes.string,
+  playerAnimation: PropTypes.string,
   weapon: PropTypes.object.isRequired,
 };
 
