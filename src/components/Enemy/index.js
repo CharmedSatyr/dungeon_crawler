@@ -2,24 +2,24 @@ import React from 'react';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
-import sprite from './orc-sprite-40x40.png';
+import spear from './enemy-spear-40x40.png';
 
-const faceDirection = facing => {
+export const faceDirection = facing => {
   switch (facing) {
     case 'north':
-      return 0;
-    case 'east':
-      return 2;
-    case 'south':
-      return 3;
+      return -4;
     case 'west':
-      return 4;
+      return -5;
+    case 'south':
+      return -6;
+    case 'east':
+      return -7;
     default:
-      return '3';
+      return -6;
   }
 };
 
-const bgp = (health, facing) => {
+export const setBackgroundPosition = (health, facing) => {
   if (health > 0) {
     return `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`;
   }
@@ -29,13 +29,13 @@ const bgp = (health, facing) => {
 const Enemy = ({ facing, stats }) => (
   <div
     style={{
-      backgroundImage: `url('${sprite}')`,
-      backgroundPosition: bgp(stats.health, facing),
+      backgroundImage: `url('${spear}')`,
+      backgroundPosition: setBackgroundPosition(stats.health, facing),
       height: c.SPRITE_SIZE,
       marginTop: -5,
       position: 'absolute',
       transform: 'scale(1.2,1.2)', // Enemies bigger than hero
-      width: c.SPRITE_SIZE
+      width: c.SPRITE_SIZE,
     }}
   />
 );
@@ -43,7 +43,7 @@ const Enemy = ({ facing, stats }) => (
 Enemy.propTypes = {
   facing: PropTypes.string,
   stats: PropTypes.shape({
-    health: PropTypes.number.isRequired
-  })
+    health: PropTypes.number.isRequired,
+  }),
 };
 export default Enemy;

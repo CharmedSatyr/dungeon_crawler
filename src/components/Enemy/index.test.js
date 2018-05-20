@@ -1,13 +1,28 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Enemy from './index';
+import * as e from './index';
+
+describe('`faceDirection` Enemy component function', () => {
+  it('should return a value used to calculate `backgroundPosition`', () => {
+    expect(e.faceDirection('north')).toBe(-4);
+    expect(e.faceDirection('west')).toBe(-5);
+    expect(e.faceDirection('south')).toBe(-6);
+    expect(e.faceDirection('east')).toBe(-7);
+    expect(e.faceDirection(null)).toBe(-6);
+  });
+});
+
+describe('`setBackgroundPosition` Enemy component function', () => {
+  it('should do something...');
+});
 
 const setup = () => {
   const props = {
     facing: '',
     stats: {
-      health: 10
-    }
+      health: 10,
+    },
   };
   const enemy = shallow(<Enemy {...props} />);
 
