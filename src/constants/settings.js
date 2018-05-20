@@ -5,3 +5,4 @@ export const GRID_WIDTH = 30; // Number of cells
 export const TOTAL_CELLS = GRID_HEIGHT * GRID_WIDTH;
 export const ROOM_SIZE_RANGE = [2, 8]; // [min, max]
 export const MAX_ROOMS = 25;
+export const ANIMATION_DURATION = 400; // How long each animation plays and player input is disabled
