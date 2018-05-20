@@ -4,25 +4,41 @@ import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
 import './styles.css';
+import fists from './heroine-fists-40x40.png';
+import dagger from './heroine-dagger-40x40.png';
+import spear from './heroine-spear-40x40.png';
+
+export const faceDirection = facing => {
+  switch (facing) {
+    case 'north':
+      return -8;
+    case 'west':
+      return -9;
+    case 'south':
+      return -10;
+    case 'east':
+      return -11;
+    default:
+      return -10;
+  }
+};
+
+export const setSpriteSheet = weapon => {
+  switch (weapon.name) {
+    case 'Fists':
+      return fists;
+    case 'Dagger':
+      return dagger;
+    case 'Spear':
+      return spear;
+    default:
+      return spear;
+  }
+};
 
 class Player extends Component {
-  faceDirection(facing) {
-    switch (facing) {
-      case 'north':
-        return -8;
-      case 'west':
-        return -9;
-      case 'south':
-        return -10;
-      case 'east':
-        return -11;
-      default:
-        return -10;
-    }
-  }
   render() {
-    const { faceDirection } = this;
-    const { playerAnimation, facing } = this.props;
+    const { playerAnimation, facing, weapon } = this.props;
     let playerClass;
     playerAnimation.length
       ? (playerClass = `sprite ${playerAnimation[playerAnimation.length - 1]}-${facing}`)
@@ -31,9 +47,10 @@ class Player extends Component {
       <div
         className={playerClass}
         style={{
+          backgroundImage: `url(${setSpriteSheet(weapon)})`,
           backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`,
           height: c.SPRITE_SIZE,
-          width: c.SPRITE_SIZE
+          width: c.SPRITE_SIZE,
         }}
       />
     );
@@ -42,11 +59,13 @@ class Player extends Component {
 
 Player.propTypes = {
   playerAnimation: PropTypes.arrayOf(PropTypes.string),
-  facing: PropTypes.string
+  facing: PropTypes.string,
+  weapon: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = ({ animation }) => ({
-  playerAnimation: animation.player
+const mapStateToProps = ({ animation, player }) => ({
+  playerAnimation: animation.player,
+  weapon: player.weapon,
 });
 
 export default connect(mapStateToProps, null)(Player);
