@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as a from '../actions/';
+import * as c from '../constants/settings';
 import PropTypes from 'prop-types';
 
 import Cell from '../components/Cell/';
@@ -16,13 +17,24 @@ class Game extends Component {
 
     // Inititalize
     this.props.next_level();
-    window.addEventListener('keydown', e => {
-      e.preventDefault();
-      this.handleKeyPress(e);
-    });
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.getTargetObj = this.getTargetObj.bind(this);
+    this.listenFunc = this.listenFunc.bind(this);
+    this.placeholderFunc = this.placeholderFunc.bind(this);
+  }
+  placeholderFunc(e) {
+    e.preventDefault();
+  }
+  listenFunc(e) {
+    // This disables player_input keys for `ANIMATION_DURATION`
+    // between keydowns so animations don't stack weirdly
+    this.handleKeyPress(e);
+    window.removeEventListener('keydown', this.listenFunc);
+
+    setTimeout(() => {
+      window.addEventListener('keydown', this.listenFunc);
+    }, c.ANIMATION_DURATION);
   }
   handleKeyPress(e) {
     const { change_weapon } = this.props;
@@ -76,10 +88,17 @@ class Game extends Component {
     return targetObj;
   }
   componentDidMount() {
+    // Listen for player input
+    window.addEventListener('keydown', this.listenFunc);
+
+    // If the player is holding down a key while listenFunc is disabled,
+    // don't start performing default operations like moving the window
+    window.addEventListener('keydown', this.placeholderFunc);
     setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
   }
   componentWillUnmount() {
-    window.removeEventListener('keydown', e => this.handleKeyPress(e));
+    window.removeEventListener('keydown', this.listenFunc);
+    window.removeEventListener('keydown', this.placeholderFunc);
   }
   render() {
     const { gridData, messages, player } = this.props;
