@@ -3,6 +3,35 @@
   position: 'absolute';
 }
 
+.attack-east {
+  animation: westSpearThrust 0.4s steps(7) 1;
+}
+.attack-north {
+  animation: westSpearThrust 0.4s steps(7) 1;
+}
+.attack-south {
+  animation: westSpearThrust 0.4s steps(7) 1;
+}
+
+.attack-west {
+  animation: westSpearThrust 0.4s steps(7) 1;
+}
+@keyframes westSpearThrust {
+  0% {
+    background-position: 0px -200px;
+    transform: translateX(0);
+  }
+  50% {
+    /*background-position: -160px -200px;*/
+    transform: translateX(-25px);
+  }
+  100% {
+    background-position: -280px -200px;
+    transform: translateX(0);
+  }
+}
+
+
 .attack-west {
   animation: westSpearThrust 0.4s steps(7) 1;
 }
