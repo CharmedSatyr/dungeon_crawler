@@ -2,7 +2,8 @@ import React from 'react';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
-import spear from './orc-spear-40x40.png';
+import orcSpear from './orc-spear-40x40.png';
+import boss from './boss-sprite-40x40.png';
 
 export const faceDirection = facing => {
   switch (facing) {
@@ -26,10 +27,20 @@ export const setBackgroundPosition = (health, facing) => {
   return `${c.SPRITE_SIZE * -5}px ${c.SPRITE_SIZE * 1}px`;
 };
 
+export const setBackgroundImage = type => {
+  if (type === 'orc') {
+    return orcSpear;
+  }
+
+  if (type === 'boss') {
+    return boss;
+  }
+};
+
 const Enemy = ({ facing, stats }) => (
   <div
     style={{
-      backgroundImage: `url('${spear}')`,
+      backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
       backgroundPosition: setBackgroundPosition(stats.health, facing),
       height: c.SPRITE_SIZE,
       marginTop: -5,
