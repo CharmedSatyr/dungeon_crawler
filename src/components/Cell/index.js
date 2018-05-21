@@ -80,6 +80,11 @@ export const display = payload => {
   if (payload.player) {
     return <Player facing={payload.player.facing} />;
   }
+
+  if (payload.boss) {
+    return <div>BOSS</div>;
+  }
+
   return null;
 };
 
