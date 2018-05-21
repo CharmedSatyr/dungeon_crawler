@@ -30,6 +30,7 @@ export const addEnemies = (data, pathType, probability) => {
       weapon: l.weapons.spear,
       facing: direction(),
       level: _.random(1, 5),
+      type: 'orc',
     };
     enemy.health = g.healthCalc(enemy.level);
 
@@ -48,12 +49,13 @@ export const addEnemies = (data, pathType, probability) => {
 export const addBoss = (data, pathType, level) => {
   let count = 0;
   for (let i = data.length - 1; i >= 0; i--) {
-    const boss = {
+    const enemy = {
       weapon: l.weapons.trident,
-      facing: direction(),
+      facing: 'west',
       level: _.random(7, 10),
+      type: 'boss',
     };
-    boss.health = g.healthCalc(boss.level);
+    enemy.health = g.healthCalc(enemy.level);
 
     // boss only appears on `level` 3
     if (
@@ -64,7 +66,7 @@ export const addBoss = (data, pathType, level) => {
     ) {
       count++;
       if (count === 2) {
-        data[i].payload = { boss };
+        data[i].payload = { enemy };
       }
     }
   }

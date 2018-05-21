@@ -23,12 +23,13 @@ describe('`addEnemies` populate grid reducer function', () => {
     expect(Array.isArray(p.addEnemies(data, pathType, probability))).toBeTruthy();
   });
 
-  it('should give data objects an `enemy` payload if `probability` is 1', () => {
+  it('should give data objects an `enemy` orc payload if `probability` is 1', () => {
     const enemy = {
       facing: expect.stringMatching(cardinalDirections),
       health: expect.any(Number),
       level: expect.any(Number),
       weapon: expect.any(Object),
+      type: 'orc',
     };
     const updatedData = [{ payload: { enemy }, type: pathType }];
     expect(p.addEnemies(data, pathType, 1)).toEqual(updatedData);
@@ -56,13 +57,14 @@ describe('`addBoss` populate grid reducer function', () => {
 
   it('should give the second to last data object with type: pathType a `boss` payload if `level` is 3', () => {
     const boss = {
-      facing: expect.stringMatching(cardinalDirections),
+      facing: 'west',
       health: expect.any(Number),
       level: expect.any(Number),
       weapon: expect.any(Object),
+      type: 'boss',
     };
     const updatedData = [
-      { payload: { boss: expect.objectContaining(boss) }, type: pathType },
+      { payload: { enemy: expect.objectContaining(boss) }, type: pathType },
       { payload: {}, type: pathType },
     ];
     expect(result).toEqual(updatedData);
@@ -306,7 +308,7 @@ describe('`populate` grid reducer function', () => {
     expect(result.data).toContainEqual(playerObj);
   });
 
-  it('should return `data` array that includes an object with a `portal` payload if the level is <3', () => {
+  it('should return `data` array that includes an object with a `portal` payload if the level is < 3', () => {
     const portalObj = {
       coordinates: { x: expect.any(Number), y: expect.any(Number) },
       index: expect.any(Number),
