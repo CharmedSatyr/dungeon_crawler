@@ -44,6 +44,43 @@ describe('`addEnemies` populate grid reducer function', () => {
   });
 });
 
+/*** addBoss ***/
+describe('`addBoss` populate grid reducer function', () => {
+  const data = [{ payload: {}, type: pathType }, { payload: {}, type: pathType }];
+  const level = 3;
+  const result = p.addBoss(data, pathType, level);
+
+  it('should return an array', () => {
+    expect(Array.isArray(result)).toBeTruthy();
+  });
+
+  it('should give the second to last data object with type: pathType a `boss` payload if `level` is 3', () => {
+    const boss = {
+      facing: expect.stringMatching(cardinalDirections),
+      health: expect.any(Number),
+      level: expect.any(Number),
+      weapon: expect.any(Object),
+    };
+    const updatedData = [
+      { payload: { boss: expect.objectContaining(boss) }, type: pathType },
+      { payload: {}, type: pathType },
+    ];
+    expect(result).toEqual(updatedData);
+  });
+
+  it('should not modify objects that already have payloads', () => {
+    const hasPayload = [
+      { payload: { thingy: 1 }, type: pathType },
+      { payload: { thingy: 1 }, type: pathType },
+    ];
+    expect(p.addBoss(hasPayload, pathType, level)).toEqual(hasPayload);
+  });
+
+  it('should not do anything if the level is 2 or less', () => {
+    expect(p.addBoss(data, pathType, 2)).toEqual(data);
+  });
+});
+
 /*** clearTheDoor ***/
 describe('`clearTheDoor` populate grid reducer function', () => {
   /*
@@ -149,22 +186,29 @@ describe('`addLoot` populate grid reducer function', () => {
 /*** addPortal ***/
 describe('`addPortal` populate grid reducer function', () => {
   const data = [{ payload: {}, type: pathType }, { payload: {}, type: pathType }];
-
-  const result = p.addPortal(data, pathType);
+  let level = 1;
+  const result = p.addPortal(data, pathType, level);
 
   it('should return an array', () => {
     expect(Array.isArray(result)).toBeTruthy();
   });
 
-  it('should give the second to last data object with type: pathType a `portal` payload', () => {
+  it('should give the second to last data object with type: pathType a `portal` payload if `level` is < 3', () => {
     const portal = { open: false };
     const updatedData = [{ payload: { portal }, type: pathType }, { payload: {}, type: pathType }];
     expect(result).toEqual(updatedData);
   });
 
   it('should not modify objects that already have payloads', () => {
-    const hasPayload = [{ payload: { thingy: 1 }, type: pathType }];
-    expect(p.addPortal(hasPayload, pathType)).toEqual(hasPayload);
+    const hasPayload = [
+      { payload: { thingy: 1 }, type: pathType },
+      { payload: { thingy: 1 }, type: pathType },
+    ];
+    expect(p.addPortal(hasPayload, pathType, level)).toEqual(hasPayload);
+  });
+
+  it('should not do anything if the level is 3 or higher', () => {
+    expect(p.addPortal(data, pathType, 3)).toEqual(data);
   });
 });
 
@@ -232,6 +276,7 @@ describe('`populate` grid reducer function', () => {
     { coordinates: { x: 2, y: 0 }, index: 2, payload: {}, type: pathType },
     { coordinates: { x: 3, y: 0 }, index: 3, payload: {}, type: pathType },
   ];
+  // parameters are `data`, `level`, `gridWidth`, `pathType`
   const result = populate(data, 1, 4, pathType);
 
   it('should return an object with `data` and `playerPosition` properties', () => {
@@ -261,7 +306,7 @@ describe('`populate` grid reducer function', () => {
     expect(result.data).toContainEqual(playerObj);
   });
 
-  it('should return `data` array that includes an object with a `portal` payload,', () => {
+  it('should return `data` array that includes an object with a `portal` payload if the level is <3', () => {
     const portalObj = {
       coordinates: { x: expect.any(Number), y: expect.any(Number) },
       index: expect.any(Number),
@@ -269,6 +314,7 @@ describe('`populate` grid reducer function', () => {
       type: pathType,
     };
     expect(result.data).toContainEqual(portalObj);
+    expect(populate(data, 3, 4, pathType)).not.toContainEqual(portalObj);
   });
 
   // Loot and Enemies are not guaranteed

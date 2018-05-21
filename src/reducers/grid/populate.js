@@ -45,6 +45,32 @@ export const addEnemies = (data, pathType, probability) => {
   return data;
 };
 
+export const addBoss = (data, pathType, level) => {
+  let count = 0;
+  for (let i = data.length - 1; i >= 0; i--) {
+    const boss = {
+      weapon: l.weapons.trident,
+      facing: direction(),
+      level: _.random(7, 10),
+    };
+    boss.health = g.healthCalc(boss.level);
+
+    // boss only appears on `level` 3
+    if (
+      level === 3 &&
+      Object.keys(data[i].payload).length === 0 &&
+      data[i].type === pathType &&
+      count <= 2
+    ) {
+      count++;
+      if (count === 2) {
+        data[i].payload = { boss };
+      }
+    }
+  }
+  return data;
+};
+
 /*** Loot functions ***/
 // Don't block a door with loot
 export const clearTheDoor = (data, i, gridWidth, pathType) => {
@@ -163,7 +189,7 @@ export const addLoot = (data, gridWidth, pathType, probability) => {
 };
 
 /*** ADD PORTAL ***/
-export const addPortal = (data, pathType) => {
+export const addPortal = (data, pathType, level) => {
   let count = 0;
   for (let i = data.length - 1; i >= 0; i--) {
     // portal
@@ -171,7 +197,7 @@ export const addPortal = (data, pathType) => {
 
     if (Object.keys(data[i].payload).length === 0 && data[i].type === pathType && count <= 2) {
       count++;
-      if (count === 2) {
+      if (count === 2 && level < 3) {
         data[i].payload = { portal };
       }
     }
@@ -212,11 +238,14 @@ const populate = (data, level, gridWidth = c.GRID_WIDTH, pathType = tileTypes(le
   // Add enemies
   data = addEnemies(data, pathType, 0.025);
 
+  // Add the boss just west of the southeast corner for level 3
+  data = addBoss(data, pathType, level);
+
   // Add loot
   data = addLoot(data, gridWidth, pathType, 0.02);
 
-  // Add portal just west of the southeast corner
-  data = addPortal(data, pathType);
+  // Add portal just west of the southeast corner for levels 1-2
+  data = addPortal(data, pathType, level);
 
   // Position player just east of the northwest corner
   const p = addPlayer(data, pathType);
