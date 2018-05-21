@@ -29,6 +29,10 @@ const setup = () => {
   return { props, enemy };
 };
 
+describe('`setBackgroundImage` Enemy component function', () => {
+  it('should do something...');
+});
+
 describe('Enemy component', () => {
   it('should render without crashing', () => {
     const { enemy } = setup();
