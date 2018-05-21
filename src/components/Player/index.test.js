@@ -17,16 +17,28 @@ describe('`faceDirection` Player component function', () => {
 });
 
 describe('`setSpriteSheet` Player component function', () => {
-  it('should return a spritesheet variable based on the `weapon` name received as a prop', () => {
+  it('should return a spritesheet variable based on the `weapon` argument `name` property', () => {
     expect(p.setSpriteSheet(l.weapons.fists.name)).toBeDefined();
     expect(p.setSpriteSheet(l.weapons.dagger.name)).toBeDefined();
     expect(p.setSpriteSheet(l.weapons.spear.name)).toBeDefined();
   });
 });
 
+describe('`setPlayerClass` Player component function', () => {
+  it('should return `sprite` if `playerAnimation` is empty', () => {
+    expect(p.setPlayerClass('', 'south')).toBe('sprite');
+    expect(p.setPlayerClass('', 'test')).toBe('sprite');
+  });
+
+  it('should return a className based on the `playerAnimation` and `facing` arguments if the former is nonempty', () => {
+    expect(p.setPlayerClass('move', 'west')).toBe('sprite move-west');
+    expect(p.setPlayerClass('test', 'example')).toBe('sprite test-example');
+  });
+});
+
 describe('Player component', () => {
   const initialState = {
-    animation: { player: [] },
+    animation: { player: '' },
     player: {
       weapon: l.weapons.fists,
     },

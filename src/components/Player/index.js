@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
@@ -36,27 +36,25 @@ export const setSpriteSheet = weapon => {
   }
 };
 
-class Player extends Component {
-  render() {
-    const { playerAnimation, facing, weapon } = this.props;
-    console.log('playerAnimation:', playerAnimation);
-    let playerClass;
-    playerAnimation.length
-      ? (playerClass = `sprite ${playerAnimation}-${facing}`)
-      : (playerClass = 'sprite');
-    return (
-      <div
-        className={playerClass}
-        style={{
-          backgroundImage: `url(${setSpriteSheet(weapon)})`,
-          backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`,
-          height: c.SPRITE_SIZE,
-          width: c.SPRITE_SIZE,
-        }}
-      />
-    );
+export const setPlayerClass = (playerAnimation, facing) => {
+  if (playerAnimation) {
+    return `sprite ${playerAnimation}-${facing}`;
+  } else {
+    return 'sprite';
   }
-}
+};
+
+const Player = ({ playerAnimation, facing, weapon }) => (
+  <div
+    className={setPlayerClass(playerAnimation, facing)}
+    style={{
+      backgroundImage: `url(${setSpriteSheet(weapon)})`,
+      backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`,
+      height: c.SPRITE_SIZE,
+      width: c.SPRITE_SIZE,
+    }}
+  />
+);
 
 Player.propTypes = {
   facing: PropTypes.string,
