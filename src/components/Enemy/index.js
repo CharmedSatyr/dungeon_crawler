@@ -2,7 +2,7 @@ import React from 'react';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
-import spear from './enemy-spear-40x40.png';
+import spear from './orc-spear-40x40.png';
 
 export const faceDirection = facing => {
   switch (facing) {
@@ -46,4 +46,5 @@ Enemy.propTypes = {
     health: PropTypes.number.isRequired,
   }),
 };
+
 export default Enemy;
