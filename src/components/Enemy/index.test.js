@@ -14,7 +14,23 @@ describe('`faceDirection` Enemy component function', () => {
 });
 
 describe('`setBackgroundPosition` Enemy component function', () => {
-  it('should do something...');
+  it('should return a CSS background position', () => {
+    expect(e.setBackgroundPosition(null, null)).toMatch(/\d+px \d+px/);
+  });
+});
+
+describe('`setBackgroundImage` Enemy component function', () => {
+  it('should be defined for `orc` type', () => {
+    expect(e.setBackgroundImage('orc')).toBeDefined();
+  });
+
+  it('should be defined for `boss` type', () => {
+    expect(e.setBackgroundImage('boss')).toBeDefined();
+  });
+
+  it('should be undefined for `kitty` type', () => {
+    expect(e.setBackgroundImage('kitty')).toBeUndefined();
+  });
 });
 
 const setup = () => {
@@ -28,10 +44,6 @@ const setup = () => {
 
   return { props, enemy };
 };
-
-describe('`setBackgroundImage` Enemy component function', () => {
-  it('should do something...');
-});
 
 describe('Enemy component', () => {
   it('should render without crashing', () => {
