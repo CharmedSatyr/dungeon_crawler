@@ -23,7 +23,7 @@ You can get feedback on your project by sharing it with your friends on Facebook
 ----
 
 ### Resources
-All art resized to 40px x 40px
+All art adapted from sources
 
 Grass
 https://opengameart.org/content/tileable-mowed-grass-textures-256x256
