@@ -3,17 +3,88 @@
   position: 'absolute';
 }
 
-.attack-east {
-  animation: eastSpearThrust 0.4s steps(7) 1;
+/*** Slash Attacks ***/
+.slash-attack-east {
+  animation: eastSlash 0.4s steps(5) 1;
 }
-@keyframes eastSpearThrust {
+@keyframes eastSlash {
+  0% {
+    background-position: 0px -600px;
+    transform: translateX(0);
+  }
+  50% {
+    /*background-position: -160px -200px;*/
+    transform: translateX(22px);
+  }
+  100% {
+    background-position: -200px -600px;
+    transform: translateX(0);
+  }
+}
+
+.slash-attack-north {
+  animation: northSlash 0.4s steps(5) 1;
+}
+@keyframes northSlash {
+  0% {
+    background-position: 0px -480px;
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-22px);
+  }
+  100% {
+    background-position: -200px -480px;
+    transform: translateY(0);
+  }
+}
+
+.slash-attack-south {
+  animation: southSlash 0.4s steps(5) 1;
+}
+@keyframes southSlash {
+  0% {
+    background-position: 0px -560px;
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(22px);
+  }
+  100% {
+    background-position: -200px -560px;
+    transform: translateY(0);
+  }
+}
+
+.slash-attack-west {
+  animation: westSlash 0.4s steps(5) 1;
+}
+@keyframes westSlash {
+  0% {
+    background-position: 0px -520px;
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-22px);
+  }
+  100% {
+    background-position: -200px -520px;
+    transform: translateX(0);
+  }
+}
+
+/*** Thrust Attacks ***/
+.thrust-attack-east {
+  animation: eastThrust 0.4s steps(7) 1;
+}
+@keyframes eastThrust {
   0% {
     background-position: 0px -280px;
     transform: translateX(0);
   }
   50% {
     /*background-position: -160px -200px;*/
-    transform: translateX(25px);
+    transform: translateX(22px);
   }
   100% {
     background-position: -280px -280px;
@@ -21,17 +92,17 @@
   }
 }
 
-.attack-north {
-  animation: northSpearThrust 0.4s steps(7) 1;
+.thrust-attack-north {
+  animation: northThrust 0.4s steps(7) 1;
 }
-@keyframes northSpearThrust {
+@keyframes northThrust {
   0% {
     background-position: 0px -160px;
     transform: translateY(0);
   }
   50% {
     /*background-position: -160px -200px;*/
-    transform: translateY(-25px);
+    transform: translateY(-22px);
   }
   100% {
     background-position: -280px -160px;
@@ -39,17 +110,17 @@
   }
 }
 
-.attack-south {
-  animation: southSpearThrust 0.4s steps(7) 1;
+.thrust-attack-south {
+  animation: southThrust 0.4s steps(7) 1;
 }
-@keyframes southSpearThrust {
+@keyframes southThrust {
   0% {
     background-position: 0px -240px;
     transform: translateY(0);
   }
   50% {
     /*background-position: -160px -200px;*/
-    transform: translateY(25px);
+    transform: translateY(22px);
   }
   100% {
     background-position: -280px -240px;
@@ -57,17 +128,17 @@
   }
 }
 
-.attack-west {
-  animation: westSpearThrust 0.4s steps(7) 1;
+.thrust-attack-west {
+  animation: westThrust 0.4s steps(7) 1;
 }
-@keyframes westSpearThrust {
+@keyframes westThrust {
   0% {
     background-position: 0px -200px;
     transform: translateX(0);
   }
   50% {
     /*background-position: -160px -200px;*/
-    transform: translateX(-25px);
+    transform: translateX(-22px);
   }
   100% {
     background-position: -280px -200px;
@@ -75,11 +146,10 @@
   }
 }
 
-/*** EAST ***/
+/*** Movement ***/
 .move-east {
   animation: moveEast 0.4s steps(8) 1;
 }
-
 @keyframes moveEast {
   from {
     background-position: 0 -440px;
@@ -90,11 +160,9 @@
   }
 }
 
-/*** NORTH ***/
 .move-north {
   animation: moveNorth 0.4s steps(8) 1;
 }
-
 @keyframes moveNorth {
   from {
     background-position: 0 -320px;
@@ -105,11 +173,9 @@
   }
 }
 
-/*** SOUTH ***/
 .move-south {
   animation: moveSouth 0.4s steps(8) 1;
 }
-
 @keyframes moveSouth {
   from {
     background-position: 0 -400px;
@@ -120,11 +186,9 @@
   }
 }
 
-/*** WEST ***/
 .move-west {
   animation: moveWest 0.4s steps(8) 1;
 }
-
 @keyframes moveWest {
   from {
     background-position: 0 -360px;

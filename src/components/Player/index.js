@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
+import * as l from '../../constants/loot';
 
 import './styles.css';
 import fists from './heroine-fists-40x40.png';
@@ -23,32 +24,45 @@ export const faceDirection = facing => {
   }
 };
 
-export const setSpriteSheet = weapon => {
-  switch (weapon.name) {
-    case 'Fists':
+export const setSpriteSheet = weaponName => {
+  switch (weaponName) {
+    case l.weapons.fists.name:
       return fists;
-    case 'Dagger':
+    case l.weapons.dagger.name:
       return dagger;
-    case 'Spear':
+    case l.weapons.spear.name:
       return spear;
+    // case 'Dragon Spear':
+    // return spear;
     default:
       return spear;
   }
 };
 
-export const setPlayerClass = (playerAnimation, facing) => {
-  if (playerAnimation) {
-    return `sprite ${playerAnimation}-${facing}`;
+export const setPlayerClass = (weaponName, playerAnimation, facing) => {
+  if (playerAnimation === 'attack') {
+    switch (weaponName) {
+      case l.weapons.fists.name:
+        return `sprite slash-attack-${facing}`;
+      case l.weapons.dagger.name:
+        return `sprite slash-attack-${facing}`;
+      case l.weapons.spear.name:
+        return `sprite thrust-attack-${facing}`;
+      default:
+        return `sprite slash-attack-${facing}`;
+    }
+  } else if (playerAnimation === 'move') {
+    return `sprite move-${facing}`;
   } else {
     return 'sprite';
   }
 };
 
-const Player = ({ playerAnimation, facing, weapon }) => (
+const Player = ({ playerAnimation, facing, weaponName }) => (
   <div
-    className={setPlayerClass(playerAnimation, facing)}
+    className={setPlayerClass(weaponName, playerAnimation, facing)}
     style={{
-      backgroundImage: `url(${setSpriteSheet(weapon)})`,
+      backgroundImage: `url(${setSpriteSheet(weaponName)})`,
       backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`,
       height: c.SPRITE_SIZE,
       width: c.SPRITE_SIZE,
@@ -59,12 +73,12 @@ const Player = ({ playerAnimation, facing, weapon }) => (
 Player.propTypes = {
   facing: PropTypes.string,
   playerAnimation: PropTypes.string,
-  weapon: PropTypes.object.isRequired,
+  weaponName: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = ({ animation, player }) => ({
   playerAnimation: animation.player,
-  weapon: player.weapon,
+  weaponName: player.weapon.name,
 });
 
 export default connect(mapStateToProps, null)(Player);

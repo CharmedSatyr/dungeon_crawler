@@ -17,7 +17,7 @@ describe('`faceDirection` Player component function', () => {
 });
 
 describe('`setSpriteSheet` Player component function', () => {
-  it('should return a spritesheet variable based on the `weapon` argument `name` property', () => {
+  it('should return a spritesheet variable based on the `weaponName` argument', () => {
     expect(p.setSpriteSheet(l.weapons.fists.name)).toBeDefined();
     expect(p.setSpriteSheet(l.weapons.dagger.name)).toBeDefined();
     expect(p.setSpriteSheet(l.weapons.spear.name)).toBeDefined();
@@ -26,13 +26,24 @@ describe('`setSpriteSheet` Player component function', () => {
 
 describe('`setPlayerClass` Player component function', () => {
   it('should return `sprite` if `playerAnimation` is empty', () => {
-    expect(p.setPlayerClass('', 'south')).toBe('sprite');
-    expect(p.setPlayerClass('', 'test')).toBe('sprite');
+    expect(p.setPlayerClass(null, null, 'south')).toBe('sprite');
+    expect(p.setPlayerClass(null, '', 'test')).toBe('sprite');
   });
 
-  it('should return a className based on the `playerAnimation` and `facing` arguments if the former is nonempty', () => {
-    expect(p.setPlayerClass('move', 'west')).toBe('sprite move-west');
-    expect(p.setPlayerClass('test', 'example')).toBe('sprite test-example');
+  it('should return a className based on the `weapon`, `playerAnimation`, and `facing` arguments if `playerAnimation` is `attack`', () => {
+    expect(p.setPlayerClass(l.weapons.fists.name, 'attack', 'east')).toBe(
+      'sprite slash-attack-east'
+    );
+    expect(p.setPlayerClass(l.weapons.dagger.name, 'attack', 'west')).toBe(
+      'sprite slash-attack-west'
+    );
+    expect(p.setPlayerClass(l.weapons.spear.name, 'attack', 'south')).toBe(
+      'sprite thrust-attack-south'
+    );
+  });
+
+  it('should return a className based on the `playerAnimation` and `facing` arguments if `playerAnimation` is `move`', () => {
+    expect(p.setPlayerClass(null, 'move', 'east')).toBe('sprite move-east');
   });
 });
 
