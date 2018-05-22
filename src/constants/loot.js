@@ -23,7 +23,8 @@ class Weapon {
 weapons.fists = new Weapon('Fists', 1, 3);
 weapons.dagger = new Weapon('Dagger', 3, 5);
 weapons.spear = new Weapon('Spear', 4, 9);
-weapons.trident = new Weapon('Dragon Trident', 7, 10);
+weapons.dragonSpear = new Weapon('Dragon Spear', 7, 10);
+weapons.trident = new Weapon('Trident', 6, 11);
 
 // Barrel constructor
 class Barrel {

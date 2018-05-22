@@ -8,6 +8,7 @@ import './styles.css';
 import fists from './heroine-fists-40x40.png';
 import dagger from './heroine-dagger-40x40.png';
 import spear from './heroine-spear-40x40.png';
+import dragonSpear from './heroine-dragonSpear-40x40.png';
 
 export const faceDirection = facing => {
   switch (facing) {
@@ -32,8 +33,8 @@ export const setSpriteSheet = weaponName => {
       return dagger;
     case l.weapons.spear.name:
       return spear;
-    // case 'Dragon Spear':
-    // return spear;
+    case l.weapons.dragonSpear.name:
+      return dragonSpear;
     default:
       return spear;
   }

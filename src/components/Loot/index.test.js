@@ -22,6 +22,11 @@ describe('`setVariety` Loot component function', () => {
     expect(lc.setBGPosition(variety)).toEqual(lc.spearPosition);
   });
 
+  it('should return a `dragonSpear` position if `variety` has a dragon spear payload', () => {
+    const variety = { item: l.weapons.dragonSpear };
+    expect(lc.setBGPosition(variety)).toEqual(lc.dragonSpearPosition);
+  });
+
   it('should return a `warningSquare` position in any other case', () => {
     const variety = 'oops!';
     expect(lc.setBGPosition(variety)).toEqual(lc.warningSquarePosition);

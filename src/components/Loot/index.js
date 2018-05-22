@@ -8,6 +8,7 @@ import tiles from './Loot.png';
 export const emptyBarrelPosition = '0px 0px';
 export const fullBarrelPosition = '-40px 0px';
 export const spearPosition = '0px -40px';
+export const dragonSpearPosition = '-40px -40px';
 export const warningSquarePosition = '0px 40px';
 
 export const setBGPosition = variety => {
@@ -21,6 +22,10 @@ export const setBGPosition = variety => {
 
   if (variety.item && variety.item === l.weapons.spear) {
     return spearPosition;
+  }
+
+  if (variety.item && variety.item === l.weapons.dragonSpear) {
+    return dragonSpearPosition;
   }
 
   return warningSquarePosition;
