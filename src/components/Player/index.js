@@ -63,9 +63,9 @@ const Player = ({ playerAnimation, facing, weaponName }) => (
     className={setPlayerClass(weaponName, playerAnimation, facing)}
     style={{
       backgroundImage: `url(${setSpriteSheet(weaponName)})`,
-      backgroundPosition: `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`,
-      height: c.SPRITE_SIZE,
-      width: c.SPRITE_SIZE,
+      backgroundPosition: `0px ${c.CELL_SIDE * faceDirection(facing)}px`,
+      height: c.CELL_SIDE,
+      width: c.CELL_SIDE,
     }}
   />
 );

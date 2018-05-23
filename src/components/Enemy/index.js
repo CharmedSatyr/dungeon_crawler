@@ -2,8 +2,8 @@ import React from 'react';
 import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 
-import orcSpear from './orc-spear-40x40.png';
-import boss from './boss-sprite-40x40.png';
+import orcSpear from './orc-spear.png';
+import boss from './boss-sprite.png';
 
 export const faceDirection = facing => {
   switch (facing) {
@@ -22,9 +22,9 @@ export const faceDirection = facing => {
 
 export const setBackgroundPosition = (health, facing) => {
   if (health > 0) {
-    return `0px ${c.SPRITE_SIZE * faceDirection(facing)}px`;
+    return `0 ${c.CELL_SIDE * faceDirection(facing)}px`;
   }
-  return `${c.SPRITE_SIZE * -5}px ${c.SPRITE_SIZE * 1}px`;
+  return `${c.CELL_SIDE * -5}px ${c.CELL_SIDE}px`;
 };
 
 export const setBackgroundImage = type => {
@@ -42,11 +42,11 @@ const Enemy = ({ facing, stats }) => (
     style={{
       backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
       backgroundPosition: setBackgroundPosition(stats.health, facing),
-      height: c.SPRITE_SIZE,
-      marginTop: -5,
+      height: c.CELL_SIDE,
+      marginTop: -7,
       position: 'absolute',
       transform: 'scale(1.2,1.2)', // Enemies bigger than hero
-      width: c.SPRITE_SIZE,
+      width: c.CELL_SIDE,
     }}
   />
 );

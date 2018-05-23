@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 
 import tiles from './Loot.png';
 
-export const emptyBarrelPosition = '0px 0px';
-export const fullBarrelPosition = '-40px 0px';
-export const spearPosition = '0px -40px';
-export const dragonSpearPosition = '-40px -40px';
-export const warningSquarePosition = '0px 40px';
+export const emptyBarrelPosition = '0 0';
+export const fullBarrelPosition = `${-c.CELL_SIDE}px 0`;
+export const spearPosition = `0 ${-c.CELL_SIDE}px`;
+export const dragonSpearPosition = `${-c.CELL_SIDE}px ${-c.CELL_SIDE}px`;
+export const warningSquarePosition = `0 ${-c.CELL_SIDE}px`;
 
 export const setBGPosition = variety => {
   if (variety === l.fullBarrel) {
