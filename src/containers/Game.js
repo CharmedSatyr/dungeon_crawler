@@ -5,11 +5,11 @@ import * as c from '../constants/settings';
 import * as h from '../actions/index.helpers';
 import PropTypes from 'prop-types';
 
-import Cell from '../components/Cell';
+import Cell from '../components/Cell/';
 import Map from '../components/Map';
 import Messages from '../components/Messages';
 import PlayerPanel from '../components/PlayerPanel';
-import Start from '../components/Start';
+import Start from '../components/Start/';
 
 class Game extends Component {
   constructor(props) {
@@ -91,9 +91,6 @@ class Game extends Component {
     // If the player is holding down a key while listenFunc is disabled,
     // don't start performing default operations like moving the window
     window.addEventListener('keydown', this.placeholderFunc);
-    if (this.props.gridData.length) {
-      setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
-    }
   }
   componentWillUnmount() {
     window.removeEventListener('keydown', this.listenFunc);
@@ -115,7 +112,16 @@ class Game extends Component {
       </div>
     );
 
-    return this.props.gridData.length ? game : <Start fn={this.props.next_level} />;
+    return this.props.gridData.length ? (
+      game
+    ) : (
+      <Start
+        fn={() => {
+          this.props.next_level();
+          setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
+        }}
+      />
+    );
   }
 }
 
