@@ -2,22 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as a from '../actions/';
 import * as c from '../constants/settings';
+import * as h from '../actions/index.helpers';
 import PropTypes from 'prop-types';
 
-import Cell from '../components/Cell/';
+import Cell from '../components/Cell';
 import Map from '../components/Map';
 import Messages from '../components/Messages';
 import PlayerPanel from '../components/PlayerPanel';
-
-import * as h from '../actions/index.helpers';
+import Start from '../components/Start';
 
 class Game extends Component {
   constructor(props) {
     super(props);
-
-    // Inititalize
-    this.props.next_level();
-
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.getTargetObj = this.getTargetObj.bind(this);
     this.listenFunc = this.listenFunc.bind(this);
@@ -95,7 +91,9 @@ class Game extends Component {
     // If the player is holding down a key while listenFunc is disabled,
     // don't start performing default operations like moving the window
     window.addEventListener('keydown', this.placeholderFunc);
-    setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
+    if (this.props.gridData.length) {
+      setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
+    }
   }
   componentWillUnmount() {
     window.removeEventListener('keydown', this.listenFunc);
@@ -109,13 +107,15 @@ class Game extends Component {
       <Cell key={index} payload={item.payload} type={item.type} />
     ));
 
-    return (
+    const game = (
       <div>
         <PlayerPanel stats={player} />
         <Messages messages={messages} />
         <Map cells={cells} />
       </div>
     );
+
+    return this.props.gridData.length ? game : <Start fn={this.props.next_level} />;
   }
 }
 
