@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import * as l from '../../constants/loot';
 
 import './styles.css';
-import fists from './heroine-fists-40x40.png';
-import dagger from './heroine-dagger-40x40.png';
-import spear from './heroine-spear-40x40.png';
-import dragonSpear from './heroine-dragonSpear-40x40.png';
+import fists from './alt-heroine-fists.png';
+import dagger from './alt-heroine-dagger.png';
+import spear from './alt-heroine-spear.png';
+import dragonSpear from './alt-heroine-dragonSpear.png';
 
 export const faceDirection = facing => {
   switch (facing) {
