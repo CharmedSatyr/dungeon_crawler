@@ -1,0 +1,10 @@
+@import '_variables';
+@import '_mixins';
+@import '_player';
+
+body {
+  background: #222;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}

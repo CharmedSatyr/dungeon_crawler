@@ -4,7 +4,6 @@ import * as c from '../../constants/settings';
 import PropTypes from 'prop-types';
 import * as l from '../../constants/loot';
 
-import './styles.css';
 import fists from './alt-heroine-fists.png';
 import dagger from './alt-heroine-dagger.png';
 import spear from './alt-heroine-spear.png';
