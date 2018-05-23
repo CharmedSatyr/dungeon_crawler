@@ -7,25 +7,25 @@ import Loot from '../Loot';
 import Player from '../Player';
 import './styles.css';
 
-import tiles from './dungeon_tileset_40x40.png';
+import tiles from './dungeon_tileset_64x64.png';
 
 /*** Passable ***/
 // Level 1
-export const dirtPath = '-160px -160px';
+export const dirtPath = `${-4 * c.CELL_SIDE}px ${-4 * c.CELL_SIDE}px`;
 // Level 2
-export const stonePath = '-40px -120px';
+export const stonePath = `${-c.CELL_SIDE}px ${-3 * c.CELL_SIDE}px`;
 
 /*** Impassable ***/
 // Level 1
-export const vines = '-120px -160px';
-// const thick = '-80px -240px';
+export const vines = `${-3 * c.CELL_SIDE}px ${-4 * c.CELL_SIDE}px`;
+// const thick = `${-2 * c.CELL_SIDE}px ${-6 * c.CELL_SIDE}px`;
 
 // Level 2
-export const rock1 = '-160px 0px';
-// const peeper1 = '-200px 0px';
+export const rock1 = `${-4 * c.CELL_SIDE}px 0px`;
+// const peeper1 =`${-5 * c.CELL_SIDE}px 0px`;
 
 // Level 3
-export const lava = '-240px -40px';
+export const lava = `${-6 * c.CELL_SIDE}px ${-c.CELL_SIDE}px`;
 
 // Set appropriate background tile based on Cell type
 export const cellBG = type => {
@@ -46,8 +46,8 @@ export const cellBG = type => {
 };
 
 const Portal = ({ open }) => {
-  const openDoor = '-80px -120px';
-  const closedDoor = '-120px -120px';
+  const openDoor = `${-2 * c.CELL_SIDE}px ${-3 * c.CELL_SIDE}px`;
+  const closedDoor = `${-3 * c.CELL_SIDE}px ${-3 * c.CELL_SIDE}px`;
   return (
     <div
       style={{
