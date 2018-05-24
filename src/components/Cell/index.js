@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import Enemy from '../Enemy';
 import Loot from '../Loot';
 import Player from '../Player';
-import './styles.css';
 
 import tiles from './dungeon_tileset_64x64.png';
 
