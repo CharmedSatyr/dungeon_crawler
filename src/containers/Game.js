@@ -97,12 +97,23 @@ class Game extends Component {
     window.removeEventListener('keydown', this.placeholderFunc);
   }
   render() {
-    const { gridData, messages, player } = this.props;
+    const { gridData, messages, player, playerPosition } = this.props;
 
     // Create an array of Cells containing data from the store
-    const cells = gridData.map((item, index) => (
-      <Cell key={index} payload={item.payload} type={item.type} />
-    ));
+    const cells = gridData
+      // .filter(
+      //   (item, index) =>
+      //     index === playerPosition.index ||
+      //     index === playerPosition.index + 1 ||
+      //     index === playerPosition.index - 1 ||
+      //     index === playerPosition.index + 2 ||
+      //     index === playerPosition.index - 2 ||
+      //     index === playerPosition.index + c.GRID_WIDTH ||
+      //     index === playerPosition.index - c.GRID_WIDTH ||
+      //     index === playerPosition.index + c.GRID_WIDTH + 1 ||
+      //     index === playerPosition.index - c.GRID_WIDTH + 1
+      // )
+      .map((item, index) => <Cell key={index} payload={item.payload} type={item.type} />);
 
     const game = (
       <div>
