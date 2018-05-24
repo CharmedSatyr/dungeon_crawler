@@ -3,7 +3,7 @@ import * as c from '../../constants/settings';
 import * as l from '../../constants/loot';
 import PropTypes from 'prop-types';
 
-import tiles from './Loot.png';
+import tiles from '../../resources/loot/Loot.png';
 
 export const emptyBarrelPosition = '0 0';
 export const fullBarrelPosition = `${-c.CELL_SIDE}px 0`;

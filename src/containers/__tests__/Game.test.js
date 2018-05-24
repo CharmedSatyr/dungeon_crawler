@@ -1,6 +1,6 @@
 import React from 'react';
-import Game from './Game';
-import * as l from '../constants/loot';
+import Game from '../Game';
+import * as l from '../../constants/loot';
 
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
