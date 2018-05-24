@@ -1,12 +1,12 @@
 import React from 'react';
-import * as c from '../../constants/settings';
+import * as c from '../constants/settings';
 
-import heroine from '../../resources/start/Heroine.png';
-import few from '../../resources/start/Few.png';
-import boss from '../../resources/start/Boss.png';
-import spacebar from '../../resources/start/spacebar.png';
-import wasd from '../../resources/start/wasd.png';
-import arrowkeys from '../../resources/start/arrowkeys.png';
+import heroine from '../resources/start/Heroine.png';
+import few from '../resources/start/Few.png';
+import boss from '../resources/start/Boss.png';
+import spacebar from '../resources/start/spacebar.png';
+import wasd from '../resources/start/wasd.png';
+import arrowkeys from '../resources/start/arrowkeys.png';
 
 const Start = ({ fn }) => (
   <div

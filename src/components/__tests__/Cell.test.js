@@ -1,20 +1,22 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Cell from './index';
-import * as i from './index';
+import * as c from '../Cell';
+
+import Cell from '../Cell';
+import Portal from '../Cell';
+
 import Enemy from '../Enemy';
 import Loot from '../Loot';
-import Portal from './index';
 import Player from '../Player';
 
 describe('`cellBG` Cell component function', () => {
   it('should return a `backgroundPosition` dependent on the `type` argument', () => {
-    expect(i.cellBG('dirtPath')).toBe(i.dirtPath);
-    expect(i.cellBG('stonePath')).toBe(i.stonePath);
-    expect(i.cellBG('vines')).toBe(i.vines);
-    expect(i.cellBG('rock1')).toBe(i.rock1);
-    expect(i.cellBG('lava')).toBe(i.lava);
-    expect(i.cellBG(undefined)).toBe(i.vines);
+    expect(c.cellBG('dirtPath')).toBe(c.dirtPath);
+    expect(c.cellBG('stonePath')).toBe(c.stonePath);
+    expect(c.cellBG('vines')).toBe(c.vines);
+    expect(c.cellBG('rock1')).toBe(c.rock1);
+    expect(c.cellBG('lava')).toBe(c.lava);
+    expect(c.cellBG(undefined)).toBe(c.vines);
   });
 });
 
@@ -46,4 +48,3 @@ describe('`Cell` component', () => {
 //    //    props.player
 //    //      ? expect(cell.find('.player')).toHaveLength(1)
 //    //      : expect(cell.find('.player')).toHaveLength(0);
-//  //  });

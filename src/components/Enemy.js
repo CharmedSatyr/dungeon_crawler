@@ -1,9 +1,9 @@
 import React from 'react';
-import * as c from '../../constants/settings';
+import * as c from '../constants/settings';
 import PropTypes from 'prop-types';
 
-import orcSpear from '../../resources/enemy/orc-spear.png';
-import boss from '../../resources/enemy/boss-sprite.png';
+import orcSpear from '../resources/enemy/orc-spear.png';
+import boss from '../resources/enemy/boss-sprite.png';
 
 export const faceDirection = facing => {
   switch (facing) {

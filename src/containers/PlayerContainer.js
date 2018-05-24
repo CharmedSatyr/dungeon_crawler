@@ -8,7 +8,7 @@ import fists from '../resources/Player/alt-heroine-fists.png';
 import dagger from '../resources/Player/alt-heroine-dagger.png';
 import spear from '../resources/Player/alt-heroine-spear.png';
 import dragonSpear from '../resources/Player/alt-heroine-dragonSpear.png';
-import Player from '../components/Player/';
+import Player from '../components/Player';
 
 export const faceDirection = facing => {
   switch (facing) {
