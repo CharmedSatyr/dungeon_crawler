@@ -27,6 +27,7 @@ const Start = ({ fn }) => (
       <img alt="enemy boss" className="boss-image" src={boss} />
       <img alt="Prince Few" className="few-image" src={few} />
     </div>
+    <button onClick={fn}>Click to Begin</button>
     <div className="controls">
       <h4>Controls:</h4>
       <p>Spacebar changes weapons</p>
@@ -39,7 +40,6 @@ const Start = ({ fn }) => (
     </div>
     <br />
     <br />
-    <button onClick={fn}>Click Start to Begin</button>
   </div>
 );
 
