@@ -57,3 +57,12 @@ https://opengameart.org/content/bat-sprite
 
 Keyboard Keys
 https://opengameart.org/content/keyboard-keys-1
+
+LPC Tile Atlas
+https://opengameart.org/content/lpc-tile-atlas
+
+LPC Tile Atlas 2
+https://opengameart.org/content/lpc-tile-atlas2
+
+LPC A Shoot'Em Up Complete Graphic Kit
+https://opengameart.org/content/lpc-a-shootem-up-complete-graphic-kit
