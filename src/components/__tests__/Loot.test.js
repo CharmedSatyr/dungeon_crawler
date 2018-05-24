@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Loot from './index';
+import Loot from '../Loot';
 // l = loot
 import * as l from '../../constants/loot';
 // lc = Loot component
-import * as lc from './index';
+import * as lc from '../Loot';
 
 describe('`setVariety` Loot component function', () => {
   it('should return `fullBarrel` position if `variety` has a full barrel payload', () => {
