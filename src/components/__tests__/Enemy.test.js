@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Enemy from './index';
-import * as e from './index';
+import Enemy from '../Enemy';
+import * as e from '../Enemy';
 
 describe('`faceDirection` Enemy component function', () => {
   it('should return a value used to calculate `backgroundPosition`', () => {
@@ -33,21 +33,10 @@ describe('`setBackgroundImage` Enemy component function', () => {
   });
 });
 
-const setup = () => {
-  const props = {
-    facing: '',
-    stats: {
-      health: 10,
-    },
-  };
-  const enemy = shallow(<Enemy {...props} />);
-
-  return { props, enemy };
-};
-
 describe('Enemy component', () => {
+  const props = { facing: '', stats: { health: 10 } };
+  const enemy = shallow(<Enemy {...props} />);
   it('should render without crashing', () => {
-    const { enemy } = setup();
     expect(enemy).toHaveLength(1);
   });
 });

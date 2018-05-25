@@ -1,5 +1,5 @@
 import React from 'react';
-import Player from './index';
+import Player from '../Player';
 import { shallow } from 'enzyme';
 
 import testImg from '../../resources/Player/alt-heroine-dagger.png';
