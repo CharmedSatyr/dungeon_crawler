@@ -25,25 +25,19 @@ describe('`setSpriteSheet` PlayerContainer component function', () => {
 });
 
 describe('`setPlayerClass` PlayerContainer component function', () => {
-  it('should return `sprite` if `playerAnimation` is empty', () => {
-    expect(p.setPlayerClass(null, null, 'south')).toBe('sprite');
-    expect(p.setPlayerClass(null, '', 'test')).toBe('sprite');
+  it('should return an empty string if `playerAnimation` is empty', () => {
+    expect(p.setPlayerClass(null, null, 'south')).toBe('');
+    expect(p.setPlayerClass(null, '', 'test')).toBe('');
   });
 
   it('should return a className based on the `weapon`, `playerAnimation`, and `facing` arguments if `playerAnimation` is `attack`', () => {
-    expect(p.setPlayerClass(l.weapons.fists.name, 'attack', 'east')).toBe(
-      'sprite slash-attack-east'
-    );
-    expect(p.setPlayerClass(l.weapons.dagger.name, 'attack', 'west')).toBe(
-      'sprite slash-attack-west'
-    );
-    expect(p.setPlayerClass(l.weapons.spear.name, 'attack', 'south')).toBe(
-      'sprite thrust-attack-south'
-    );
+    expect(p.setPlayerClass(l.weapons.fists.name, 'attack', 'east')).toBe('slash-attack-east');
+    expect(p.setPlayerClass(l.weapons.dagger.name, 'attack', 'west')).toBe('slash-attack-west');
+    expect(p.setPlayerClass(l.weapons.spear.name, 'attack', 'south')).toBe('thrust-attack-south');
   });
 
   it('should return a className based on the `playerAnimation` and `facing` arguments if `playerAnimation` is `move`', () => {
-    expect(p.setPlayerClass(null, 'move', 'east')).toBe('sprite move-east');
+    expect(p.setPlayerClass(null, 'move', 'east')).toBe('move-east');
   });
 });
 
