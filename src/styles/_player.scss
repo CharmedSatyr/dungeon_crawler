@@ -1,6 +1,6 @@
 /*** Slash Attacks ***/
 .slash-attack-east {
-  animation: eastSlash 0.4s steps(5) 1;
+  animation: eastSlash $animation_duration steps(5) 1;
 }
 @keyframes eastSlash {
   0% {
@@ -17,7 +17,7 @@
 }
 
 .slash-attack-north {
-  animation: northSlash 0.4s steps(5) 1;
+  animation: northSlash $animation_duration steps(5) 1;
 }
 @keyframes northSlash {
   0% {
@@ -34,7 +34,7 @@
 }
 
 .slash-attack-south {
-  animation: southSlash 0.4s steps(5) 1;
+  animation: southSlash $animation_duration steps(5) 1;
 }
 @keyframes southSlash {
   0% {
@@ -51,7 +51,7 @@
 }
 
 .slash-attack-west {
-  animation: westSlash 0.4s steps(5) 1;
+  animation: westSlash $animation_duration steps(5) 1;
 }
 @keyframes westSlash {
   0% {
@@ -69,7 +69,7 @@
 
 /*** Thrust Attacks ***/
 .thrust-attack-east {
-  animation: eastThrust 0.4s steps(7) 1;
+  animation: eastThrust $animation_duration steps(7) 1;
 }
 @keyframes eastThrust {
   0% {
@@ -87,7 +87,7 @@
 }
 
 .thrust-attack-north {
-  animation: northThrust 0.4s steps(7) 1;
+  animation: northThrust $animation_duration steps(7) 1;
 }
 @keyframes northThrust {
   0% {
@@ -105,7 +105,7 @@
 }
 
 .thrust-attack-south {
-  animation: southThrust 0.4s steps(7) 1;
+  animation: southThrust $animation_duration steps(7) 1;
 }
 @keyframes southThrust {
   0% {
@@ -122,7 +122,7 @@
 }
 
 .thrust-attack-west {
-  animation: westThrust 0.4s steps(7) 1;
+  animation: westThrust $animation_duration steps(7) 1;
 }
 @keyframes westThrust {
   0% {
@@ -140,7 +140,7 @@
 
 /*** Movement ***/
 .move-east {
-  animation: moveEast 0.4s steps(8) 1;
+  animation: moveEast $animation_duration steps(8) 1;
 }
 @keyframes moveEast {
   from {
@@ -153,7 +153,7 @@
 }
 
 .move-north {
-  animation: moveNorth 0.4s steps(8) 1;
+  animation: moveNorth $animation_duration steps(8) 1;
 }
 @keyframes moveNorth {
   from {
@@ -166,7 +166,7 @@
 }
 
 .move-south {
-  animation: moveSouth 0.4s steps(8) 1;
+  animation: moveSouth $animation_duration steps(8) 1;
 }
 @keyframes moveSouth {
   from {
@@ -179,7 +179,7 @@
 }
 
 .move-west {
-  animation: moveWest 0.4s steps(8) 1;
+  animation: moveWest $animation_duration steps(8) 1;
 }
 @keyframes moveWest {
   from {
