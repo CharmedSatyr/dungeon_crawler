@@ -5,7 +5,7 @@ import * as c from '../constants/settings';
 import * as h from '../actions/index.helpers';
 import PropTypes from 'prop-types';
 
-import Cell from '../components/Cell';
+import Cell from './CellContainer';
 import Map from '../components/Map';
 import Messages from '../components/Messages';
 import PlayerPanel from '../components/PlayerPanel';
