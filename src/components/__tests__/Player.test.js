@@ -7,7 +7,7 @@ import testImg from '../../resources/Player/alt-heroine-dagger.png';
 describe('`Player` presentational component', () => {
   const props = {
     cellSide: 64,
-    playerClass: 'move-east',
+    animationClass: 'move-east',
     spriteSheet: testImg,
     backgroundPositionY: 0,
   };

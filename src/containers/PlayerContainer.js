@@ -40,7 +40,7 @@ export const setSpriteSheet = weaponName => {
   }
 };
 
-export const setPlayerClass = (weaponName, playerAnimation, facing) => {
+export const setAnimationClass = (weaponName, playerAnimation, facing) => {
   if (playerAnimation === 'attack') {
     switch (weaponName) {
       case l.weapons.fists.name:
@@ -61,7 +61,7 @@ export const setPlayerClass = (weaponName, playerAnimation, facing) => {
 
 const PlayerContainer = ({ playerAnimation, facing, weaponName }) => (
   <Player
-    playerClass={setPlayerClass(weaponName, playerAnimation, facing)}
+    animationClass={setAnimationClass(weaponName, playerAnimation, facing)}
     spriteSheet={setSpriteSheet(weaponName)}
     backgroundPositionY={c.CELL_SIDE * faceDirection(facing)}
     cellSide={c.CELL_SIDE}
