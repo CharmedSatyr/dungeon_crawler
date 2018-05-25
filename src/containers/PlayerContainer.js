@@ -44,18 +44,18 @@ export const setPlayerClass = (weaponName, playerAnimation, facing) => {
   if (playerAnimation === 'attack') {
     switch (weaponName) {
       case l.weapons.fists.name:
-        return `sprite slash-attack-${facing}`;
+        return `slash-attack-${facing}`;
       case l.weapons.dagger.name:
-        return `sprite slash-attack-${facing}`;
+        return `slash-attack-${facing}`;
       case l.weapons.spear.name:
-        return `sprite thrust-attack-${facing}`;
+        return `thrust-attack-${facing}`;
       default:
-        return `sprite slash-attack-${facing}`;
+        return `slash-attack-${facing}`;
     }
   } else if (playerAnimation === 'move') {
-    return `sprite move-${facing}`;
+    return `move-${facing}`;
   } else {
-    return 'sprite';
+    return '';
   }
 };
 
