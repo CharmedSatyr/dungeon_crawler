@@ -8,6 +8,7 @@ const Player = ({ backgroundPositionY, cellSide, playerClass, spriteSheet }) => 
       backgroundImage: `url(${spriteSheet})`,
       backgroundPosition: `0px ${backgroundPositionY}px`,
       height: cellSide,
+      position: 'absolute',
       width: cellSide,
     }}
   />

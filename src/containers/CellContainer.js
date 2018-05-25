@@ -7,7 +7,7 @@ import Enemy from '../components/Enemy';
 import Loot from '../components/Loot';
 import Portal from '../components/Portal';
 
-import Player from './PlayerContainer';
+import PlayerContainer from './PlayerContainer';
 
 import tiles from '../resources/cell/dungeon_tileset_64x64.png';
 
@@ -48,6 +48,15 @@ export const cellBG = type => {
 };
 
 export const display = payload => {
+  if (payload.player && payload.enemy) {
+    return (
+      <div>
+        <Enemy facing={payload.enemy.facing} stats={payload.enemy} />
+        <PlayerContainer facing={payload.player.facing} />
+      </div>
+    );
+  }
+
   if (payload.enemy) {
     return <Enemy facing={payload.enemy.facing} stats={payload.enemy} />;
   }
@@ -61,7 +70,7 @@ export const display = payload => {
   }
 
   if (payload.player) {
-    return <Player facing={payload.player.facing} />;
+    return <PlayerContainer facing={payload.player.facing} />;
   }
 
   return null;
