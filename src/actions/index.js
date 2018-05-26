@@ -126,11 +126,8 @@ export const take_damage = damage => {
 export const hostile_enemies = targetObj => {
   const { enemy } = targetObj.payload;
   const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
-  return batchActions([
-    facing(targetObj, 'enemy'),
-    message('An enemy assails you and does ' + d + ' damage!'),
-    take_damage(d),
-  ]);
+  const msg = `An enemy assails you and does ${d} damage!`;
+  return batchActions([facing(targetObj, 'enemy'), message(msg), take_damage(d)]);
 };
 
 // Check if the player should level up
@@ -166,9 +163,8 @@ export const player_input = (targetObj, player = getState().player) => {
     // Calculate damage and display a message
     const d = g.damageCalc(weapon.min_damage, weapon.max_damage, level);
     const h = enemy.health - d;
-    const addendum =
-      h > 0 ? "Your hapless enemy's health drops to " + h + '.' : 'The enemy is slain!';
-    let msg = 'You swing mightily and do ' + d + ' damage. ' + addendum;
+    const addendum = h > 0 ? `Your hapless enemy's health drops to ${h}.` : 'The enemy is slain!';
+    let msg = `You engage the enemy and do ${d} damage. ${addendum}`;
 
     // If the enemy is dead, player gains experience
     if (h <= 0) {
