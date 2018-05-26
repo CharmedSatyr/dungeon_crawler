@@ -1,3 +1,4 @@
+export const ADD_GOLD = 'ADD_GOLD';
 export const ADD_ITEM = 'ADD_ITEM';
 export const ADD_XP = 'ADD_EXP';
 export const ATTACK = 'ATTACK';
