@@ -30,6 +30,7 @@ class Gold {
   constructor(name, amount) {
     this.name = name;
     this.amount = amount;
+    this.type = 'gold';
   }
 }
 
