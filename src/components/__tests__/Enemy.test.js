@@ -15,7 +15,7 @@ describe('`faceDirection` Enemy component function', () => {
 
 describe('`setBackgroundPosition` Enemy component function', () => {
   it('should return a CSS background position', () => {
-    expect(e.setBackgroundPosition(null, null)).toMatch(/\d+px \d+px/);
+    expect(e.setBackgroundPosition(null, null, null)).toMatch(/\d+[px]? \d+[px]?/);
   });
 });
 

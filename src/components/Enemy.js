@@ -20,11 +20,17 @@ export const faceDirection = facing => {
   }
 };
 
-export const setBackgroundPosition = (health, facing) => {
+export const setBackgroundPosition = (type, health, facing) => {
   if (health > 0) {
     return `0 ${c.CELL_SIDE * faceDirection(facing)}px`;
   }
-  return `${c.CELL_SIDE * -5}px ${c.CELL_SIDE}px`;
+  if (type === 'orc') {
+    return `${c.CELL_SIDE * -5}px ${c.CELL_SIDE}px`;
+  }
+  if (type === 'boss') {
+    return `${c.CELL_SIDE * -5}px ${-20 * c.CELL_SIDE}px`;
+  }
+  return `0 0`;
 };
 
 export const setBackgroundImage = type => {
@@ -41,7 +47,7 @@ const Enemy = ({ facing, stats }) => (
   <div
     style={{
       backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
-      backgroundPosition: setBackgroundPosition(stats.health, facing),
+      backgroundPosition: setBackgroundPosition(stats.type, stats.health, facing),
       height: c.CELL_SIDE,
       marginTop: -7,
       position: 'absolute',
