@@ -165,8 +165,25 @@ export const clearTheDoor = (data, i, gridWidth, pathType) => {
 // Set the type of loot in a square
 export const setLootType = chances => {
   switch (true) {
-    case chances < 0.7:
+    // Barrels
+    case chances < 0.5:
       return l.fullBarrel;
+    // Gold
+    case chances < 0.55:
+      return { item: l.gold.coin };
+    case chances < 0.6:
+      return { item: l.gold.handful };
+    case chances < 0.625:
+      return { item: l.gold.nugget };
+    case chances < 0.65:
+      return { item: l.gold.sm_pile };
+    case chances < 0.675:
+      return { item: l.gold.pile };
+    case chances < 0.69:
+      return { item: l.gold.pouch };
+    case chances < 0.7:
+      return { item: l.gold.stash };
+    // Weapons
     case chances < 0.9:
       return { item: l.weapons.spear };
     case chances >= 0.9:
