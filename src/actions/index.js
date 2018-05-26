@@ -6,6 +6,15 @@ import { getState } from '../store';
 import { batchActions } from 'redux-batched-actions';
 
 /*** ACTION CREATORS ***/
+export const add_gold = (amount, targetObj) => {
+  const action = {
+    type: t.ADD_GOLD,
+    amount,
+    targetObj,
+  };
+  return action;
+};
+
 export const add_item = (item, targetObj) => {
   const action = {
     type: t.ADD_ITEM,
@@ -189,10 +198,16 @@ export const player_input = (targetObj, player = getState().player) => {
     return batchActions([message(msg), facing(targetObj)]);
   }
 
-  // If the target is an item, move there, pick it up and see a message
+  // If the target is an item, move there, pick it up, and see a message
   if (loot && loot.item) {
     const msg = `You have picked up a ${loot.item.name}!`;
     return batchActions([move(targetObj), add_item(loot.item, targetObj), message(msg)]);
+  }
+
+  // If the target is gold, move there, pick it up, and see a message
+  if (loot && loot.type === 'gold') {
+    const msg = `You have picked up a ${loot.name}!`;
+    return batchActions([move(targetObj), add_gold(loot.amount, targetObj), message(msg)]);
   }
 
   // If the target is a closed portal, open the door

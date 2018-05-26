@@ -4,6 +4,15 @@ import * as t from '../../constants/action-types';
 import * as l from '../../constants/loot';
 
 /*** SIMPLE ACTION CREATORS ***/
+describe('`add_gold` action creator', () => {
+  it('should return an action to add gold to the player inventory', () => {
+    const amount = 10;
+    const targetObj = {};
+    const action = { type: t.ADD_GOLD, amount, targetObj };
+    expect(a.add_gold(amount, targetObj)).toEqual(action);
+  });
+});
+
 describe('`add_item` action creator', () => {
   it('should return an action to add an item to the player inventory', () => {
     const item = { testy: 'placeholder' };
@@ -236,6 +245,23 @@ describe('`player_input` action creator thunk', () => {
       payload: [
         { type: t.MOVE },
         { type: t.ADD_ITEM, item: l.weapons.spear, targetObj: itemTargetObj },
+        { type: t.MESSAGE },
+      ],
+      type: 'BATCHING_REDUCER.BATCH',
+    });
+  });
+
+  it('should trigger batched `add_gold`, `move`, and `message` action creators if the argument payload is gold', () => {
+    const targetObj = {
+      payload: {
+        loot: l.gold.coin,
+      },
+    };
+
+    expect(a.player_input(targetObj)).toMatchObject({
+      payload: [
+        { type: t.MOVE },
+        { type: t.ADD_GOLD, amount: l.gold.coin.amount, targetObj },
         { type: t.MESSAGE },
       ],
       type: 'BATCHING_REDUCER.BATCH',
