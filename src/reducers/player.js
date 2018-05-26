@@ -17,6 +17,8 @@ initialState.health.current = initialState.health.max;
 // Player reducers
 const player = (state = initialState, action) => {
   switch (action.type) {
+    case t.ADD_GOLD:
+      return Object.assign({}, state, { gold: state.gold + action.amount });
     case t.ADD_ITEM:
       const newItem = action.item;
       const updatedInventory = _.clone(state.inventory);

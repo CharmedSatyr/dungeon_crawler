@@ -33,6 +33,13 @@ describe('`player` reducer', () => {
     });
   });
 
+  it('should add gold to player `gold` property when `ADD_GOLD` action is received', () => {
+    const action = { type: t.ADD_GOLD, amount: 10, targetObj: {} };
+    const state = { gold: 0 };
+    const updatedState = { gold: 10 };
+    expect(player(state, action)).toEqual(updatedState);
+  });
+
   it('should add an item to the inventory when `ADD_ITEM` action is received', () => {
     const action = { type: t.ADD_ITEM, item: l.weapons.spear };
     const inventory = [l.weapons.fists, l.weapons.dagger];
@@ -40,6 +47,22 @@ describe('`player` reducer', () => {
     const updatedInventory = [...inventory, l.weapons.spear];
     const updatedState = { inventory: updatedInventory };
     expect(player(state, action)).toEqual(updatedState);
+  });
+
+  it('should add an action.amount of experience to state.experience when an `ADD_XP` action is received', () => {
+    const action = { type: t.ADD_XP, amount: 10 };
+    const state0 = {
+      experience: 0,
+    };
+    const state1 = {
+      experience: 10,
+    };
+    const state2 = {
+      experience: 20,
+    };
+
+    expect(player(state0, action)).toEqual(state1);
+    expect(player(state1, action)).toEqual(state2);
   });
 
   it('should change the equipped weapon to the next in the inventory when `CHANGE_WEAPON` action is received', () => {
@@ -58,22 +81,6 @@ describe('`player` reducer', () => {
     const state = { weapon, inventory };
     const updatedState = { weapon: l.weapons.fists, inventory };
     expect(player(state, action)).toEqual(updatedState);
-  });
-
-  it('should add an action.amount of experience to state.experience when an `ADD_XP` action is received', () => {
-    const action = { type: t.ADD_XP, amount: 10 };
-    const state0 = {
-      experience: 0,
-    };
-    const state1 = {
-      experience: 10,
-    };
-    const state2 = {
-      experience: 20,
-    };
-
-    expect(player(state0, action)).toEqual(state1);
-    expect(player(state1, action)).toEqual(state2);
   });
 
   it('should heal the player for an action.amount of points when a `DRINK` action is received, up to max health', () => {
