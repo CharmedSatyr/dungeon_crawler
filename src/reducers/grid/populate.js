@@ -170,19 +170,19 @@ export const setLootType = chances => {
       return l.fullBarrel;
     // Gold
     case chances < 0.55:
-      return { item: l.gold.coin };
+      return l.gold.coin;
     case chances < 0.6:
-      return { item: l.gold.handful };
+      return l.gold.handful;
     case chances < 0.625:
-      return { item: l.gold.nugget };
+      return l.gold.nugget;
     case chances < 0.65:
-      return { item: l.gold.sm_pile };
+      return l.gold.sm_pile;
     case chances < 0.675:
-      return { item: l.gold.pile };
+      return l.gold.pile;
     case chances < 0.69:
-      return { item: l.gold.pouch };
+      return l.gold.pouch;
     case chances < 0.7:
-      return { item: l.gold.stash };
+      return l.gold.stash;
     // Weapons
     case chances < 0.9:
       return { item: l.weapons.spear };
