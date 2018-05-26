@@ -30,6 +30,17 @@ describe('`grid` reducer', () => {
     expect(grid(undefined, action)).toEqual(expect.objectContaining(expected));
   });
 
+  it('should preserve state shape on `ADD_GOLD` action type', () => {
+    const action = {
+      amount: 100,
+      targetObj: {
+        payload: { loot: { name: 'gold', amount: 100 } },
+      },
+      type: t.ADD_GOLD,
+    };
+    expect(grid(undefined, action)).toEqual(expect.objectContaining(expected));
+  });
+
   it('should preserve state shape on `ATTACK` action type', () => {
     const action = {
       damage: expect.any(Number),

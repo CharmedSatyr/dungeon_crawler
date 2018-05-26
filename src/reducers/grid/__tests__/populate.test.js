@@ -159,49 +159,49 @@ describe('`setLootType` populate grid reducer function', () => {
 
   // Gold
   it('should return some type of gold if the argument is >= 0.50 < 0.70', () => {
-    const gold = { item: { name: expect.any(String), amount: expect.any(Number) } };
+    const gold = { name: expect.any(String), amount: expect.any(Number) };
     expect(p.setLootType(0.5)).toMatchObject(gold);
     expect(p.setLootType(0.69)).toMatchObject(gold);
   });
 
   it('should return a gold `coin` if the argument is >= 0.50 < 0.55', () => {
-    const gold = { item: l.gold.coin };
+    const gold = l.gold.coin;
     expect(p.setLootType(0.5)).toMatchObject(gold);
     expect(p.setLootType(0.54)).toMatchObject(gold);
   });
 
   it('should return a gold `handful` if the argument is >= 0.55 < 0.60', () => {
-    const gold = { item: l.gold.handful };
+    const gold = l.gold.handful;
     expect(p.setLootType(0.55)).toMatchObject(gold);
     expect(p.setLootType(0.59)).toMatchObject(gold);
   });
 
   it('should return a gold `nugget` if the argument is >= 0.60 < 0.625', () => {
-    const gold = { item: l.gold.nugget };
+    const gold = l.gold.nugget;
     expect(p.setLootType(0.6)).toMatchObject(gold);
     expect(p.setLootType(0.624)).toMatchObject(gold);
   });
 
   it('should return a gold `sm_pile` if the argument is >= 0.625 < 0.65', () => {
-    const gold = { item: l.gold.sm_pile };
+    const gold = l.gold.sm_pile;
     expect(p.setLootType(0.625)).toMatchObject(gold);
     expect(p.setLootType(0.64)).toMatchObject(gold);
   });
 
   it('should return a gold `pile` if the argument is >= 0.65 < 0.675', () => {
-    const gold = { item: l.gold.pile };
+    const gold = l.gold.pile;
     expect(p.setLootType(0.65)).toMatchObject(gold);
     expect(p.setLootType(0.674)).toMatchObject(gold);
   });
 
   it('should return a gold `pouch` if the argument is >= 0.675 < 0.69', () => {
-    const gold = { item: l.gold.pouch };
+    const gold = l.gold.pouch;
     expect(p.setLootType(0.675)).toMatchObject(gold);
     expect(p.setLootType(0.68)).toMatchObject(gold);
   });
 
   it('should return a gold `stash` if the argument is >= 0.69 < 0.70', () => {
-    const gold = { item: l.gold.stash };
+    const gold = l.gold.stash;
     expect(p.setLootType(0.69)).toMatchObject(gold);
     expect(p.setLootType(0.699)).toMatchObject(gold);
   });
