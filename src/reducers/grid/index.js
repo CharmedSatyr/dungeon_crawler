@@ -20,7 +20,9 @@ const initialState = {
 // Grid reducers
 const grid = (state = initialState, { damage, direction, flag, targetObj, type }) => {
   switch (type) {
+    case t.ADD_GOLD:
     case t.ADD_ITEM:
+      // This function just removes the loot from the floor; the player reducer handles inventory and gold count
       return Object.assign({}, state, {
         data: add_item(state.data, targetObj),
       });
