@@ -35,6 +35,7 @@
 
 .slash-attack-south {
   animation: southSlash $animation_duration steps(5) 1;
+  z-index: 0 !important; // This is necessary to keep from overlapping targets on South attack
 }
 @keyframes southSlash {
   0% {
@@ -106,6 +107,7 @@
 
 .thrust-attack-south {
   animation: southThrust $animation_duration steps(7) 1;
+  z-index: 0 !important;
 }
 @keyframes southThrust {
   0% {
