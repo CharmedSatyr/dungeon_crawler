@@ -75,6 +75,9 @@ class Game extends Component {
       // If enemy, initiate its attack
       if (enemy && enemy.health > 0) {
         hostile_enemies(targetObj);
+        setTimeout(() => {
+          this.props.clear_enemy_animation();
+        }, c.ANIMATION_DURATION);
       }
     });
   }
@@ -158,6 +161,7 @@ const mapStateToProps = ({ grid, player, messages }) => ({
 const mapDispatchToProps = dispatch => ({
   change_weapon: () => dispatch(a.change_weapon()),
   clear_animation: () => dispatch(a.clear_animation()),
+  clear_enemy_animation: () => dispatch(a.clear_enemy_animation()),
   hostile_enemies: targetObj => dispatch(a.hostile_enemies(targetObj)),
   next_level: () => dispatch(a.next_level()),
   player_input: targetObj => dispatch(a.player_input(targetObj)),

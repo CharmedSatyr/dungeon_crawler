@@ -61,6 +61,15 @@ describe('`clear_animation` action creator', () => {
   });
 });
 
+describe('`clear_enemy_animation` action creator', () => {
+  it('should return an action to remove an animated CSS style class', () => {
+    const action = {
+      type: t.CLEAR_ENEMY_ANIMATION,
+    };
+    expect(a.clear_enemy_animation()).toMatchObject(action);
+  });
+});
+
 describe('`drink` action creator', () => {
   it('should return an action to drink from a full barrel', () => {
     const targetObj = {

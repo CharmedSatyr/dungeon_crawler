@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import * as c from '../constants/settings';
 import PropTypes from 'prop-types';
+import * as l from '../constants/loot';
 
 import orcSpear from '../resources/enemy/orc-spear.png';
 import boss from '../resources/enemy/boss-sprite.png';
@@ -43,8 +45,28 @@ export const setBackgroundImage = type => {
   }
 };
 
-const Enemy = ({ facing, stats }) => (
+export const setAnimationClass = (weaponName, enemyAnimation, facing) => {
+  if (enemyAnimation === 'attack') {
+    switch (weaponName) {
+      case l.weapons.fists.name:
+        return `slash-attack-${facing}`;
+      case l.weapons.dagger.name:
+        return `slash-attack-${facing}`;
+      case l.weapons.spear.name:
+        return `thrust-attack-${facing}`;
+      default:
+        return `slash-attack-${facing}`;
+    }
+  } else if (enemyAnimation === 'move') {
+    return `move-${facing}`;
+  } else {
+    return '';
+  }
+};
+
+const Enemy = ({ enemyAnimation, facing, stats }) => (
   <div
+    className={setAnimationClass(stats.weapon, enemyAnimation, facing)}
     style={{
       backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
       backgroundPosition: setBackgroundPosition(stats.type, stats.health, facing),
@@ -58,10 +80,15 @@ const Enemy = ({ facing, stats }) => (
 );
 
 Enemy.propTypes = {
-  facing: PropTypes.string,
+  facin: PropTypes.string,
   stats: PropTypes.shape({
     health: PropTypes.number.isRequired,
+    weapon: PropTypes.object.isRequired,
   }),
 };
 
-export default Enemy;
+const mapStateToProps = ({ animation }) => ({
+  enemyAnimation: animation.enemy,
+});
+
+export default connect(mapStateToProps, null)(Enemy);

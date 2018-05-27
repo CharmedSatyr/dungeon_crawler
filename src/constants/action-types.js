@@ -3,6 +3,7 @@ export const ADD_ITEM = 'ADD_ITEM';
 export const ADD_XP = 'ADD_EXP';
 export const ATTACK = 'ATTACK';
 export const CLEAR_ANIMATION = 'CLEAR_ANIMATION';
+export const CLEAR_ENEMY_ANIMATION = 'CLEAR_ENEMY_ANIMATION';
 export const CHANGE_WEAPON = 'CHANGE_WEAPON';
 export const DRINK = 'DRINK';
 export const FACING = 'FACING';

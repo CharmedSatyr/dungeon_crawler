@@ -55,6 +55,12 @@ export const clear_animation = () => {
   return action;
 };
 
+export const clear_enemy_animation = () => {
+  const action = {
+    type: t.CLEAR_ENEMY_ANIMATION,
+  };
+  return action;
+};
 export const drink = (targetObj, amount) => {
   const action = {
     type: t.DRINK,
