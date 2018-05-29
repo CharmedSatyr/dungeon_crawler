@@ -35,41 +35,40 @@ describe('`setBackgroundImage` Enemy component function', () => {
   });
 });
 
-/*** THIS IS COPIED FROM PLAYERCONTAINER TESTS. NO CHANGES BUT ARGUMENT NAME ***/
 describe('`setAnimationClass` Enemy component function', () => {
   it('should return an empty string if `enemyAnimation` is empty', () => {
-    expect(e.setAnimationClass(null, null, 'south')).toBe('');
-    expect(e.setAnimationClass(null, '', 'test')).toBe('');
+    const enemyAnimation = {};
+    expect(e.setAnimationClass(null, enemyAnimation, 'south', 0)).toBe('');
+    expect(e.setAnimationClass(null, enemyAnimation, 'test', 0)).toBe('');
   });
 
-  it('should return a className based on the `weapon`, `enemyAnimation`, and `facing` arguments if `enemyAnimation` is `attack`', () => {
-    expect(e.setAnimationClass(l.weapons.fists.name, 'attack', 'east')).toBe('slash-attack-east');
-    expect(e.setAnimationClass(l.weapons.dagger.name, 'attack', 'west')).toBe('slash-attack-west');
-    expect(e.setAnimationClass(l.weapons.spear.name, 'attack', 'south')).toBe(
+  it('should return a className per `index` based on the `weapon`, `enemyAnimation`, and `facing` arguments if `enemyAnimation[index]` is `attack`', () => {
+    const enemyAnimation = { 0: 'attack', 1: 'attack', 2: 'attack' };
+    expect(e.setAnimationClass(l.weapons.fists.name, enemyAnimation, 'east', 0)).toBe(
+      'slash-attack-east'
+    );
+    expect(e.setAnimationClass(l.weapons.dagger.name, enemyAnimation, 'west', 1)).toBe(
+      'slash-attack-west'
+    );
+    expect(e.setAnimationClass(l.weapons.spear.name, enemyAnimation, 'south', 2)).toBe(
       'thrust-attack-south'
     );
   });
 
-  it('should return a className based on the `enemyAnimation` and `facing` arguments if `enemyAnimation` is `move`', () => {
-    expect(e.setAnimationClass(null, 'move', 'east')).toBe('move-east');
+  it('should return a className per `index` based on the `enemyAnimation` and `facing` arguments if `enemyAnimation[index]` is `move`', () => {
+    const enemyAnimation = { 0: 'move' };
+    expect(e.setAnimationClass(null, enemyAnimation, 'east', 0)).toBe('move-east');
   });
 });
 
-// describe('Enemy component', () => {
-//   const props = { facing: '', stats: { health: 10 } };
-//   const enemy = shallow(<Enemy {...props} />);
-//   it('should render without crashing', () => {
-//     expect(enemy).toHaveLength(1);
-//   });
-// });
-
 describe('`Enemy` component', () => {
   const initialState = {
-    animation: { enemy: '' },
+    animation: { enemy: { 0: 'attack' } },
   };
   const props = {
-    stats: { health: 10, weapon: l.weapons.spear },
     facing: 'south',
+    index: 0,
+    stats: { health: 10, weapon: l.weapons.spear },
   };
 
   const mockStore = configureMockStore();
@@ -79,8 +78,6 @@ describe('`Enemy` component', () => {
   });
 
   it('should render without crashing', () => {
-    // Requires full mount to include store since PlayerContainer
-    // is a connected component. Shallow mount won't work
     const player = mount(<Enemy store={store} {...props} />);
     expect(player.find(Enemy)).toHaveLength(1);
   });

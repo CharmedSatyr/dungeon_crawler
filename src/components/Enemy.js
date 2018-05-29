@@ -45,8 +45,8 @@ export const setBackgroundImage = type => {
   }
 };
 
-export const setAnimationClass = (weaponName, enemyAnimation, facing) => {
-  if (enemyAnimation === 'attack') {
+export const setAnimationClass = (weaponName, enemyAnimation, facing, index) => {
+  if (enemyAnimation[index] === 'attack') {
     switch (weaponName) {
       case l.weapons.fists.name:
         return `slash-attack-${facing}`;
@@ -57,16 +57,16 @@ export const setAnimationClass = (weaponName, enemyAnimation, facing) => {
       default:
         return `slash-attack-${facing}`;
     }
-  } else if (enemyAnimation === 'move') {
+  } else if (enemyAnimation[index] === 'move') {
     return `move-${facing}`;
   } else {
     return '';
   }
 };
 
-const Enemy = ({ enemyAnimation, facing, stats }) => (
+const Enemy = ({ enemyAnimation, facing, index, stats }) => (
   <div
-    className={setAnimationClass(stats.weapon, enemyAnimation, facing)}
+    className={setAnimationClass(stats.weapon, enemyAnimation, facing, index)}
     style={{
       backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
       backgroundPosition: setBackgroundPosition(stats.type, stats.health, facing),
@@ -80,7 +80,9 @@ const Enemy = ({ enemyAnimation, facing, stats }) => (
 );
 
 Enemy.propTypes = {
-  facin: PropTypes.string,
+  enemyAnimation: PropTypes.object.isRequired,
+  facing: PropTypes.string,
+  index: PropTypes.number.isRequired,
   stats: PropTypes.shape({
     health: PropTypes.number.isRequired,
     weapon: PropTypes.object.isRequired,
