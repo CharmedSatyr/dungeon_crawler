@@ -3,10 +3,10 @@ import React from 'react';
 import Cell from '../../components/Cell';
 import CellContainer from '../CellContainer';
 
-import Enemy from '../../components/Enemy';
+// import Enemy from '../../components/Enemy';
 import Loot from '../../components/Loot';
 import Portal from '../../components/Portal';
-import PlayerContainer from '../PlayerContainer';
+// import PlayerContainer from '../PlayerContainer';
 
 import * as cc from '../CellContainer';
 
@@ -25,10 +25,12 @@ describe('`cellBG` Cell component function', () => {
 
 describe('`display` Cell component function', () => {
   const index = 0;
-  // Because `PlayerContainer` and `Enemy` are connected, testing that they render probably requires a mock store, etc.
+
+  // Because `PlayerContainer` and `Enemy` are connected components, testing that they render probably requires a mock store, etc.
   it(
     'should render both `PlayerContainer` and `Enemy` components if `payload.player` and `payload.enemy` are defined'
   );
+  it('should render a `PlayerContainer` component if `payload.player` is defined');
   it('should render `Enemy` component if `payload.enemy` is defined');
 
   it('should render a `Loot` component if `payload.loot` is defined', () => {
@@ -40,7 +42,6 @@ describe('`display` Cell component function', () => {
     const payload = { portal: { open: false } };
     expect(mount(cc.display(payload, index)).find(Portal)).toHaveLength(1);
   });
-  it('should render a `PlayerContainer` component if `payload.player` is defined');
 });
 
 describe('`CellContainer` component', () => {
