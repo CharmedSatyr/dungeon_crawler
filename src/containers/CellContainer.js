@@ -47,18 +47,18 @@ export const cellBG = type => {
   }
 };
 
-export const display = payload => {
+export const display = (payload, index) => {
   if (payload.player && payload.enemy) {
     return (
       <div>
-        <Enemy facing={payload.enemy.facing} stats={payload.enemy} />
+        <Enemy index={index} facing={payload.enemy.facing} stats={payload.enemy} />
         <PlayerContainer facing={payload.player.facing} />
       </div>
     );
   }
 
   if (payload.enemy) {
-    return <Enemy facing={payload.enemy.facing} stats={payload.enemy} />;
+    return <Enemy index={index} facing={payload.enemy.facing} stats={payload.enemy} />;
   }
 
   if (payload.loot) {
@@ -77,12 +77,12 @@ export const display = payload => {
 };
 
 // background
-const CellContainer = ({ payload, type }) => (
+const CellContainer = ({ index, payload, type }) => (
   <Cell
     backgroundImage={`url(${tiles})`}
     backgroundPosition={cellBG(type)}
     cellSide={c.CELL_SIDE}
-    children={display(payload)}
+    children={display(payload, index)}
   />
 );
 
