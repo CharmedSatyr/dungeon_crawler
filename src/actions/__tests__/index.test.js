@@ -167,9 +167,10 @@ describe('`open` action creator', () => {
 
 describe('`take_damage` action creator', () => {
   it('should return an action to cause the player to take a specified amount of damage', () => {
-    const args = 12;
-    const action = { type: t.TAKE_DAMAGE, damage: 12 };
-    expect(a.take_damage(args)).toEqual(action);
+    const damage = 12;
+    const index = 0;
+    const action = { damage, index, type: t.TAKE_DAMAGE };
+    expect(a.take_damage(damage, index)).toEqual(action);
   });
 });
 
@@ -193,7 +194,7 @@ describe('`hostile_enemies` action creator thunk', () => {
       payload: [
         { type: t.FACING, targetObj },
         { type: t.MESSAGE, msg: expect.any(String) },
-        { type: t.TAKE_DAMAGE, damage: expect.any(Number) },
+        { type: t.TAKE_DAMAGE, damage: expect.any(Number), index: targetObj.index },
       ],
       type: 'BATCHING_REDUCER.BATCH',
     };

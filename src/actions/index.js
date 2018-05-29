@@ -119,10 +119,11 @@ export const open = targetObj => {
   return action;
 };
 
-export const take_damage = damage => {
+export const take_damage = (damage, index) => {
   const action = {
-    type: t.TAKE_DAMAGE,
     damage,
+    index,
+    type: t.TAKE_DAMAGE,
   };
   return action;
 };
@@ -131,9 +132,10 @@ export const take_damage = damage => {
 // Turn the enemy toward the player, display damage notification, inflict damage
 export const hostile_enemies = targetObj => {
   const { enemy } = targetObj.payload;
+  const { index } = targetObj;
   const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
   const msg = `An enemy assails you and does ${d} damage!`;
-  return batchActions([facing(targetObj, 'enemy'), message(msg), take_damage(d)]);
+  return batchActions([facing(targetObj, 'enemy'), message(msg), take_damage(d, index)]);
 };
 
 // Check if the player should level up
