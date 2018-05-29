@@ -5,7 +5,7 @@ import * as c from '../constants/settings';
 import * as h from '../actions/index.helpers';
 import PropTypes from 'prop-types';
 
-import Cell from './CellContainer';
+import CellContainer from './CellContainer';
 import Map from '../components/Map';
 import Messages from '../components/Messages';
 import PlayerPanel from '../components/PlayerPanel';
@@ -100,7 +100,7 @@ class Game extends Component {
     window.removeEventListener('keydown', this.placeholderFunc);
   }
   render() {
-    const { gridData, messages, player, playerPosition } = this.props;
+    const { gridData, messages, player } = this.props;
 
     // Create an array of Cells containing data from the store
     const cells = gridData
@@ -116,7 +116,9 @@ class Game extends Component {
       //     index === playerPosition.index + c.GRID_WIDTH + 1 ||
       //     index === playerPosition.index - c.GRID_WIDTH + 1
       // )
-      .map((item, index) => <Cell key={index} payload={item.payload} type={item.type} />);
+      .map((item, index) => (
+        <CellContainer key={index} index={index} payload={item.payload} type={item.type} />
+      ));
 
     const game = (
       <div>
