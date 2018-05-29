@@ -2,7 +2,7 @@ import * as t from '../constants/action-types';
 
 const initialState = {
   player: '',
-  enemy: '',
+  enemy: {},
 };
 
 // Animation reducers
@@ -13,12 +13,13 @@ const animation = (state = initialState, action) => {
     case t.CLEAR_ANIMATION:
       return Object.assign({}, state, { player: '' });
     case t.CLEAR_ENEMY_ANIMATION:
-      return Object.assign({}, state, { enemy: '' });
+      return Object.assign({}, state, { enemy: {} });
     case t.MOVE:
       return Object.assign({}, state, { player: 'move' });
     case t.TAKE_DAMAGE:
-      console.log('testing this out...');
-      return Object.assign({}, state, { enemy: 'attack' });
+      const enemyUpdate = Object.assign({}, state.enemy);
+      enemyUpdate[action.index] = 'attack';
+      return Object.assign({}, state, { enemy: enemyUpdate });
     default:
       return state;
   }
