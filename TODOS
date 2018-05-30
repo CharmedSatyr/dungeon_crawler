@@ -1,10 +1,8 @@
-give each enemy separate attack animations
-correct attack/walk animations
-  - oversize weapons?
-Add Prince Few
+Add Prince Few - actions/reducer
 Add enemy movement
 add healing spell
 Add more weapons
+  - oversize weapons?
 Add FOG
 Increase chance of enemies by doors
 
