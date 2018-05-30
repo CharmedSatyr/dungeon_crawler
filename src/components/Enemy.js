@@ -66,7 +66,7 @@ export const setAnimationClass = (weaponName, enemyAnimation, facing, index) => 
 
 const Enemy = ({ enemyAnimation, facing, index, stats }) => (
   <div
-    className={setAnimationClass(stats.weapon, enemyAnimation, facing, index)}
+    className={setAnimationClass(stats.weapon.name, enemyAnimation, facing, index)}
     style={{
       backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
       backgroundPosition: setBackgroundPosition(stats.type, stats.health, facing),
