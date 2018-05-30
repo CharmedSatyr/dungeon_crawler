@@ -47,16 +47,16 @@ export const addEnemies = (data, pathType, probability) => {
 };
 
 export const addBoss = (data, pathType, level) => {
+  const enemy = {
+    weapon: l.weapons.trident,
+    facing: 'west',
+    level: _.random(7, 10),
+    type: 'boss',
+  };
+  enemy.health = g.healthCalc(enemy.level);
+
   let count = 0;
   for (let i = data.length - 1; i >= 0; i--) {
-    const enemy = {
-      weapon: l.weapons.trident,
-      facing: 'west',
-      level: _.random(7, 10),
-      type: 'boss',
-    };
-    enemy.health = g.healthCalc(enemy.level);
-
     // boss only appears on `level` 3
     if (
       level === 3 &&
@@ -68,6 +68,25 @@ export const addBoss = (data, pathType, level) => {
       if (count === 2) {
         data[i].payload = { enemy };
       }
+    }
+  }
+  return data;
+};
+
+export const addPrinceFew = (data, pathType, level) => {
+  const prince = {
+    weapon: l.weapons.trident,
+    facing: 'west',
+    level: _.random(2, 4),
+    type: 'prince',
+  };
+  prince.health = g.healthCalc(prince.level);
+
+  for (let i = data.length - 1; i >= 0; i--) {
+    // Prince Few only appears on `level` 3
+    if (level === 3 && Object.keys(data[i].payload).length === 0 && data[i].type === pathType) {
+      data[i].payload = { prince };
+      break;
     }
   }
   return data;
@@ -261,6 +280,9 @@ const populate = (data, level, gridWidth = c.GRID_WIDTH, pathType = tileTypes(le
 
   // Add the boss just west of the southeast corner for level 3
   data = addBoss(data, pathType, level);
+
+  // Add the boss just west of the southeast corner for level 3
+  data = addPrinceFew(data, pathType, level);
 
   // Add loot
   data = addLoot(data, gridWidth, pathType, 0.02);
