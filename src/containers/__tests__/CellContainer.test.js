@@ -6,6 +6,7 @@ import CellContainer from '../CellContainer';
 // import Enemy from '../../components/Enemy';
 import Loot from '../../components/Loot';
 import Portal from '../../components/Portal';
+import Prince from '../../components/Prince';
 // import PlayerContainer from '../PlayerContainer';
 
 import * as cc from '../CellContainer';
@@ -32,6 +33,10 @@ describe('`display` Cell component function', () => {
   );
   it('should render a `PlayerContainer` component if `payload.player` is defined');
   it('should render `Enemy` component if `payload.enemy` is defined');
+  it('should render `Prince` component if `payload.prince` is defined', () => {
+    const payload = { prince: { facing: 'west', health: 10, weapon: {}, type: 'prince' } };
+    expect(mount(cc.display(payload, index)).find(Prince)).toHaveLength(1);
+  });
 
   it('should render a `Loot` component if `payload.loot` is defined', () => {
     const payload = { loot: { variety: {} } };
