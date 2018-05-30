@@ -6,6 +6,7 @@ import Cell from '../components/Cell';
 import Enemy from '../components/Enemy';
 import Loot from '../components/Loot';
 import Portal from '../components/Portal';
+import Prince from '../components/Prince';
 
 import PlayerContainer from './PlayerContainer';
 
@@ -71,6 +72,10 @@ export const display = (payload, index) => {
 
   if (payload.player) {
     return <PlayerContainer facing={payload.player.facing} />;
+  }
+
+  if (payload.prince) {
+    return <Prince index={index} facing={payload.prince.facing} stats={payload.prince} />;
   }
 
   return null;

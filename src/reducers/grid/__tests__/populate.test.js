@@ -93,32 +93,32 @@ describe('`addPrinceFew` populate grid reducer function', () => {
     expect(Array.isArray(result)).toBeTruthy();
   });
 
-  //  it('should give the last data object with type: pathType a `prince` payload if `level` is 3', () => {
-  //    const prince = {
-  //      facing: 'west',
-  //      health: expect.any(Number),
-  //      level: expect.any(Number),
-  //      weapon: expect.any(Object),
-  //      type: 'prince',
-  //    };
-  //    const updatedData = [
-  //      { payload: {}, type: pathType },
-  //      { payload: { enemy: expect.objectContaining(prince) }, type: pathType },
-  //    ];
-  //    expect(result).toEqual(updatedData);
-  //  });
-  //
-  //  it('should not modify objects that already have payloads', () => {
-  //    const hasPayload = [
-  //      { payload: { thingy: 1 }, type: pathType },
-  //      { payload: { thingy: 1 }, type: pathType },
-  //    ];
-  //    expect(p.addPrinceFew(hasPayload, pathType, level)).toEqual(hasPayload);
-  //  });
-  //
-  //  it('should not do anything if the level is 2 or less', () => {
-  //    expect(p.addPrinceFew(data, pathType, 2)).toEqual(data);
-  //  });
+  it('should give the last data object with type: pathType a `prince` payload if `level` is 3', () => {
+    const prince = {
+      facing: 'west',
+      health: expect.any(Number),
+      level: expect.any(Number),
+      weapon: expect.any(Object),
+      type: 'prince',
+    };
+    const updatedData = [
+      { payload: {}, type: pathType },
+      { payload: { prince: expect.objectContaining(prince) }, type: pathType },
+    ];
+    expect(result).toEqual(updatedData);
+  });
+
+  it('should not modify objects that already have payloads', () => {
+    const hasPayload = [
+      { payload: { thingy: 1 }, type: pathType },
+      { payload: { thingy: 1 }, type: pathType },
+    ];
+    expect(p.addPrinceFew(hasPayload, pathType, level)).toEqual(hasPayload);
+  });
+
+  it('should not do anything if the level is 2 or less', () => {
+    expect(p.addPrinceFew(data, pathType, 2)).toEqual(data);
+  });
 });
 
 /*** clearTheDoor ***/
