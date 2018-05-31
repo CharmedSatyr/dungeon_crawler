@@ -66,7 +66,8 @@ class Game extends Component {
   checkAttack(playerPosition) {
     // Check for living enemies adjacent to player
     const { gridData, hostile_enemies } = this.props;
-    const pap = h.playerAdjacentPositions(playerPosition);
+    // pap = player-adjacent positions
+    const pap = h.adjacentPositions(playerPosition);
     // For each neighbor
     pap.forEach(targetPosition => {
       const { index } = targetPosition;

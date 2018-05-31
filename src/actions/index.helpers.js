@@ -34,34 +34,34 @@ export const getTargetPosition = (originPosition, direction) => {
     case 'north':
       return {
         coordinates: { x: originPosition.coordinates.x, y: originPosition.coordinates.y - 1 },
-        index: originPosition.index - GRID_WIDTH
+        index: originPosition.index - GRID_WIDTH,
       };
     case 'east':
       return {
         coordinates: { x: originPosition.coordinates.x + 1, y: originPosition.coordinates.y },
-        index: originPosition.index + 1
+        index: originPosition.index + 1,
       };
     case 'south':
       return {
         coordinates: { x: originPosition.coordinates.x, y: originPosition.coordinates.y + 1 },
-        index: originPosition.index + GRID_WIDTH
+        index: originPosition.index + GRID_WIDTH,
       };
     case 'west':
       return {
         coordinates: { x: originPosition.coordinates.x - 1, y: originPosition.coordinates.y },
-        index: originPosition.index - 1
+        index: originPosition.index - 1,
       };
     default:
       return originPosition;
   }
 };
 
-// Return positions of cells adjacent to player
-export const playerAdjacentPositions = playerPosition => {
-  const e = getTargetPosition(playerPosition, 'east');
-  const n = getTargetPosition(playerPosition, 'north');
-  const s = getTargetPosition(playerPosition, 'south');
-  const w = getTargetPosition(playerPosition, 'west');
+// Return positions of cells adjacent to argument
+export const adjacentPositions = originPosition => {
+  const e = getTargetPosition(originPosition, 'east');
+  const n = getTargetPosition(originPosition, 'north');
+  const s = getTargetPosition(originPosition, 'south');
+  const w = getTargetPosition(originPosition, 'west');
 
   return [e, n, s, w];
 };

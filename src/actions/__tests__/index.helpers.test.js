@@ -22,34 +22,34 @@ describe('getTargetPosition', () => {
 
     expect(h.getTargetPosition(originPosition, 'north')).toEqual({
       coordinates: { x: 0, y: -1 },
-      index: -GRID_WIDTH
+      index: -GRID_WIDTH,
     });
 
     expect(h.getTargetPosition(originPosition, 'east')).toEqual({
       coordinates: { x: 1, y: 0 },
-      index: 1
+      index: 1,
     });
 
     expect(h.getTargetPosition(originPosition, 'south')).toEqual({
       coordinates: { x: 0, y: 1 },
-      index: GRID_WIDTH
+      index: GRID_WIDTH,
     });
 
     expect(h.getTargetPosition(originPosition, 'west')).toEqual({
       coordinates: { x: -1, y: 0 },
-      index: -1
+      index: -1,
     });
   });
 });
 
-describe('playerAdjacentPositions', () => {
-  it('should return an array of coordinate/index objects for cells adjacent to player in order east, north, south, west', () => {
-    const playerPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
+describe('adjacentPositions', () => {
+  it('should return an array of coordinate/index objects for cells adjacent to origin argument in order east, north, south, west', () => {
+    const originPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
     const e = { coordinates: { x: 1, y: 0 }, index: 1 };
     const n = { coordinates: { x: 0, y: -1 }, index: -GRID_WIDTH };
     const s = { coordinates: { x: 0, y: 1 }, index: GRID_WIDTH };
     const w = { coordinates: { x: -1, y: 0 }, index: -1 };
-    expect(h.playerAdjacentPositions(playerPosition)).toEqual([e, n, s, w]);
+    expect(h.adjacentPositions(originPosition)).toEqual([e, n, s, w]);
   });
 });
 
