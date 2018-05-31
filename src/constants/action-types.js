@@ -7,6 +7,7 @@ export const CLEAR_ENEMY_ANIMATION = 'CLEAR_ENEMY_ANIMATION';
 export const CHANGE_WEAPON = 'CHANGE_WEAPON';
 export const DRINK = 'DRINK';
 export const FACING = 'FACING';
+export const GAME_OVER = 'GAME_OVER';
 export const HOSTILE_ENEMIES = 'HOSTILE_ENEMIES';
 export const LEVEL_UP = 'LEVEL_UP';
 export const MESSAGE = 'MESSAGE';

@@ -118,6 +118,13 @@ describe('`facing` action creator', () => {
   });
 });
 
+describe('`game_over` action creator', () => {
+  it('should return a `GAME_OVER` action', () => {
+    const action = { type: t.GAME_OVER };
+    expect(a.game_over()).toEqual(action);
+  });
+});
+
 describe('`move` action creator', () => {
   it('should return an action to move to a target position', () => {
     const args = [{ x: 0, y: 0 }];
@@ -361,6 +368,18 @@ describe('`player_input` action creator thunk', () => {
     };
     expect(a.player_input(openPortal)).toMatchObject({
       payload: [{ type: t.NEXT_LEVEL }, { type: t.MESSAGE }],
+      type: 'BATCHING_REDUCER.BATCH',
+    });
+  });
+
+  it('should trigger batched `message`, `facing`, and `game_over` action creators if the targetObj is the `prince`', () => {
+    const prince = {
+      payload: {
+        prince: {},
+      },
+    };
+    expect(a.player_input(prince)).toMatchObject({
+      payload: [{ type: t.MESSAGE }, { type: t.FACING }, { type: t.GAME_OVER }],
       type: 'BATCHING_REDUCER.BATCH',
     });
   });

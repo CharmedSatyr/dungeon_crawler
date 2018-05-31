@@ -79,6 +79,13 @@ export const facing = (targetObj, flag = 'player') => {
   return action;
 };
 
+export const game_over = () => {
+  const action = {
+    type: t.GAME_OVER,
+  };
+  return action;
+};
+
 export const move = targetObj => {
   const action = {
     type: t.MOVE,
@@ -154,11 +161,11 @@ export const player_input = (targetObj, player = getState().player) => {
   // Get info about the cell the player is advancing toward
   const { level } = getState().grid;
   const { type } = targetObj;
-  const { enemy, loot, portal } = targetObj.payload;
+  const { enemy, loot, portal, prince } = targetObj.payload;
 
   // Just move if the targetPosition is an empty floor or dead enemy
   if (
-    (type === tileTypes(level, 'path') && !enemy && !loot && !portal) ||
+    (type === tileTypes(level, 'path') && !enemy && !loot && !portal && !prince) ||
     (enemy && enemy.health <= 0)
   ) {
     return move(targetObj);
@@ -224,6 +231,12 @@ export const player_input = (targetObj, player = getState().player) => {
   if (portal && portal.open) {
     const msg = 'You fearlessly descend into darkness.';
     return batchActions([next_level(), message(msg)]);
+  }
+
+  // If the targetObj is the prince, face him, see a message, and trigger the end of the game
+  if (prince) {
+    const msg = 'You have rescued Prince Few!';
+    return batchActions([message(msg), facing(targetObj), game_over()]);
   }
 
   // If no conditions are met, just face in the right direction
