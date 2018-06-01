@@ -29,12 +29,12 @@ export const getDirection = (originPosition, targetPosition) => {
 };
 
 // Establish the player's potential next position given current position and direction
-export const getTargetPosition = (originPosition, direction) => {
+export const getTargetPosition = (originPosition, direction, gridWidth = GRID_WIDTH) => {
   switch (direction) {
     case 'north':
       return {
         coordinates: { x: originPosition.coordinates.x, y: originPosition.coordinates.y - 1 },
-        index: originPosition.index - GRID_WIDTH,
+        index: originPosition.index - gridWidth,
       };
     case 'east':
       return {
@@ -44,7 +44,7 @@ export const getTargetPosition = (originPosition, direction) => {
     case 'south':
       return {
         coordinates: { x: originPosition.coordinates.x, y: originPosition.coordinates.y + 1 },
-        index: originPosition.index + GRID_WIDTH,
+        index: originPosition.index + gridWidth,
       };
     case 'west':
       return {
@@ -57,11 +57,11 @@ export const getTargetPosition = (originPosition, direction) => {
 };
 
 // Return positions of cells adjacent to argument
-export const adjacentPositions = originPosition => {
-  const e = getTargetPosition(originPosition, 'east');
-  const n = getTargetPosition(originPosition, 'north');
-  const s = getTargetPosition(originPosition, 'south');
-  const w = getTargetPosition(originPosition, 'west');
+export const adjacentPositions = (originPosition, gridWidth = GRID_WIDTH) => {
+  const e = getTargetPosition(originPosition, 'east', gridWidth);
+  const n = getTargetPosition(originPosition, 'north', gridWidth);
+  const s = getTargetPosition(originPosition, 'south', gridWidth);
+  const w = getTargetPosition(originPosition, 'west', gridWidth);
 
   return [e, n, s, w];
 };
