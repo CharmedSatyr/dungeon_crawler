@@ -6,6 +6,22 @@ const defaultType = 'default';
 const pathType = 'path';
 const cardinalDirections = /[north||south||east||west]/;
 
+const mockOrc = {
+  facing: expect.stringMatching(cardinalDirections),
+  health: expect.any(Number),
+  level: expect.any(Number),
+  weapon: expect.any(Object),
+  type: 'orc',
+};
+
+const mockBoss = {
+  facing: 'west',
+  health: expect.any(Number),
+  level: expect.any(Number),
+  weapon: expect.any(Object),
+  type: 'boss',
+};
+
 /*** direction ***/
 describe('`direction` populate grid reducer function', () => {
   it('should return a string matching a cardinal direction', () => {
@@ -24,14 +40,7 @@ describe('`addEnemies` populate grid reducer function', () => {
   });
 
   it('should give data objects an `enemy` orc payload if `probability` is 1', () => {
-    const enemy = {
-      facing: expect.stringMatching(cardinalDirections),
-      health: expect.any(Number),
-      level: expect.any(Number),
-      weapon: expect.any(Object),
-      type: 'orc',
-    };
-    const updatedData = [{ payload: { enemy }, type: pathType }];
+    const updatedData = [{ payload: { enemy: mockOrc }, type: pathType }];
     expect(p.addEnemies(data, pathType, 1)).toEqual(updatedData);
   });
 
@@ -56,15 +65,8 @@ describe('`addBoss` populate grid reducer function', () => {
   });
 
   it('should give the second to last data object with type: pathType a `boss` payload if `level` is 3', () => {
-    const boss = {
-      facing: 'west',
-      health: expect.any(Number),
-      level: expect.any(Number),
-      weapon: expect.any(Object),
-      type: 'boss',
-    };
     const updatedData = [
-      { payload: { enemy: expect.objectContaining(boss) }, type: pathType },
+      { payload: { enemy: expect.objectContaining(mockBoss) }, type: pathType },
       { payload: {}, type: pathType },
     ];
     expect(result).toEqual(updatedData);
@@ -311,6 +313,80 @@ describe('`addPortal` populate grid reducer function', () => {
   });
 });
 
+/*** addPortalGuards ***/
+describe('`addPortalGuards` populate grid reducer function', () => {
+  it('should do nothing if the level has no portal', () => {
+    const data = [{ coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType }];
+    expect(p.addPortalGuards(data, pathType, 1)).toEqual(data);
+  });
+
+  /* For the below,
+  * Index 4 should be Portal
+  * Indices 1, 3, 5, 7 should be Enemies
+  * |-----+-----+-----|
+  * | 0,0 | ENE | 2,0 |
+  * |=====+=====+=====|
+  * | ENE | DOR | ENE |
+  * |-----+-----+-----|
+  * | 0,2 | ENE | 2,2 |
+  * |-----+-----+-----|
+  */
+
+  const gridWidth = 3;
+  const data = [
+    { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: pathType },
+    { coordinates: { x: 2, y: 0 }, index: 2, payload: {}, type: pathType },
+    { coordinates: { x: 0, y: 1 }, index: 3, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 1 }, index: 4, payload: { portal: { open: false } }, type: pathType },
+    { coordinates: { x: 2, y: 1 }, index: 5, payload: {}, type: pathType },
+    { coordinates: { x: 0, y: 2 }, index: 6, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 2 }, index: 7, payload: {}, type: defaultType }, // Should not be changed
+    { coordinates: { x: 2, y: 2 }, index: 8, payload: {}, type: pathType },
+  ];
+
+  it('should return an array', () => {
+    const probability = 0;
+    expect(Array.isArray(p.addPortalGuards(data, pathType, probability, gridWidth))).toBeTruthy();
+  });
+
+  it('should add enemies on `pathType` squares adjacent to a portal', () => {
+    const probability = 1;
+    const updatedData = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType },
+      {
+        coordinates: { x: 1, y: 0 },
+        index: 1,
+        payload: { enemy: expect.objectContaining(mockOrc) },
+        type: pathType,
+      },
+      { coordinates: { x: 2, y: 0 }, index: 2, payload: {}, type: pathType },
+      {
+        coordinates: { x: 0, y: 1 },
+        index: 3,
+        payload: { enemy: expect.objectContaining(mockOrc) },
+        type: pathType,
+      },
+      {
+        coordinates: { x: 1, y: 1 },
+        index: 4,
+        payload: { portal: { open: false } },
+        type: pathType,
+      },
+      {
+        coordinates: { x: 2, y: 1 },
+        index: 5,
+        payload: { enemy: expect.objectContaining(mockOrc) },
+        type: pathType,
+      },
+      { coordinates: { x: 0, y: 2 }, index: 6, payload: {}, type: pathType },
+      { coordinates: { x: 1, y: 2 }, index: 7, payload: {}, type: defaultType },
+      { coordinates: { x: 2, y: 2 }, index: 8, payload: {}, type: pathType },
+    ];
+    expect(p.addPortalGuards(data, pathType, probability, gridWidth)).toEqual(updatedData);
+  });
+});
+
 /*** addPlayer ***/
 describe('`addPlayer` populate grid reducer function', () => {
   const data = [
@@ -369,15 +445,62 @@ describe('`addPlayer` populate grid reducer function', () => {
 
 /*** populate ***/
 describe('`populate` grid reducer function', () => {
+  /*
+   * |-----+-----+-----+-----+-----+-----|
+   * | 0,0 | 1,0 | 2,0 | 3,0 | 4,0 | 5,0 |
+   * |=====+=====+=====+=====+=====+=====|
+   * | 0,1 | 1,1 | 2,1 | 3,1 | 4,1 | 5,1 |
+   * |-----+-----+-----+-----+-----+-----|
+   * | 0,2 | 1,2 | 2,2 | 3,2 | 4,2 | 5,2 |
+   * |-----+-----+-----+-----+-----+-----|
+   * | 0,3 | 1,3 | 2,3 | 3,3 | 4,3 | 5,3 |
+   * |-----+-----+-----+-----+-----+-----|
+   * | 0,4 | 1,4 | 2,4 | 3,4 | 4,4 | 5,4 |
+   * |-----+-----+-----+-----+-----+-----|
+   * | 0,5 | 1,5 | 2,5 | 3,5 | 4,5 | 5,5 |
+   * |-----+-----+-----+-----+-----+-----|
+   */
+
   const data = [
     { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: pathType },
     { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: pathType },
     { coordinates: { x: 2, y: 0 }, index: 2, payload: {}, type: pathType },
     { coordinates: { x: 3, y: 0 }, index: 3, payload: {}, type: pathType },
+    { coordinates: { x: 4, y: 0 }, index: 4, payload: {}, type: pathType },
+    { coordinates: { x: 5, y: 0 }, index: 5, payload: {}, type: pathType },
+    { coordinates: { x: 0, y: 1 }, index: 6, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 1 }, index: 7, payload: {}, type: pathType },
+    { coordinates: { x: 2, y: 1 }, index: 8, payload: {}, type: pathType },
+    { coordinates: { x: 3, y: 1 }, index: 9, payload: {}, type: pathType },
+    { coordinates: { x: 4, y: 1 }, index: 10, payload: {}, type: pathType },
+    { coordinates: { x: 5, y: 1 }, index: 11, payload: {}, type: pathType },
+    { coordinates: { x: 0, y: 2 }, index: 12, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 2 }, index: 13, payload: {}, type: pathType },
+    { coordinates: { x: 2, y: 2 }, index: 14, payload: {}, type: pathType },
+    { coordinates: { x: 3, y: 2 }, index: 15, payload: {}, type: pathType },
+    { coordinates: { x: 4, y: 2 }, index: 16, payload: {}, type: pathType },
+    { coordinates: { x: 5, y: 2 }, index: 17, payload: {}, type: pathType },
+    { coordinates: { x: 0, y: 3 }, index: 18, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 3 }, index: 19, payload: {}, type: pathType },
+    { coordinates: { x: 2, y: 3 }, index: 20, payload: {}, type: pathType },
+    { coordinates: { x: 3, y: 3 }, index: 21, payload: {}, type: pathType },
+    { coordinates: { x: 4, y: 3 }, index: 22, payload: {}, type: pathType },
+    { coordinates: { x: 5, y: 3 }, index: 23, payload: {}, type: pathType },
+    { coordinates: { x: 0, y: 4 }, index: 24, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 4 }, index: 25, payload: {}, type: pathType },
+    { coordinates: { x: 2, y: 4 }, index: 26, payload: {}, type: pathType },
+    { coordinates: { x: 3, y: 4 }, index: 27, payload: {}, type: pathType },
+    { coordinates: { x: 4, y: 4 }, index: 28, payload: {}, type: pathType },
+    { coordinates: { x: 5, y: 4 }, index: 29, payload: {}, type: pathType },
+    { coordinates: { x: 0, y: 5 }, index: 30, payload: {}, type: pathType },
+    { coordinates: { x: 1, y: 5 }, index: 31, payload: {}, type: pathType },
+    { coordinates: { x: 2, y: 5 }, index: 32, payload: {}, type: pathType },
+    { coordinates: { x: 3, y: 5 }, index: 33, payload: {}, type: pathType },
+    { coordinates: { x: 4, y: 5 }, index: 34, payload: {}, type: pathType },
+    { coordinates: { x: 5, y: 5 }, index: 35, payload: {}, type: pathType },
   ];
   // parameters are `data`, `level`, `gridWidth`, `pathType`
-  const result = populate(data, 1, 4, pathType);
-
+  const result = populate(data, 1, 6, pathType);
   it('should return an object with `data` and `playerPosition` properties', () => {
     expect(result).toHaveProperty('data');
     expect(result).toHaveProperty('playerPosition');
@@ -413,8 +536,7 @@ describe('`populate` grid reducer function', () => {
       type: pathType,
     };
     expect(result.data).toContainEqual(portalObj);
-    expect(populate(data, 3, 4, pathType)).not.toContainEqual(portalObj);
+    expect(populate(data, 3, 6, pathType)).not.toContainEqual(portalObj);
   });
-
   // Loot and Enemies are not guaranteed
 });

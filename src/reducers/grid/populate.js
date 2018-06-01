@@ -1,7 +1,7 @@
-import _ from 'lodash';
 import * as c from '../../constants/settings';
 import * as l from '../../constants/loot';
-import * as g from '../../constants/gameplay';
+import * as ch from '../../constants/characters';
+import * as h from '../../actions/index.helpers';
 import tileTypes from '../../constants/tile-types';
 
 /*** Enemy functions ***/
@@ -25,36 +25,23 @@ export const direction = () => {
 
 // Add enemies
 export const addEnemies = (data, pathType, probability) => {
-  for (let i in data) {
-    const enemy = {
-      weapon: l.weapons.spear,
-      facing: direction(),
-      level: _.random(1, 5),
-      type: 'orc',
-    };
-    enemy.health = g.healthCalc(enemy.level);
-
+  for (let i = data.length - 1; i >= 0; i--) {
     // `probability` of an empty path being occupied by an enemy
     if (
+      data[i] &&
+      data[i].payload &&
       probability >= Math.random() &&
       Object.keys(data[i].payload).length === 0 &&
       data[i].type === pathType
     ) {
-      data[i].payload = { enemy };
+      // Orcs are the default enemy
+      data[i].payload = { enemy: new ch.orc() };
     }
   }
   return data;
 };
 
 export const addBoss = (data, pathType, level) => {
-  const enemy = {
-    weapon: l.weapons.trident,
-    facing: 'west',
-    level: _.random(7, 10),
-    type: 'boss',
-  };
-  enemy.health = g.healthCalc(enemy.level);
-
   let count = 0;
   for (let i = data.length - 1; i >= 0; i--) {
     // boss only appears on `level` 3
@@ -66,26 +53,33 @@ export const addBoss = (data, pathType, level) => {
     ) {
       count++;
       if (count === 2) {
-        data[i].payload = { enemy };
+        data[i].payload = { enemy: ch.boss };
       }
     }
   }
   return data;
 };
 
-export const addPrinceFew = (data, pathType, level) => {
-  const prince = {
-    weapon: l.weapons.trident,
-    facing: 'west',
-    level: _.random(2, 4),
-    type: 'prince',
-  };
-  prince.health = g.healthCalc(prince.level);
+export const addPortalGuards = (data, pathType, probability, gridWidth = c.GRID_WIDTH) => {
+  const portal = data.find(cell => cell.payload.hasOwnProperty('portal'));
+  if (portal) {
+    const portalAdjacentPositions = h.adjacentPositions(portal, gridWidth);
+    const portalAdjacentObjects = portalAdjacentPositions.map(i => data[i.index]);
+    const updatedObjs = addEnemies(portalAdjacentObjects, pathType, probability);
+    updatedObjs.forEach(uo => {
+      if (uo && uo.payload && uo.payload.enemy) {
+        data.splice(uo.index, 1, uo);
+      }
+    });
+  }
+  return data;
+};
 
+export const addPrinceFew = (data, pathType, level) => {
   for (let i = data.length - 1; i >= 0; i--) {
     // Prince Few only appears on `level` 3
     if (level === 3 && Object.keys(data[i].payload).length === 0 && data[i].type === pathType) {
-      data[i].payload = { prince };
+      data[i].payload = { prince: ch.prince };
       break;
     }
   }
@@ -251,16 +245,10 @@ export const addPlayer = (data, pathType) => {
   let count = 0;
   let playerPosition;
   for (let i = 0; i <= data.length - 1; i++) {
-    // Player
-    const player = {
-      facing: 'south',
-      level: 1,
-      health: 20,
-    };
     if (Object.keys(data[i].payload).length === 0 && data[i].type === pathType && count <= 2) {
       count++;
       if (count === 2) {
-        data[i].payload = { player };
+        data[i].payload = { player: ch.player };
 
         // Save playerPosition as a variable
         playerPosition = {
@@ -289,6 +277,9 @@ const populate = (data, level, gridWidth = c.GRID_WIDTH, pathType = tileTypes(le
 
   // Add portal just west of the southeast corner for levels 1-2
   data = addPortal(data, pathType, level);
+
+  // Add guards around the portals on each level
+  data = addPortalGuards(data, pathType, 0.4);
 
   // Position player just east of the northwest corner
   const p = addPlayer(data, pathType);
