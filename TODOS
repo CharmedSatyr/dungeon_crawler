@@ -1,10 +1,9 @@
-Add Prince Few - actions/reducer
-Add enemy movement
+Add enemy random movement
+  - Add smart enemy movement?
 add healing spell
 Add more weapons
   - oversize weapons?
 Add FOG
-Increase chance of enemies by doors
 
 User Story: Much of the map is hidden. When I take a step, all spaces that are within a certain number of spaces from me are revealed.
 User Story: When I find and beat the boss, I win.
