@@ -64,13 +64,28 @@ describe('`setAnimationClass` Enemy component function', () => {
 describe('`Enemy` component', () => {
   const initialState = {
     animation: { enemy: { 0: 'attack' } },
+    grid: {
+      playerPosition: {
+        coordinates: {
+          x: 0,
+          y: 0,
+        },
+        index: 0,
+      },
+    },
   };
   const props = {
     facing: 'south',
     index: 0,
     stats: { health: 10, weapon: l.weapons.spear },
+    position: {
+      coordinates: {
+        x: 0,
+        y: 0,
+      },
+      index: 0,
+    },
   };
-
   const mockStore = configureMockStore();
   let store;
   beforeEach(() => {
