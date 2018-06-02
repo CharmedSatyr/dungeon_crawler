@@ -4,10 +4,9 @@ import * as l from '../../../constants/loot';
 
 const defaultType = 'default';
 const pathType = 'path';
-const cardinalDirections = /[north||south||east||west]/;
 
 const mockOrc = {
-  facing: expect.stringMatching(cardinalDirections),
+  facing: expect.any(String),
   health: expect.any(Number),
   level: expect.any(Number),
   weapon: expect.any(Object),
@@ -21,13 +20,6 @@ const mockBoss = {
   weapon: expect.any(Object),
   type: 'boss',
 };
-
-/*** direction ***/
-describe('`direction` populate grid reducer function', () => {
-  it('should return a string matching a cardinal direction', () => {
-    expect(p.direction()).toMatch(cardinalDirections);
-  });
-});
 
 /*** addEnemies ***/
 describe('`addEnemies` populate grid reducer function', () => {

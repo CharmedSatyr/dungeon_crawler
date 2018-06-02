@@ -5,24 +5,6 @@ import * as h from '../../actions/index.helpers';
 import tileTypes from '../../constants/tile-types';
 
 /*** Enemy functions ***/
-// direction
-// Returns a random cardinal direction
-export const direction = () => {
-  const n = Math.random();
-  switch (true) {
-    case n < 0.25:
-      return 'north';
-    case n < 0.5:
-      return 'east';
-    case n < 0.75:
-      return 'south';
-    case n <= 1.0:
-      return 'west';
-    default:
-      return 'south';
-  }
-};
-
 // Add enemies
 export const addEnemies = (data, pathType, probability) => {
   for (let i = data.length - 1; i >= 0; i--) {
