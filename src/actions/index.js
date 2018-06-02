@@ -94,9 +94,9 @@ export const move = targetObj => {
   return action;
 };
 
-export const move_enemy = (enemy, targetObj) => {
+export const move_enemy = (enemyPosition, targetObj) => {
   const action = {
-    enemy,
+    enemyPosition,
     targetObj,
     type: t.MOVE_ENEMY,
   };

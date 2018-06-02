@@ -138,14 +138,14 @@ describe('`move` action creator', () => {
 
 describe('`move_enemy` action creator', () => {
   it('should return an action to move an `enemy` payload to a target position', () => {
-    const enemy = { x: 0, y: 0 };
+    const enemyPosition = { x: 0, y: 0 };
     const targetObj = { x: 1, y: 0 };
     const action = {
-      enemy,
+      enemyPosition,
       targetObj,
       type: t.MOVE_ENEMY,
     };
-    expect(a.move_enemy(enemy, targetObj)).toEqual(action);
+    expect(a.move_enemy(enemyPosition, targetObj)).toEqual(action);
   });
 });
 
