@@ -127,12 +127,25 @@ describe('`game_over` action creator', () => {
 
 describe('`move` action creator', () => {
   it('should return an action to move to a target position', () => {
-    const args = [{ x: 0, y: 0 }];
+    const targetObj = { x: 0, y: 0 };
     const action = {
+      targetObj,
       type: t.MOVE,
-      targetObj: args[0],
     };
-    expect(a.move(...args)).toEqual(action);
+    expect(a.move(targetObj)).toEqual(action);
+  });
+});
+
+describe('`move_enemy` action creator', () => {
+  it('should return an action to move an `enemy` payload to a target position', () => {
+    const enemy = { x: 0, y: 0 };
+    const targetObj = { x: 1, y: 0 };
+    const action = {
+      enemy,
+      targetObj,
+      type: t.MOVE_ENEMY,
+    };
+    expect(a.move_enemy(enemy, targetObj)).toEqual(action);
   });
 });
 

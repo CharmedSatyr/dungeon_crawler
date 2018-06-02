@@ -12,6 +12,7 @@ export const HOSTILE_ENEMIES = 'HOSTILE_ENEMIES';
 export const LEVEL_UP = 'LEVEL_UP';
 export const MESSAGE = 'MESSAGE';
 export const MOVE = 'MOVE';
+export const MOVE_ENEMY = 'MOVE_ENEMY';
 export const NEXT_LEVEL = 'NEXT_LEVEL';
 export const OPEN = 'OPEN';
 export const TAKE_DAMAGE = 'TAKE_DAMAGE';

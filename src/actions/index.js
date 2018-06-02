@@ -88,8 +88,17 @@ export const game_over = () => {
 
 export const move = targetObj => {
   const action = {
-    type: t.MOVE,
     targetObj,
+    type: t.MOVE,
+  };
+  return action;
+};
+
+export const move_enemy = (enemy, targetObj) => {
+  const action = {
+    enemy,
+    targetObj,
+    type: t.MOVE_ENEMY,
   };
   return action;
 };
