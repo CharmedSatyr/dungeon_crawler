@@ -1,14 +1,15 @@
 {
   "name": "dungeon_crawler",
   "version": "0.0.1",
-  "description": "\"Build a Roguelike Dungeon Crawler Game\" is a project required for freeCodeCamp's Data Visualization Certificate.",
+  "description":
+    "\"Build a Roguelike Dungeon Crawler Game\" is a project required for freeCodeCamp's Data Visualization Certificate.",
   "repository": "https://github.com/CharmedSatyr/dungeon_crawler",
   "author": "CharmedSatyr <z@charmed.tech>",
   "license": "GPL-3.0",
   "engines": {
-    "node": "^9.8.0",
-    "npm": "^6.0.1",
-    "yarn": "^1.6.0"
+    "node": "^10.3.0",
+    "npm": "^6.1.0",
+    "yarn": "^1.7.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
@@ -75,12 +76,8 @@
     "extends": "react-app"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,mjs}"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
+    "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
     "setupTestFrameworkScriptFile": "<rootDir>/src/setupTests.js",
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
@@ -93,25 +90,13 @@
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node",
-      "mjs"
-    ]
+    "moduleFileExtensions": ["web.js", "js", "json", "web.jsx", "jsx", "node", "mjs"]
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   }
 }
