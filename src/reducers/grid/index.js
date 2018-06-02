@@ -42,7 +42,7 @@ const grid = (state = initialState, { damage, direction, flag, targetObj, type }
       const updated = move(state.data, state.playerPosition, targetObj);
       return Object.assign({}, state, {
         data: updated.data,
-        playerPosition: updated.playerPosition,
+        playerPosition: updated.position,
       });
     case t.NEXT_LEVEL:
       const level = populate(generate(state.level + 1), state.level + 1);

@@ -1,85 +1,113 @@
+import move from '../move';
+
 describe('`move` grid reducer', () => {
-  it('should do something...');
+  it('should return an object with `data` and `position` properties', () => {
+    const data = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { player: { facing: 'west' } } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    ];
+    const originPosition = data[0];
+    const targetObj = data[1];
+    expect(move(data, originPosition, targetObj)).toHaveProperty('data');
+    expect(move(data, originPosition, targetObj)).toHaveProperty('position');
+  });
+
+  it('should return an object with a `data` property that is an array', () => {
+    const data = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { player: { facing: 'west' } } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    ];
+    const originPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
+    const targetObj = data[1];
+    expect(Array.isArray(move(data, originPosition, targetObj).data)).toBeTruthy();
+  });
+
+  it('should return an object with a `position` property that has `coordinates` and `index` properties of the correct shape/type', () => {
+    const data = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { player: { facing: 'west' } } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    ];
+    const originPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
+    const targetObj = data[1];
+    const positionShape = {
+      coordinates: {
+        x: expect.any(Number),
+        y: expect.any(Number),
+      },
+      index: expect.any(Number),
+    };
+    expect(move(data, originPosition, targetObj).position).toMatchObject(positionShape);
+  });
+
+  it('should update the targetObj payload to `player` if the object at `originPosition` has a `player` payload', () => {
+    const data = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { player: { facing: 'west' } } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    ];
+    const originPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
+    const targetObj = data[1];
+
+    const updatedData = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: {} },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: { player: { facing: 'east' } } },
+    ];
+    expect(move(data, originPosition, targetObj).data).toEqual(updatedData);
+  });
+
+  it('should update the targetObj payload to `enemy` if the object at `originPosition` has a living `enemy` payload', () => {
+    const data = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { enemy: { facing: 'west', health: 10 } } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    ];
+    const originPosition = { coordinates: { x: 0, y: 0 }, index: 0 };
+    const targetObj = data[1];
+    const updatedData = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: {} },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: { enemy: { facing: 'east', health: 10 } } },
+    ];
+    expect(move(data, originPosition, targetObj).data).toEqual(updatedData);
+  });
+
+  it('should update the object at `originPosition` to not have a `player` payload if the `originPosition` argument had a `player` payload', () => {
+    const data = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { player: { facing: 'west' } } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    ];
+    const originPosition = data[0];
+    const targetObj = data[1];
+    const resultData = move(data, originPosition, targetObj).data;
+    const updatedOriginPosition = resultData[0];
+    expect(updatedOriginPosition.payload).not.toHaveProperty('player');
+  });
+
+  it('should update the object at `originPosition` to not have an `enemy` payload if the `originPosition` had an `enemy` payload', () => {
+    const data = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { enemy: { facing: 'west' } } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    ];
+    const originPosition = data[0];
+    const targetObj = data[1];
+    const resultData = move(data, originPosition, targetObj).data;
+    const updatedOriginPosition = resultData[0];
+    expect(updatedOriginPosition.payload).not.toHaveProperty('enemy');
+  });
+
+  it('should NOT remove dead enemies from `originPosition` payloads', () => {
+    const data = [
+      {
+        coordinates: { x: 0, y: 0 },
+        index: 0,
+        payload: { player: { facing: 'west' }, enemy: { facing: 'west', health: 0 } },
+      },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    ];
+    const originPosition = data[0];
+    const targetObj = data[1];
+    const resultData = move(data, originPosition, targetObj).data;
+    console.log('resultData:', resultData);
+    const updatedOriginPosition = resultData[0];
+    const updatedTargetObj = resultData[1];
+    expect(updatedOriginPosition.payload).toHaveProperty('enemy');
+    expect(updatedTargetObj.payload).toHaveProperty('player');
+  });
 });
-// describe('grid reducers', () => {
-//   /*** TOGGLE_CELL ***/
-//   it('should toggle the state indicating the player character', () => {
-//     const initialState = [{ player: false }, { player: true }];
-//     const result = [{ player: true }, { player: false }];
-//
-//     expect(grid(initialState, { type: 'TOGGLE_CELL', index: 0 })).toEqual(result);
-//   });
-//
-//   /*** MOVE_EAST ***/
-//   it('should advance the player property one index if not at boundary', () => {
-//     const initialState = [{ player: true }, { player: false }];
-//     const result = [{ player: false }, { player: true }];
-//
-//     expect(grid(initialState, { type: 'MOVE_EAST', position: 0 })).toEqual(result);
-//   });
-//
-//   /*** MOVE_NORTH ***/
-//   it('should move the player property back GRID_WIDTH indices if not at boundary', () => {
-//     // manual mocks
-//     // last index is player
-//     const initialState = [];
-//     for (let i = 0; i < TOTAL_CELLS; i++) {
-//       initialState.push({ player: false });
-//     }
-//     initialState.splice(TOTAL_CELLS - 1, 1, { player: true });
-//
-//     // end of second to last row is player
-//     const result = [];
-//     for (let i = 0; i < TOTAL_CELLS; i++) {
-//       result.push({ player: false });
-//     }
-//     result.splice(TOTAL_CELLS - 1 - GRID_WIDTH, 1, { player: true });
-//
-//     expect(grid(initialState, { type: 'MOVE_NORTH', position: TOTAL_CELLS - 1 })).toEqual(result);
-//     expect(grid(initialState, { type: 'MOVE_NORTH', position: 0 })).toEqual(initialState);
-//   });
-//
-//   /*** MOVE_SOUTH ***/
-//   it('should advance the player property GRID_WIDTH indices if not at boundary', () => {
-//     //manual mock
-//
-//     // end of second to last row is player
-//     const initialState = [];
-//     for (let i = 0; i < TOTAL_CELLS; i++) {
-//       initialState.push({ player: false });
-//     }
-//     initialState.splice(TOTAL_CELLS - 1 - GRID_WIDTH, 1, { player: true });
-//
-//     // last index is player
-//     const result = [];
-//     for (let i = 0; i < TOTAL_CELLS; i++) {
-//       result.push({ player: false });
-//     }
-//     result.splice(TOTAL_CELLS - 1, 1, { player: true });
-//
-//     // first cell on last row
-//     const initialState2 = [];
-//     for (let i = 0; i < TOTAL_CELLS; i++) {
-//       initialState2.push({ player: false });
-//     }
-//     initialState2.splice(TOTAL_CELLS - GRID_WIDTH, 1, { player: true });
-//
-//     expect(
-//       grid(initialState, { type: 'MOVE_SOUTH', position: TOTAL_CELLS - 1 - GRID_WIDTH })
-//     ).toEqual(result);
-//     expect(grid(result, { type: 'MOVE_SOUTH', position: TOTAL_CELLS - 1 })).toEqual(result);
-//     // Ensure the first cell on the last row cannot move down
-//     expect(grid(initialState2, { type: 'MOVE_SOUTH', position: TOTAL_CELLS - GRID_WIDTH })).toEqual(
-//       initialState2
-//     );
-//   });
-//
-//   /*** MOVE_WEST ***/
-//   it('should move the player property back one index if not at boundary', () => {
-//     const initialState = [{ player: false }, { player: true }];
-//     const result = [{ player: true }, { player: false }];
-//
-//     expect(grid(initialState, { type: 'MOVE_WEST', position: 1 })).toEqual(result);
-//     expect(grid(result, { type: 'MOVE_WEST', position: 0 })).toEqual(result);
-//   });
-// });
