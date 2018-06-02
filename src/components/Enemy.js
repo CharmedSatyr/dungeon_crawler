@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as c from '../constants/settings';
 import PropTypes from 'prop-types';
@@ -64,33 +64,76 @@ export const setAnimationClass = (weaponName, enemyAnimation, facing, index) => 
   }
 };
 
-const Enemy = ({ enemyAnimation, facing, index, stats }) => (
-  <div
-    className={setAnimationClass(stats.weapon.name, enemyAnimation, facing, index)}
-    style={{
-      backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
-      backgroundPosition: setBackgroundPosition(stats.type, stats.health, facing),
-      height: c.CELL_SIDE,
-      marginTop: -7,
-      position: 'absolute',
-      transform: 'scale(1.2,1.2)', // Enemies bigger than hero
-      width: c.CELL_SIDE,
-    }}
-  />
-);
+class Enemy extends Component {
+  constructor(props) {
+    super(props);
+    this.checkMove = this.checkMove.bind(this);
+  }
+  checkMove() {
+    const { playerPosition, position } = this.props;
+    switch (true) {
+      case playerPosition.index + 1 === position.index:
+      case playerPosition.index - 1 === position.index:
+      case playerPosition.index + c.GRID_WIDTH === position.index:
+      case playerPosition.index - c.GRID_WIDTH === position.index:
+        return console.log('feck I should not move:', position.index);
+      case position.index === playerPosition.index - 2 * c.GRID_WIDTH:
+        return console.log('I should move south');
+      default:
+        break;
+    }
+  }
+  componentWillMount() {
+    setInterval(() => this.checkMove(), 1000);
+  }
+  render() {
+    const { enemyAnimation, facing, position, stats } = this.props;
+    return (
+      <div
+        className={setAnimationClass(stats.weapon.name, enemyAnimation, facing, position.index)}
+        style={{
+          backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
+          backgroundPosition: setBackgroundPosition(stats.type, stats.health, facing),
+          height: c.CELL_SIDE,
+          marginTop: -7,
+          position: 'absolute',
+          transform: 'scale(1.2,1.2)', // Enemies bigger than hero
+          width: c.CELL_SIDE,
+        }}
+      />
+    );
+  }
+}
 
 Enemy.propTypes = {
   enemyAnimation: PropTypes.object.isRequired,
   facing: PropTypes.string,
-  index: PropTypes.number.isRequired,
+  position: PropTypes.shape({
+    coordinates: PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    }),
+    index: PropTypes.number.isRequired,
+  }),
+  playerPosition: PropTypes.shape({
+    coordinates: PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    }),
+    index: PropTypes.number.isRequired,
+  }),
   stats: PropTypes.shape({
     health: PropTypes.number.isRequired,
     weapon: PropTypes.object.isRequired,
   }),
 };
 
-const mapStateToProps = ({ animation }) => ({
+const mapStateToProps = ({ animation, grid }) => ({
   enemyAnimation: animation.enemy,
+  playerPosition: grid.playerPosition,
 });
 
-export default connect(mapStateToProps, null)(Enemy);
+export default connect(
+  mapStateToProps,
+  null
+)(Enemy);

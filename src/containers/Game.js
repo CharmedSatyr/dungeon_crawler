@@ -117,9 +117,15 @@ class Game extends Component {
       //     index === playerPosition.index + c.GRID_WIDTH + 1 ||
       //     index === playerPosition.index - c.GRID_WIDTH + 1
       // )
-      .map((item, index) => (
-        <CellContainer key={index} index={index} payload={item.payload} type={item.type} />
-      ));
+      .map((item, index) => {
+        const position = {
+          coordinates: item.coordinates,
+          index: item.index,
+        };
+        return (
+          <CellContainer key={index} position={position} payload={item.payload} type={item.type} />
+        );
+      });
 
     const game = (
       <div>
@@ -170,4 +176,7 @@ const mapDispatchToProps = dispatch => ({
   player_input: targetObj => dispatch(a.player_input(targetObj)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Game);

@@ -48,18 +48,18 @@ export const cellBG = type => {
   }
 };
 
-export const display = (payload, index) => {
+export const display = (payload, position) => {
   if (payload.player && payload.enemy) {
     return (
       <div>
-        <Enemy index={index} facing={payload.enemy.facing} stats={payload.enemy} />
+        <Enemy position={position} facing={payload.enemy.facing} stats={payload.enemy} />
         <PlayerContainer facing={payload.player.facing} />
       </div>
     );
   }
 
   if (payload.enemy) {
-    return <Enemy index={index} facing={payload.enemy.facing} stats={payload.enemy} />;
+    return <Enemy position={position} facing={payload.enemy.facing} stats={payload.enemy} />;
   }
 
   if (payload.loot) {
@@ -75,24 +75,31 @@ export const display = (payload, index) => {
   }
 
   if (payload.prince) {
-    return <Prince index={index} facing={payload.prince.facing} stats={payload.prince} />;
+    return <Prince index={position.index} facing={payload.prince.facing} stats={payload.prince} />;
   }
 
   return null;
 };
 
 // background
-const CellContainer = ({ index, payload, type }) => (
+const CellContainer = ({ position, payload, type }) => (
   <Cell
     backgroundImage={`url(${tiles})`}
     backgroundPosition={cellBG(type)}
     cellSide={c.CELL_SIDE}
-    children={display(payload, index)}
+    children={display(payload, position)}
   />
 );
 
 CellContainer.propTypes = {
   payload: PropTypes.object.isRequired,
+  position: PropTypes.shape({
+    coordinates: PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    }),
+    index: PropTypes.number.isRequired,
+  }),
   type: PropTypes.string.isRequired,
 };
 
