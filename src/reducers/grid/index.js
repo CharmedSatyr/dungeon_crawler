@@ -18,7 +18,10 @@ const initialState = {
 };
 
 // Grid reducers
-const grid = (state = initialState, { damage, direction, flag, targetObj, type }) => {
+const grid = (
+  state = initialState,
+  { damage, direction, enemyPosition, flag, targetObj, type }
+) => {
   switch (type) {
     case t.ADD_GOLD:
     case t.ADD_ITEM:
@@ -43,6 +46,11 @@ const grid = (state = initialState, { damage, direction, flag, targetObj, type }
       return Object.assign({}, state, {
         data: updated.data,
         playerPosition: updated.position,
+      });
+    case t.MOVE_ENEMY:
+      const updateEnemy = move(state.data, enemyPosition, targetObj);
+      return Object.assign({}, state, {
+        data: updateEnemy.data,
       });
     case t.NEXT_LEVEL:
       const level = populate(generate(state.level + 1), state.level + 1);

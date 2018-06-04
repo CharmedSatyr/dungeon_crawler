@@ -85,6 +85,27 @@ describe('`grid` reducer', () => {
     expect(grid(mockState, action)).toEqual(expect.objectContaining(expected));
   });
 
+  it('should preserve state shape on `MOVE_ENEMY` action type', () => {
+    const mockData = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { enemy: { facing: 'south' } } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+      { coordinates: { x: 2, y: 0 }, index: 2, payload: { player: {} } },
+    ];
+    const enemyPosition = mockData[0];
+    const targetObj = mockData[1];
+    const action = { enemyPosition, targetObj, type: t.MOVE_ENEMY };
+    const mockState = {
+      data: mockData,
+      level: 1,
+      playerPosition: {
+        coordinates: { x: 2, y: 0 },
+        index: 2,
+      },
+    };
+    expect.assertions(1);
+    expect(grid(mockState, action)).toEqual(expect.objectContaining(expected));
+  });
+
   it('should preserve state shape on `NEXT_LEVEL` action type', () => {
     const action = { type: t.NEXT_LEVEL };
     expect.assertions(1);
