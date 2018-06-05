@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as c from '../constants/settings';
-import PropTypes from 'prop-types';
+import * as a from '../actions/';
 import * as l from '../constants/loot';
+import PropTypes from 'prop-types';
 
 import orcSpear from '../resources/enemy/orc-spear.png';
 import boss from '../resources/enemy/boss-sprite.png';
@@ -64,30 +65,34 @@ export const setAnimationClass = (weaponName, enemyAnimation, facing, index) => 
   }
 };
 
+// export const checkMove = (playerPosition, enemyPosition, gridData) => {
+//   // Player is diagonal right of enemy
+//   if (enemyPosition.index + c.GRID_WIDTH + 1 === playerPosition.index) {
+//     // Move right
+//     const targetObj = gridData[enemyPosition.index + 1];
+//     return this.props.move_enemy(enemyPosition, targetObj);
+//   }
+// };
+
 class Enemy extends Component {
   constructor(props) {
     super(props);
     this.checkMove = this.checkMove.bind(this);
   }
-  checkMove() {
-    const { playerPosition, position } = this.props;
-    switch (true) {
-      case playerPosition.index + 1 === position.index:
-      case playerPosition.index - 1 === position.index:
-      case playerPosition.index + c.GRID_WIDTH === position.index:
-      case playerPosition.index - c.GRID_WIDTH === position.index:
-        return console.log('feck I should not move:', position.index);
-      case position.index === playerPosition.index - 2 * c.GRID_WIDTH:
-        return console.log('I should move south');
-      default:
-        break;
-    }
-  }
-  componentWillMount() {
-    setInterval(() => this.checkMove(), 1000);
-  }
+  //  checkMove(playerPosition, enemyPosition, gridData) {
+  //    // Player is right of enemy
+  //    console.log('playerPosition:', playerPosition.coordinates.y);
+  //    console.log('enemyPosition:', enemyPosition.coordinates.y);
+  //    if (enemyPosition.coordinates.y === playerPosition.coordinates.y) {
+  //      console.log('yabba dabba doo!');
+  //      // Move right
+  //      const targetObj = gridData[enemyPosition.index + 1];
+  //      return this.props.move_enemy(enemyPosition, targetObj);
+  //    }
+  //  }
   render() {
-    const { enemyAnimation, facing, position, stats } = this.props;
+    const { gridData, enemyAnimation, facing, position, playerPosition, stats } = this.props;
+    // setInterval(() => this.checkMove(playerPosition, position, gridData), 1000);
     return (
       <div
         className={setAnimationClass(stats.weapon.name, enemyAnimation, facing, position.index)}
@@ -108,6 +113,8 @@ class Enemy extends Component {
 Enemy.propTypes = {
   enemyAnimation: PropTypes.object.isRequired,
   facing: PropTypes.string,
+  gridData: PropTypes.array.isRequired,
+  move_enemy: PropTypes.func.isRequired,
   position: PropTypes.shape({
     coordinates: PropTypes.shape({
       x: PropTypes.number.isRequired,
@@ -130,10 +137,15 @@ Enemy.propTypes = {
 
 const mapStateToProps = ({ animation, grid }) => ({
   enemyAnimation: animation.enemy,
+  gridData: grid.data,
   playerPosition: grid.playerPosition,
+});
+
+const mapDispatchToProps = dispatch => ({
+  move_enemy: (enemyPosition, targetObj) => dispatch(a.move_enemy(enemyPosition, targetObj)),
 });
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Enemy);

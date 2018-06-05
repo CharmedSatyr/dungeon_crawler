@@ -61,6 +61,23 @@ describe('`setAnimationClass` Enemy component function', () => {
   });
 });
 
+describe('`checkMove` Enemy component function', () => {
+  /*
+    * |--------+-------|
+    * | Player | 1,0   |
+    * |========+=======|
+    * | 0,1    | Enemy |
+    * |--------+-------|
+   */
+
+  it('should return `undefined` if either `playerPosition` or `enemyPosition` arguments are invalid', () => {
+    expect(e.checkMove(null, null)).toBeUndefined();
+    expect(e.checkMove('string', 8)).toBeUndefined();
+  });
+
+  it('should return... something... if the Player is NW...');
+});
+
 describe('`Enemy` component', () => {
   const initialState = {
     animation: { enemy: { 0: 'attack' } },
