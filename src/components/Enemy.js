@@ -65,34 +65,81 @@ export const setAnimationClass = (weaponName, enemyAnimation, facing, index) => 
   }
 };
 
-// export const checkMove = (playerPosition, enemyPosition, gridData) => {
-//   // Player is diagonal right of enemy
-//   if (enemyPosition.index + c.GRID_WIDTH + 1 === playerPosition.index) {
-//     // Move right
-//     const targetObj = gridData[enemyPosition.index + 1];
-//     return this.props.move_enemy(enemyPosition, targetObj);
-//   }
-// };
-
 class Enemy extends Component {
   constructor(props) {
     super(props);
     this.checkMove = this.checkMove.bind(this);
   }
-  //  checkMove(playerPosition, enemyPosition, gridData) {
-  //    // Player is right of enemy
-  //    console.log('playerPosition:', playerPosition.coordinates.y);
-  //    console.log('enemyPosition:', enemyPosition.coordinates.y);
-  //    if (enemyPosition.coordinates.y === playerPosition.coordinates.y) {
-  //      console.log('yabba dabba doo!');
-  //      // Move right
-  //      const targetObj = gridData[enemyPosition.index + 1];
-  //      return this.props.move_enemy(enemyPosition, targetObj);
-  //    }
-  //  }
+  checkMove(playerPosition, enemyPosition, gridData, health) {
+    let targetObj;
+    const conditions = (targetObj, health) => {
+      if (
+        health > 0 &&
+        !targetObj.payload.enemy &&
+        !targetObj.payload.loot &&
+        (targetObj.type === 'dirtPath' || targetObj.type === 'stonePath')
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    switch (true) {
+      // Player is east of enemy
+      case enemyPosition.index + 2 === playerPosition.index:
+      case enemyPosition.index + 3 === playerPosition.index:
+        // Move east
+        targetObj = gridData[enemyPosition.index + 1];
+        if (conditions(targetObj, health)) {
+          return this.props.move_enemy(enemyPosition, targetObj);
+        }
+        break;
+      // Player is west of enemy
+      case enemyPosition.index - 2 === playerPosition.index:
+      case enemyPosition.index - 3 === playerPosition.index:
+        // Move west
+        targetObj = gridData[enemyPosition.index - 1];
+        if (conditions(targetObj, health)) {
+          return this.props.move_enemy(enemyPosition, targetObj);
+        }
+        break;
+      // Player is north of enemy
+      case enemyPosition.index - 2 * c.GRID_WIDTH === playerPosition.index:
+      case enemyPosition.index - 3 * c.GRID_WIDTH === playerPosition.index:
+        // Move north
+        targetObj = gridData[enemyPosition.index - c.GRID_WIDTH];
+        if (conditions(targetObj, health)) {
+          return this.props.move_enemy(enemyPosition, targetObj);
+        }
+        break;
+      // Player is south of enemy
+      case enemyPosition.index + 2 * c.GRID_WIDTH === playerPosition.index:
+      case enemyPosition.index + 3 * c.GRID_WIDTH === playerPosition.index:
+        // Move south
+        targetObj = gridData[enemyPosition.index + c.GRID_WIDTH];
+        if (conditions(targetObj, health)) {
+          return this.props.move_enemy(enemyPosition, targetObj);
+        }
+        break;
+      // Player is south of enemy
+      //      case enemyPosition.index + 2 * c.GRID_WIDTH === playerPosition.index:
+      //      case enemyPosition.index + 3 * c.GRID_WIDTH === playerPosition.index:
+      //        // Move south
+      //        targetObj = gridData[enemyPosition.index + c.GRID_WIDTH];
+      //        if (conditions(targetObj)) {
+      //          return this.props.move_enemy(enemyPosition, targetObj);
+      //        }
+      //        break;
+      default:
+        break;
+    }
+  }
+  componentDidUpdate() {
+    const { gridData, playerPosition, position, stats } = this.props;
+    this.checkMove(playerPosition, position, gridData, stats.health);
+  }
   render() {
-    const { gridData, enemyAnimation, facing, position, playerPosition, stats } = this.props;
-    // setInterval(() => this.checkMove(playerPosition, position, gridData), 1000);
+    const { enemyAnimation, facing, position, stats } = this.props;
     return (
       <div
         className={setAnimationClass(stats.weapon.name, enemyAnimation, facing, position.index)}
