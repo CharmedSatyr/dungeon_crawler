@@ -16,10 +16,11 @@ describe('`animation` reducer', () => {
     expect(animation(initialState, action)).toEqual(updatedState);
   });
 
-  it('should reset the enemy animation to an empty object on `CLEAR_ENEMY_ANIMATION` action', () => {
-    const initialState = { enemy: { 1: 'attack' } };
-    const action = { type: t.CLEAR_ENEMY_ANIMATION };
-    const updatedState = { enemy: {} };
+  it('should remove an enemy index key on `CLEAR_ENEMY_ANIMATION` action', () => {
+    const initialState = { enemy: { 1: 'attack', 2: 'move' } };
+    const targetObj = { index: 2, payload: 'enemy' };
+    const action = { targetObj, type: t.CLEAR_ENEMY_ANIMATION };
+    const updatedState = { enemy: { 1: 'attack' } };
     expect(animation(initialState, action)).toEqual(updatedState);
   });
 
@@ -27,6 +28,14 @@ describe('`animation` reducer', () => {
     const initialState = { player: '' };
     const action = { type: t.MOVE };
     const updatedState = { player: 'move' };
+    expect(animation(initialState, action)).toEqual(updatedState);
+  });
+
+  it('should change `state.enemy` to `move` at key `targetObj.index` on `MOVE_ENEMY` action', () => {
+    const initialState = { enemy: {} };
+    const targetObj = { index: 0, payload: 'enemy' };
+    const action = { targetObj, type: t.MOVE_ENEMY };
+    const updatedState = { enemy: { 0: 'move' } };
     expect(animation(initialState, action)).toEqual(updatedState);
   });
 
