@@ -141,7 +141,7 @@ class Game extends Component {
       <Start
         fn={() => {
           this.props.next_level();
-          setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
+          // setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
         }}
       />
     );
