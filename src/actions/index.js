@@ -55,12 +55,21 @@ export const clear_animation = () => {
   return action;
 };
 
-export const clear_enemy_animation = () => {
+// export const clear_enemy_animation = () => {
+//   const action = {
+//     type: t.CLEAR_ENEMY_ANIMATION,
+//   };
+//   return action;
+// };
+
+export const clear_enemy_animation = targetObj => {
   const action = {
+    targetObj,
     type: t.CLEAR_ENEMY_ANIMATION,
   };
   return action;
 };
+
 export const drink = (targetObj, amount) => {
   const action = {
     type: t.DRINK,
@@ -145,6 +154,14 @@ export const take_damage = (damage, index) => {
 };
 
 /*** THUNKS ***/
+export const enemy_attack = targetObj => {
+  const { enemy } = targetObj.payload;
+  const { index } = targetObj;
+  const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
+  const msg = `An enemy assails you and does ${d} damage!`;
+  return batchActions([facing(targetObj, 'enemy'), message(msg), take_damage(d, index)]);
+};
+
 // Turn the enemy toward the player, display damage notification, inflict damage
 export const hostile_enemies = targetObj => {
   const { enemy } = targetObj.payload;
