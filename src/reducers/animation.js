@@ -12,8 +12,12 @@ const animation = (state = initialState, action) => {
       return Object.assign({}, state, { player: 'attack' });
     case t.CLEAR_ANIMATION:
       return Object.assign({}, state, { player: '' });
+    //  case t.CLEAR_ENEMY_ANIMATION:
+    //    return Object.assign({}, state, { enemy: {} });
     case t.CLEAR_ENEMY_ANIMATION:
-      return Object.assign({}, state, { enemy: {} });
+      const updatedEnemy = Object.assign({}, state.enemy);
+      delete updatedEnemy[action.targetObj.index];
+      return Object.assign({}, state, { enemy: updatedEnemy });
     case t.MOVE:
       return Object.assign({}, state, { player: 'move' });
     case t.TAKE_DAMAGE:
