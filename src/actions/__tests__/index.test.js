@@ -62,11 +62,13 @@ describe('`clear_animation` action creator', () => {
 });
 
 describe('`clear_enemy_animation` action creator', () => {
-  it('should return an action to remove an animated CSS style class', () => {
+  it('should return an action to remove an animated CSS style class from a targetObj', () => {
+    const targetObj = { payload: 'test' };
     const action = {
+      targetObj,
       type: t.CLEAR_ENEMY_ANIMATION,
     };
-    expect(a.clear_enemy_animation()).toMatchObject(action);
+    expect(a.clear_enemy_animation(targetObj)).toMatchObject(action);
   });
 });
 
