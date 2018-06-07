@@ -63,25 +63,6 @@ class Game extends Component {
     const { player_input } = this.props;
     player_input(this.getTargetObj(direction));
   }
-  checkAttack(playerPosition) {
-    // Check for living enemies adjacent to player
-    const { gridData, hostile_enemies } = this.props;
-    // pap = player-adjacent positions
-    const pap = h.adjacentPositions(playerPosition);
-    // For each neighbor
-    pap.forEach(targetPosition => {
-      const { index } = targetPosition;
-      const targetObj = gridData[index];
-      const { enemy } = targetObj.payload;
-      // If enemy, initiate its attack
-      if (enemy && enemy.health > 0) {
-        hostile_enemies(targetObj);
-        setTimeout(() => {
-          this.props.clear_enemy_animation();
-        }, c.ANIMATION_DURATION);
-      }
-    });
-  }
   getTargetObj(direction) {
     const { gridData, playerPosition } = this.props;
     const targetPosition = h.getTargetPosition(playerPosition, direction);
@@ -89,6 +70,9 @@ class Game extends Component {
     return targetObj;
   }
   componentDidMount() {
+    // Initialize (Only for testing)
+    this.props.next_level();
+
     // Listen for player input
     window.addEventListener('keydown', this.listenFunc);
 
