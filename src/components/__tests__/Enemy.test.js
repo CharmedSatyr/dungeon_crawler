@@ -61,27 +61,213 @@ describe('`setAnimationClass` Enemy component function', () => {
   });
 });
 
-describe('`checkMove` Enemy component function', () => {
-  /*
-    * |--------+-------|
-    * | Player | 1,0   |
-    * |========+=======|
-    * | 0,1    | Enemy |
-    * |--------+-------|
-   */
+describe('`conditions` Enemy component function', () => {
+  it('should do something...');
+});
 
-  it('should return `undefined` if either `playerPosition` or `enemyPosition` arguments are invalid', () => {
-    expect(e.checkMove(null, null)).toBeUndefined();
-    expect(e.checkMove('string', 8)).toBeUndefined();
+describe('`checkMove` Enemy component function', () => {
+  const health = 100;
+
+  it('should return a function to move enemies two cells west of the player east', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gd = [
+      { index: 0, payload: { enemy: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: { player: {} }, type: 'dirtPath' },
+    ];
+    const ep = { index: 0 };
+    const pp = { index: 2 };
+    const to = gd[1];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return... something... if the Player is NW...');
+  it('should return a function to move enemies three cells west of the player east', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gd = [
+      { index: 0, payload: { enemy: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: {}, type: 'dirtPath' },
+      { index: 3, payload: { player: {} }, type: 'dirtPath' },
+    ];
+    const ep = { index: 0 };
+    const pp = { index: 3 };
+    const to = gd[1];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+  });
+
+  it('should return a function to move enemies two cells east of the player west', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gd = [
+      { index: 0, payload: { player: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: { enemy: {} }, type: 'dirtPath' },
+    ];
+    const ep = { index: 2 };
+    const pp = { index: 0 };
+    const to = gd[1];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+  });
+
+  it('should return a function to move enemies three cells east of the player west', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gd = [
+      { index: 0, payload: { player: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: {}, type: 'dirtPath' },
+      { index: 3, payload: { enemy: {} }, type: 'dirtPath' },
+    ];
+    const ep = { index: 3 };
+    const pp = { index: 0 };
+    const to = gd[2];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+  });
+
+  it('should return a function to move enemies two cells north of the player south', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gridWidth = 1;
+    const gd = [
+      { index: 0, payload: { enemy: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: { player: {} }, type: 'dirtPath' },
+    ];
+    const ep = { index: 0 };
+    const pp = { index: 2 };
+    const to = gd[1];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+  });
+
+  it('should return a function to move enemies three cells north of the player south', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gridWidth = 1;
+    const gd = [
+      { index: 0, payload: { enemy: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: {}, type: 'dirtPath' },
+      { index: 3, payload: { player: {} }, type: 'dirtPath' },
+    ];
+    const ep = { index: 0 };
+    const pp = { index: 3 };
+    const to = gd[1];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+  });
+
+  it('should return a function to move enemies two cells south of the player north', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gridWidth = 1;
+    const gd = [
+      { index: 0, payload: { player: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: { enemy: {} }, type: 'dirtPath' },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 2 };
+    const to = gd[1];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+  });
+
+  it('should return a function to move enemies three cells south of the player north', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gridWidth = 1;
+    const gd = [
+      { index: 0, payload: { player: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: {}, type: 'dirtPath' },
+      { index: 3, payload: { enemy: {} }, type: 'dirtPath' },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 3 };
+    const to = gd[2];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+  });
+
+  it('should handle enemies at diagonals...');
+  it('should handle obstacles...');
+
+  it('should return `undefined` when enemies are in cells out of range', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gd = [
+      { index: 0, payload: { player: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: {}, type: 'dirtPath' },
+      { index: 3, payload: {}, type: 'dirtPath' },
+      { index: 4, payload: { enemy: {} }, type: 'dirtPath' },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 4 };
+    expect(e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation)).toBeUndefined();
+  });
+
+  it('should not call `moveEnemy` when enemies are in cells out of range', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gd = [
+      { index: 0, payload: { player: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: {}, type: 'dirtPath' },
+      { index: 3, payload: {}, type: 'dirtPath' },
+      { index: 4, payload: { enemy: {} }, type: 'dirtPath' },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 4 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  it('should call `clearAnimation` after a delay if `moveEnemy` has been called');
+
+  it('should not call `clearAnimation` when enemies are in cells out of range', () => {
+    // TODO: Specify timeout
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gd = [
+      { index: 0, payload: { player: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: {}, type: 'dirtPath' },
+      { index: 3, payload: {}, type: 'dirtPath' },
+      { index: 4, payload: { enemy: {} }, type: 'dirtPath' },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 4 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation);
+    expect(clearAnimation).not.toHaveBeenCalled();
+  });
+
+  it('should return `undefined` if `enemyPosition` has no enemy payload', () => {
+    const moveEnemy = jest.fn();
+    const clearAnimation = jest.fn();
+    const gd = [
+      { index: 0, payload: { player: {} }, type: 'dirtPath' },
+      { index: 1, payload: {}, type: 'dirtPath' },
+      { index: 2, payload: {}, type: 'dirtPath' },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 2 };
+    expect(e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation)).toBeUndefined();
+  });
 });
 
 describe('`Enemy` component', () => {
   const initialState = {
     animation: { enemy: { 0: 'attack' } },
     grid: {
+      data: [],
       playerPosition: {
         coordinates: {
           x: 0,

@@ -81,60 +81,68 @@ export const conditions = (targetObj, health) => {
   }
 };
 
-const checkMove = (playerPosition, enemyPosition, gridData, health, moveEnemy, clearAnimation) => {
+export const checkMove = (
+  playerPosition,
+  enemyPosition,
+  gridData,
+  health,
+  moveEnemy,
+  clearAnimation,
+  gridWidth = c.GRID_WIDTH
+) => {
   let targetObj;
   switch (true) {
     /*** Player is northeast of enemy ***/
-    case enemyPosition.index + 1 - c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index + 2 - c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index + 1 - 2 * c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index + 2 - 2 * c.GRID_WIDTH === playerPosition.index:
+    case enemyPosition.index + 1 - gridWidth === playerPosition.index:
+    case enemyPosition.index + 2 - gridWidth === playerPosition.index:
+    case enemyPosition.index + 1 - 2 * gridWidth === playerPosition.index:
+    case enemyPosition.index + 2 - 2 * gridWidth === playerPosition.index:
       // Move east if possible, else north
       targetObj = conditions(gridData[enemyPosition.index + 1], health)
         ? gridData[enemyPosition.index + 1]
-        : gridData[enemyPosition.index - c.GRID_WIDTH];
+        : gridData[enemyPosition.index - gridWidth];
       if (conditions(targetObj, health)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         return moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Player is southeast of enemy ***/
-    case enemyPosition.index + 1 + c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index + 2 + c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index + 1 + 2 * c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index + 2 + 2 * c.GRID_WIDTH === playerPosition.index:
+    case enemyPosition.index + 1 + gridWidth === playerPosition.index:
+    case enemyPosition.index + 2 + gridWidth === playerPosition.index:
+    case enemyPosition.index + 1 + 2 * gridWidth === playerPosition.index:
+    case enemyPosition.index + 2 + 2 * gridWidth === playerPosition.index:
       // Move east if possible, else south
       targetObj = conditions(gridData[enemyPosition.index + 1], health)
         ? gridData[enemyPosition.index + 1]
-        : gridData[enemyPosition.index + c.GRID_WIDTH];
+        : gridData[enemyPosition.index + gridWidth];
       if (conditions(targetObj, health)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         return moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Player is southwest of enemy ***/
-    case enemyPosition.index - 1 + c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index - 2 + c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index - 1 + 2 * c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index - 2 + 2 * c.GRID_WIDTH === playerPosition.index:
+    case enemyPosition.index - 1 + gridWidth === playerPosition.index:
+    case enemyPosition.index - 2 + gridWidth === playerPosition.index:
+    case enemyPosition.index - 1 + 2 * gridWidth === playerPosition.index:
+    case enemyPosition.index - 2 + 2 * gridWidth === playerPosition.index:
       // Move west if possible, else south
       targetObj = conditions(gridData[enemyPosition.index - 1], health)
         ? gridData[enemyPosition.index - 1]
-        : gridData[enemyPosition.index + c.GRID_WIDTH];
+        : gridData[enemyPosition.index + gridWidth];
       if (conditions(targetObj, health)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         return moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Player is northwest of enemy ***/
-    case enemyPosition.index - 1 - c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index - 2 - c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index - 1 - 2 * c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index - 2 - 2 * c.GRID_WIDTH === playerPosition.index:
+    case enemyPosition.index - 1 - gridWidth === playerPosition.index:
+    case enemyPosition.index - 2 - gridWidth === playerPosition.index:
+    case enemyPosition.index - 1 - 2 * gridWidth === playerPosition.index:
+    case enemyPosition.index - 2 - 2 * gridWidth === playerPosition.index:
       // Move west if possible, else north
       targetObj = conditions(gridData[enemyPosition.index - 1], health)
         ? gridData[enemyPosition.index - 1]
-        : gridData[enemyPosition.index - c.GRID_WIDTH];
+        : gridData[enemyPosition.index - gridWidth];
       if (conditions(targetObj, health)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         return moveEnemy(enemyPosition, targetObj);
@@ -161,20 +169,20 @@ const checkMove = (playerPosition, enemyPosition, gridData, health, moveEnemy, c
       }
       break;
     /*** Player is north of enemy ***/
-    case enemyPosition.index - 2 * c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index - 3 * c.GRID_WIDTH === playerPosition.index:
+    case enemyPosition.index - 2 * gridWidth === playerPosition.index:
+    case enemyPosition.index - 3 * gridWidth === playerPosition.index:
       // Move north
-      targetObj = gridData[enemyPosition.index - c.GRID_WIDTH];
+      targetObj = gridData[enemyPosition.index - gridWidth];
       if (conditions(targetObj, health)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         return moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Player is south of enemy ***/
-    case enemyPosition.index + 2 * c.GRID_WIDTH === playerPosition.index:
-    case enemyPosition.index + 3 * c.GRID_WIDTH === playerPosition.index:
+    case enemyPosition.index + 2 * gridWidth === playerPosition.index:
+    case enemyPosition.index + 3 * gridWidth === playerPosition.index:
       // Move south
-      targetObj = gridData[enemyPosition.index + c.GRID_WIDTH];
+      targetObj = gridData[enemyPosition.index + gridWidth];
       if (conditions(targetObj, health)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         return moveEnemy(enemyPosition, targetObj);
