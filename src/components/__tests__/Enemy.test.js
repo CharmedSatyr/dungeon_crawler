@@ -2,6 +2,7 @@ import React from 'react';
 import Enemy from '../Enemy';
 import * as e from '../Enemy';
 import * as l from '../../constants/loot';
+import * as c from '../../constants/settings';
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import tileTypes from '../../constants/tile-types';
@@ -109,10 +110,17 @@ describe('`checkMove` Enemy component function', () => {
   const level = 0;
   const pathType = tileTypes(level, 'path');
   let moveEnemy, clearAnimation;
+
   beforeEach(() => {
     clearAnimation = jest.fn();
     moveEnemy = jest.fn();
+    jest.useFakeTimers();
   });
+
+  //  afterEach(() => {
+  //    expect(setTimeout).toHaveBeenCalledTimes(1);
+  //    expect(clearAnimation).toHaveBeenCalledTimes(1);
+  //  });
 
   // CARDINAL DIRECTIONS
   it('should return a function to move enemies two cells west of the player east', () => {
@@ -252,7 +260,6 @@ describe('`checkMove` Enemy component function', () => {
       { index: 4, payload: { enemy: {} }, type: pathType },
       { index: 5, payload: {}, type: pathType },
     ];
-
     const pp = { index: 0 };
     const ep = { index: 4 };
     const to = gd[2];
@@ -663,8 +670,90 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // OBSTACLES
-  //  it('should handle obstacles...');
+  it('should not call `moveEnemy` if there is an obstacle blocking an enemy in a cardinal direction', () => {
+    /*
+     * |----+----+-----+-----+-----+----+----|
+     * | 0  | 1  | 2   | E   | 4   | 5  | 6  |
+     * |====+====+=====+=====+=====+====+====|
+     * | 7  | 8  | 9   | E   | 11  | 12 | 13 |
+     * |----+----+-----+-----+-----+----+----|
+     * | 14 | 15 | 16  | OBS | 18  | 19 | 20 |
+     * |----+----+-----+-----+-----+----+----|
+     * | E  | E  | OBS | P   | OBS | E  | E  |
+     * |----+----+-----+-----+-----+----+----|
+     * | 28 | 29 | 30  | OBS | 32  | 33 | 34 |
+     * |----+----+-----+-----+-----+----+----|
+     * | 35 | 36 | 37  | E   | 39  | 40 | 41 |
+     * |----+----+-----+-----+-----+----+----|
+     * | 42 | 43 | 44  | E   | 46  | 47 | 48 |
+     * |----+----+-----+-----+-----+----+----|
+     */
 
+    const gridWidth = 7;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: { enemy: {} }, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+      { index: 8, payload: {}, type: pathType },
+      { index: 9, payload: {}, type: pathType },
+      { index: 10, payload: { enemy: {} }, type: pathType },
+      { index: 11, payload: {}, type: pathType },
+      { index: 12, payload: {}, type: pathType },
+      { index: 13, payload: {}, type: pathType },
+      { index: 14, payload: {}, type: pathType },
+      { index: 15, payload: {}, type: pathType },
+      { index: 16, payload: {}, type: pathType },
+      { index: 17, payload: { portal: {} }, type: pathType },
+      { index: 18, payload: {}, type: pathType },
+      { index: 19, payload: {}, type: pathType },
+      { index: 20, payload: {}, type: pathType },
+      { index: 21, payload: { enemy: {} }, type: pathType },
+      { index: 22, payload: { enemy: {} }, type: pathType },
+      { index: 23, payload: { portal: {} }, type: pathType },
+      { index: 24, payload: { player: {} }, type: pathType },
+      { index: 25, payload: { portal: {} }, type: pathType },
+      { index: 26, payload: { enemy: {} }, type: pathType },
+      { index: 27, payload: { enemy: {} }, type: pathType },
+      { index: 28, payload: {}, type: pathType },
+      { index: 29, payload: {}, type: pathType },
+      { index: 30, payload: {}, type: pathType },
+      { index: 31, payload: { portal: {} }, type: pathType },
+      { index: 32, payload: {}, type: pathType },
+      { index: 33, payload: {}, type: pathType },
+      { index: 34, payload: {}, type: pathType },
+      { index: 35, payload: {}, type: pathType },
+      { index: 36, payload: {}, type: pathType },
+      { index: 37, payload: {}, type: pathType },
+      { index: 38, payload: { enemy: {} }, type: pathType },
+      { index: 39, payload: {}, type: pathType },
+      { index: 40, payload: {}, type: pathType },
+      { index: 41, payload: {}, type: pathType },
+      { index: 42, payload: {}, type: pathType },
+      { index: 43, payload: {}, type: pathType },
+      { index: 44, payload: {}, type: pathType },
+      { index: 45, payload: { enemy: {} }, type: pathType },
+      { index: 46, payload: {}, type: pathType },
+      { index: 47, payload: {}, type: pathType },
+      { index: 48, payload: {}, type: pathType },
+    ];
+    const pp = { index: 23 };
+    e.checkMove(pp, gd[3], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, gd[10], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    // e.checkMove(pp, gd[21], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    // e.checkMove(pp, gd[22], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    // e.checkMove(pp, gd[26], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    // e.checkMove(pp, gd[27], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    // e.checkMove(pp, gd[38], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    // e.checkMove(pp, gd[45], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  // OTHER REQUIREMENTS
   //  it('should return `undefined` when enemies are in cells out of range', () => {
   //    const gd = [
   //      { index: 0, payload: { player: {} }, type: pathType },
