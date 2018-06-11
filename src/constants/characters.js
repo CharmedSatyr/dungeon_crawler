@@ -20,9 +20,22 @@ export const direction = () => {
   }
 };
 
+export const addWeapon = chances => {
+  switch (true) {
+    case chances < 0.5:
+      return l.weapons.fists;
+    case chances < 0.75:
+      return l.weapons.dagger;
+    case chances <= 1.0:
+      return l.weapons.spear;
+    default:
+      return l.weapons.fists;
+  }
+};
+
 export const orc = class Orc {
   constructor() {
-    this.weapon = l.weapons.spear;
+    this.weapon = addWeapon(Math.random());
     this.facing = direction();
     this.level = _.random(1, 5);
     this.type = 'orc';
