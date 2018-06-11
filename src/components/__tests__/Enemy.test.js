@@ -116,13 +116,8 @@ describe('`checkMove` Enemy component function', () => {
     jest.useFakeTimers();
   });
 
-  //  afterEach(() => {
-  //    expect(setTimeout).toHaveBeenCalledTimes(1);
-  //    expect(clearAnimation).toHaveBeenCalledTimes(1);
-  //  });
-
   // CARDINAL DIRECTIONS
-  it('should call a function to move enemies two cells west of the player east', () => {
+  it('should call `moveEnemy` to move enemies two cells west of the player east, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     const gridWidth = 3;
     const gd = [
       { index: 0, payload: { enemy: {} }, type: pathType },
@@ -134,9 +129,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[1];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move enemies three cells west of the player east', () => {
+  it('should call `moveEnemy` to move enemies three cells west of the player east, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     const gridWidth = 4;
     const gd = [
       { index: 0, payload: { enemy: {} }, type: pathType },
@@ -149,9 +147,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[1];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move enemies two cells east of the player west', () => {
+  it('should call `moveEnemy` to move enemies two cells east of the player west, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     const gridWidth = 3;
     const gd = [
       { index: 0, payload: { player: {} }, type: pathType },
@@ -163,9 +164,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[1];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move enemies three cells east of the player west', () => {
+  it('should call `moveEnemy` to move enemies three cells east of the player west, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     const gridWidth = 4;
     const gd = [
       { index: 0, payload: { player: {} }, type: pathType },
@@ -178,9 +182,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[2];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move enemies two cells north of the player south', () => {
+  it('should call `moveEnemy` to move enemies two cells north of the player south, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*
      * When gridWidth is 1, horizontal tests provide the right answer
      * |---+---|
@@ -205,9 +212,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[2];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move enemies three cells north of the player south', () => {
+  it('should call `moveEnemy` to move enemies three cells north of the player south, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*
      *  When gridWidth is 1, horizontal tests
      *  might provide the right answer
@@ -221,7 +231,6 @@ describe('`checkMove` Enemy component function', () => {
      * | P | 7 |
      * |---+---|
      */
-
     const gridWidth = 2;
     const gd = [
       { index: 0, payload: { enemy: {} }, type: pathType },
@@ -238,9 +247,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[2];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move enemies two cells south of the player north', () => {
+  it('should call `moveEnemy` to move enemies two cells south of the player north, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /* 
      * |---+---|
      * | P | 1 |
@@ -264,9 +276,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[2];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move enemies three cells south of the player north', () => {
+  it('should call `moveEnemy` to move enemies three cells south of the player north, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*
      *|---+---|
      *| P | 1 |
@@ -294,10 +309,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[4];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // DIAGONALS
-  it('should call a function to move northeast enemies west, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move northeast enemies west, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*
      * |---+---|
      * | 0 | E |
@@ -317,9 +335,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[0];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move northwest enemies east, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move northwest enemies east, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /* 
      * Again, need to expand grid to avoid crossover passing
      * |---+---+---|
@@ -343,9 +364,12 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[2];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move southeast enemies west, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move southeast enemies west, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /* 
      * |---+---+---|
      * | 0 | P | 2 |
@@ -367,18 +391,21 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[4];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
-  it('should call a function to move southwest enemies east, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move southwest enemies east, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     // This is a bit longer to avoid a horizontal function picking it up (NOTE: subtracting indices causes row overlap problems!)
     // TODO: Change all of these functions to use coordinates instead?
     /*
- * |---+---+---+---+----+----|
- * | 0 | 1 | P | 3 | 4  | 5  |
- * |===+===+===+===+====+====|
- * | 6 | E | 8 | 9 | 10 | 11 |
- * |---+---+---+---+----+----|
- */
+     * |---+---+---+---+----+----|
+     * | 0 | 1 | P | 3 | 4  | 5  |
+     * |===+===+===+===+====+====|
+     * | 6 | E | 8 | 9 | 10 | 11 |
+     * |---+---+---+---+----+----|
+     */
     const gridWidth = 6;
     const gd = [
       { index: 0, payload: {}, type: pathType },
@@ -399,6 +426,9 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[8];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // FAR DIAGONALS
@@ -417,7 +447,7 @@ describe('`checkMove` Enemy component function', () => {
   */
 
   // NNW
-  it('should call a function to move north-northwest enemies east, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move north-northwest enemies east, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*
      * |---+---+---|
      * | 0 | E | 2 |
@@ -444,10 +474,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[2];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // NNE
-  it('should call a function to move north-northeast enemies west, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move north-northeast enemies west, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*
      * |---+---+---|
      * | 0 | E | 2 |
@@ -474,10 +507,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[0];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // WNW
-  it('should call a function to move west-northwest enemies east, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move west-northwest enemies east, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*
      * |---+---+---+---|
      * | 0 | E | 2 | 3 |
@@ -501,10 +537,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[2];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // ENE
-  it('should call a function to move east-northeast enemies west, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move east-northeast enemies west, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*    
      * |---+---+---+---+---+----+------|
      * | 0 | 1 | 2 | E  | 4  | 5  | 6  |
@@ -534,10 +573,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[2];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // WSW
-  it('should call a function to move west-southwest enemies east, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move west-southwest enemies east, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*    
      * |---+---+---+---+---+----+------|
      * | 0 | 1 | 2 | P  | 4  | 5  | 6  |
@@ -567,10 +609,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[9];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // ESE
-  it('should call a function to move east-southeast enemies west, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move east-southeast enemies west, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*    
      * |---+---+---+---+---+----+-----|
      * | 0 | 1 | 2 | P  | 4  | 5 | 6  |
@@ -600,10 +645,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[11];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // SSW
-  it('should call a function to move south-southwest enemies east, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move south-southwest enemies east, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /* 
      * |---+---+----+----|
      * | 0 | P | 2  | 3  |
@@ -633,10 +681,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[9];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // SSE
-  it('should call a function to move south-southeast enemies west, if there is no obstacle', () => {
+  it('should call `moveEnemy` to move south-southeast enemies west, if there is no obstacle, followed by `clearAnimation` after timer', () => {
     /*
      * |---+---+----+---|
      * | 0 | P | 2 | 3  |
@@ -666,10 +717,13 @@ describe('`checkMove` Enemy component function', () => {
     const to = gd[9];
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
   // OBSTACLES WITH CARDINAL DIRECTIONS
-  it('should not call a function to move enemies two cells west of the player east, if there is an obstacle', () => {
+  it('should not call `moveEnemy` to move enemies two cells west of the player east, if there is an obstacle, nor `clearAnimation`', () => {
     const gridWidth = 3;
     const gd = [
       { index: 0, payload: { enemy: {} }, type: pathType },
@@ -680,9 +734,12 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 2 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
 
-  it('should not call a function to move enemies three cells west of the player east, if there is an obstacle', () => {
+  it('should not call `moveEnemy` to move enemies three cells west of the player east, if there is an obstacle, nor `clearAnimation`', () => {
     const gridWidth = 4;
     const gd = [
       { index: 0, payload: { enemy: {} }, type: pathType },
@@ -694,9 +751,12 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 3 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
 
-  it('should not call a function to move enemies two cells east of the player west, if there is an obstacle', () => {
+  it('should not call `moveEnemy` to move enemies two cells east of the player west, if there is an obstacle, nor `clearAnimation`', () => {
     const gridWidth = 3;
     const gd = [
       { index: 0, payload: { player: {} }, type: pathType },
@@ -707,9 +767,12 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 0 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
 
-  it('should not call a function to move enemies three cells east of the player west, if there is an obstacle', () => {
+  it('should not call `moveEnemy` to move enemies three cells east of the player west, if there is an obstacle, nor `clearAnimation`', () => {
     const gridWidth = 4;
     const gd = [
       { index: 0, payload: { player: {} }, type: pathType },
@@ -721,9 +784,12 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 0 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
 
-  it('should not call a function to move enemies two cells north of the player south', () => {
+  it('should not call `moveEnemy` to move enemies two cells north of the player south, if there is an obstacle, nor `clearAnimation`', () => {
     /*
    * When gridWidth is 1, horizontal tests provide the right answer
    * |---+---|
@@ -747,9 +813,12 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 4 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
 
-  it('should not call a function to move enemies three cells north of the player south, if there is an obstacle', () => {
+  it('should not call `moveEnemy` to move enemies three cells north of the player south, if there is an obstacle, nor `clearAnimation`', () => {
     /*
      *  When gridWidth is 1, horizontal tests
      *  might provide the right answer
@@ -779,9 +848,12 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 6 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
 
-  it('should not call a function to move enemies two cells south of the player north', () => {
+  it('should not call `moveEnemy` to move enemies two cells south of the player north, if there is an obstacle, nor `clearAnimation`', () => {
     /*
      * |---+---|
      * | P | 1 |
@@ -804,9 +876,12 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 4 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
 
-  it('should not call a function to move enemies three cells south of the player north, if there is an obstacle', () => {
+  it('should not call `moveEnemy` to move enemies three cells south of the player north, if there is an obstacle, nor `clearAnimation`', () => {
     /*
      *|---+---|
      *| P | 1 |
@@ -833,10 +908,416 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 6 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
 
   // OBSTACLES WITH DIAGONALS
-  it('should handle them appropriately...');
+  it('should call `moveEnemy` to move northeast enemies south, if there is a west obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+     * |---+---|
+     * |OBS| E |
+     * |===+===|
+     * | P | 3 |
+     * |---+---|
+     */
+    const gridWidth = 2;
+    const gd = [
+      { index: 0, payload: { portal: {} }, type: pathType },
+      { index: 1, payload: { enemy: {} }, type: pathType },
+      { index: 2, payload: { player: {} }, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+    ];
+    const pp = { index: 2 };
+    const ep = { index: 1 };
+    const to = gd[3];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  it('should call `moveEnemy` to move northwest enemies south, if there is an east obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+      * Again, need to expand grid to avoid crossover passing
+      * |---+---+---|
+      * | 0 | E |OBS|
+      * |===+===+===|
+      * | 3 | 4 | P |
+      * |---+---+---|
+      */
+
+    const gridWidth = 3;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: { enemy: {} }, type: pathType },
+      { index: 2, payload: { portal: {} }, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: { player: {} }, type: pathType },
+    ];
+    const pp = { index: 5 };
+    const ep = { index: 1 };
+    const to = gd[4];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  it('should call `moveEnemy` to move southeast enemies north, if there is a west obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+      * |---+---+---|
+      * | 0 | P | 2 |
+      * |===+===+===|
+      * | 3 |OBS| E |
+      * |---+---+---|
+      */
+    const gridWidth = 3;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: { player: {} }, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: { portal: {} }, type: pathType },
+      { index: 5, payload: { enemy: {} }, type: pathType },
+    ];
+    const pp = { index: 1 };
+    const ep = { index: 5 };
+    const to = gd[2];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  it('should call `moveEnemy` to move southwest enemies north, if there is an east obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+   * |---+---+---+---+----+----|
+   * | 0 | 1 | P | 3 | 4  | 5  |
+   * |===+===+===+===+====+====|
+   * | 6 | E |OBS| 9 | 10 | 11 |
+   * |---+---+---+---+----+----|
+   */
+    const gridWidth = 6;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: { player: {} }, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: { enemy: {} }, type: pathType },
+      { index: 8, payload: { portal: {} }, type: pathType },
+      { index: 9, payload: {}, type: pathType },
+      { index: 10, payload: {}, type: pathType },
+      { index: 11, payload: {}, type: pathType },
+    ];
+    const pp = { index: 2 };
+    const ep = { index: 7 };
+    const to = gd[1];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  // OBSTACLES WITH FAR DIAGONALS
+  /*
+  * |-----+-----+----+-----+-----|
+  * | 0   | NNW | 2  | NNE | 4   |
+  * |=====+=====+====+=====+=====|
+  * | WNW | 6   | 7  | 8   | ENE |
+  * |-----+-----+----+-----+-----|
+  * | 10  | 11  | P  | 13  | 14  |
+  * |-----+-----+----+-----+-----|
+  * | WSW | 16  | 17 | 18  | ESE |
+  * |-----+-----+----+-----+-----|
+  * | 20  | SSW | 22 | SSE | 24  |
+  * |-----+-----+----+-----+-----|
+  */
+
+  // NNW
+  it('should call `moveEnemy` to move north-northwest enemies south, if there is an east obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+     * |---+---+---|
+     * | 0 | E |OBS|
+     * |===+===+===|
+     * | 3 | 4 | 5 |
+     * |---+---+---|
+     * | 6 | 7 | P |
+     * |---+---+---|
+     */
+    const gridWidth = 3;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: { enemy: {} }, type: pathType },
+      { index: 2, payload: { portal: {} }, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+      { index: 8, payload: { player: {} }, type: pathType },
+    ];
+    const pp = { index: 8 };
+    const ep = { index: 1 };
+    const to = gd[4];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  // NNE
+  it('should call `moveEnemy` to move north-northeast enemies south, if there is a west obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+      * |---+---+---|
+      * |OBS| E | 2 |
+      * |===+===+===|
+      * | 3 | 4 | 5 |
+      * |---+---+---|
+      * | P | 7 | 8 |
+      * |---+---+---|
+      */
+    const gridWidth = 3;
+    const gd = [
+      { index: 0, payload: { portal: {} }, type: pathType },
+      { index: 1, payload: { enemy: {} }, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: { player: {} }, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+      { index: 8, payload: {}, type: pathType },
+    ];
+    const pp = { index: 6 };
+    const ep = { index: 1 };
+    const to = gd[4];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  // WNW
+  it('should call `moveEnemy` to move west-northwest enemies south, if there is an east obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+     * |---+---+---+---|
+     * | 0 | E |OBS| 3 |
+     * |===+===+===+===|
+     * | 4 | 5 | 6 | P |
+     * |---+---+---+---|
+    */
+    const gridWidth = 4;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: { enemy: {} }, type: pathType },
+      { index: 2, payload: { portal: {} }, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: { player: {} }, type: pathType },
+    ];
+    const pp = { index: 7 };
+    const ep = { index: 1 };
+    const to = gd[5];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  // ENE
+  it('should call `moveEnemy` to move east-northeast enemies south, if there is a west obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+     * |---+---+---+---+---+----+------|
+     * | 0 | 1 |OBS| E  | 4  | 5  | 6  |
+     * |===+===+===+===+===+====+======|
+     * | 7 | P | 9 | 10 | 11 | 12 | 13 |
+     * |---+---+---+---+---+----+------|
+     */
+    const gridWidth = 7;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: { portal: {} }, type: pathType },
+      { index: 3, payload: { enemy: {} }, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+      { index: 8, payload: { player: {} }, type: pathType },
+      { index: 9, payload: {}, type: pathType },
+      { index: 10, payload: {}, type: pathType },
+      { index: 11, payload: {}, type: pathType },
+      { index: 12, payload: {}, type: pathType },
+      { index: 13, payload: {}, type: pathType },
+    ];
+    const pp = { index: 8 };
+    const ep = { index: 3 };
+    const to = gd[10];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  // WSW
+  it('should call `moveEnemy` to move west-southwest enemies north, if there is an east obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+     * |---+---+---+---+---+----+------|
+     * | 0 | 1 | 2 | P  | 4  | 5  | 6  |
+     * |===+===+===+===+===+====+======|
+     * | 7 | E |OBS| 10 | 11 | 12 | 13 |
+     * |---+---+---+---+---+----+------|
+     */
+    const gridWidth = 7;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: { player: {} }, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+      { index: 8, payload: { enemy: {} }, type: pathType },
+      { index: 9, payload: { portal: {} }, type: pathType },
+      { index: 10, payload: {}, type: pathType },
+      { index: 11, payload: {}, type: pathType },
+      { index: 12, payload: {}, type: pathType },
+      { index: 13, payload: {}, type: pathType },
+    ];
+    const pp = { index: 3 };
+    const ep = { index: 8 };
+    const to = gd[1];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  // ESE
+  it('should call `moveEnemy` to move east-southeast enemies north, if there is a west obstacle, followed by `clearAnimation` after timer', () => {
+    /*   
+    * |---+---+---+----+-----+---+----|
+    * | 0 | 1 | 2 | P  | 4   | 5 | 6  |
+    * |===+===+===+====+=====+===+====|
+    * | 7 | 8 | 9 | 10 | OBS | E | 13 |
+    * |---+---+---+----+-----+---+----|
+    */
+    const gridWidth = 7;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: { player: {} }, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+      { index: 8, payload: {}, type: pathType },
+      { index: 9, payload: {}, type: pathType },
+      { index: 10, payload: {}, type: pathType },
+      { index: 11, payload: { portal: {} }, type: pathType },
+      { index: 12, payload: { enemy: {} }, type: pathType },
+      { index: 13, payload: {}, type: pathType },
+    ];
+    const pp = { index: 3 };
+    const ep = { index: 12 };
+    const to = gd[5];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  // SSW
+  it('should call `moveEnemy` to move south-southwest enemies north, if there is an east obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+     * |---+---+----+----|
+     * | 0 | P | 2  | 3  |
+     * |===+===+====+====|
+     * | 4 | 5 | 6  | 7  |
+     * |---+---+----+----|
+     * | E |OBS| 10 | 11 |
+     * |---+---+----+----|
+     */
+    const gridWidth = 4;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: { player: {} }, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+      { index: 8, payload: { enemy: {} }, type: pathType },
+      { index: 9, payload: { portal: {} }, type: pathType },
+      { index: 10, payload: {}, type: pathType },
+      { index: 11, payload: {}, type: pathType },
+    ];
+    const pp = { index: 1 };
+    const ep = { index: 8 };
+    const to = gd[4];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
+
+  // SSE
+  it('should call `moveEnemy` to move south-southeast enemies north, if there is a west obstacle, followed by `clearAnimation` after timer', () => {
+    /*
+     * |---+---+----+---|
+     * | 0 | P | 2 | 3  |
+     * |===+===+====+===|
+     * | 4 | 5 | 6 | 7  |
+     * |---+---+----+---|
+     * | 8 |OBS| E | 11 |
+     * |---+---+----+---|
+     */
+    const gridWidth = 4;
+    const gd = [
+      { index: 0, payload: {}, type: pathType },
+      { index: 1, payload: { player: {} }, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: {}, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+      { index: 8, payload: {}, type: pathType },
+      { index: 9, payload: { portal: {} }, type: pathType },
+      { index: 10, payload: { enemy: {} }, type: pathType },
+      { index: 11, payload: {}, type: pathType },
+    ];
+    const pp = { index: 1 };
+    const ep = { index: 10 };
+    const to = gd[6];
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).toHaveBeenCalledWith(ep, to);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    jest.runAllTimers();
+    expect(clearAnimation).toHaveBeenCalledWith(to);
+  });
 
   // OTHER REQUIREMENTS
   it('should return `undefined` when enemies are in cells out of range', () => {
@@ -856,7 +1337,7 @@ describe('`checkMove` Enemy component function', () => {
     ).toBeUndefined();
   });
 
-  it('should not call `moveEnemy` when enemies are in cells out of range', () => {
+  it('should not call `moveEnemy` or `clearAnimation` when enemies are in cells out of range', () => {
     const gridWidth = 5;
     const gd = [
       { index: 0, payload: { player: {} }, type: pathType },
@@ -869,11 +1350,10 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 4 };
     e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
+    expect(setTimeout).not.toHaveBeenCalled();
+    jest.runAllTimers();
+    expect(clearAnimation).not.toHaveBeenCalled();
   });
-
-  it('should call `clearAnimation` after a delay if `moveEnemy` has been called');
-
-  it('should not call `clearAnimation` if `moveEnemy` has not been called');
 });
 
 describe('`Enemy` component', () => {
