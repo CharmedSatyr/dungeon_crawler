@@ -9,7 +9,7 @@ const initialState = {
   health: {},
   level: 1,
   weapon: l.weapons.fists,
-  inventory: [l.weapons.fists, l.weapons.dagger],
+  inventory: [l.weapons.fists],
 };
 initialState.health.max = g.healthCalc(initialState.level);
 initialState.health.current = initialState.health.max;

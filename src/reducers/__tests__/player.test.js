@@ -29,7 +29,7 @@ describe('`player` reducer', () => {
         min_damage: expect.any(Number),
         max_damage: expect.any(Number),
       }),
-      inventory: expect.arrayContaining([l.weapons.fists, l.weapons.dagger]),
+      inventory: expect.arrayContaining([l.weapons.fists]),
     });
   });
 
