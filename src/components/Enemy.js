@@ -69,6 +69,7 @@ export const setAnimationClass = (weaponName, enemyAnimation, facing, index) => 
 export const conditions = (targetObj, health, level) => {
   if (
     health > 0 &&
+    targetObj &&
     !targetObj.payload.enemy &&
     !targetObj.payload.portal &&
     !targetObj.payload.loot &&
@@ -99,8 +100,9 @@ export const checkMove = (
       // Move east
       targetObj = gridData[enemyPosition.index + 1];
       if (conditions(targetObj, health, level)) {
+        // The anonymous wrapper is necessary to avoid Syntax Error in Chromium
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
-        return moveEnemy(enemyPosition, targetObj);
+        moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Enemy is east of the Player ***/
@@ -110,7 +112,7 @@ export const checkMove = (
       targetObj = gridData[enemyPosition.index - 1];
       if (conditions(targetObj, health, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
-        return moveEnemy(enemyPosition, targetObj);
+        moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Enemy is north of the Player ***/
@@ -120,7 +122,7 @@ export const checkMove = (
       targetObj = gridData[enemyPosition.index + gridWidth];
       if (conditions(targetObj, health, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
-        return moveEnemy(enemyPosition, targetObj);
+        moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Enemy is south of the Player ***/
@@ -130,7 +132,7 @@ export const checkMove = (
       targetObj = gridData[enemyPosition.index - gridWidth];
       if (conditions(targetObj, health, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
-        return moveEnemy(enemyPosition, targetObj);
+        moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Enemy is northeast of Player ***/
@@ -143,7 +145,7 @@ export const checkMove = (
         : gridData[enemyPosition.index + gridWidth];
       if (conditions(targetObj, health, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
-        return moveEnemy(enemyPosition, targetObj);
+        moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Enemy is northwest of Player ***/
@@ -156,7 +158,7 @@ export const checkMove = (
         : gridData[enemyPosition.index + gridWidth];
       if (conditions(targetObj, health, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
-        return moveEnemy(enemyPosition, targetObj);
+        moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Enemy is southeast of Player ***/
@@ -169,7 +171,7 @@ export const checkMove = (
         : gridData[enemyPosition.index - gridWidth];
       if (conditions(targetObj, health, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
-        return moveEnemy(enemyPosition, targetObj);
+        moveEnemy(enemyPosition, targetObj);
       }
       break;
     /*** Enemy is southwest of Player ***/
@@ -182,7 +184,7 @@ export const checkMove = (
         : gridData[enemyPosition.index - gridWidth];
       if (conditions(targetObj, health, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
-        return moveEnemy(enemyPosition, targetObj);
+        moveEnemy(enemyPosition, targetObj);
       }
       break;
     default:
@@ -230,13 +232,14 @@ class Enemy extends Component {
           stats.health,
           move_enemy,
           clear_enemy_animation,
+          c.GRID_WIDTH,
           gridLevel
         );
 
         this.checkAttack(playerPosition, position, gridData, stats.health);
       }
       // This interval should be longer than ANIMATION_DURATION or the animations have trouble clearing
-    }, 2 * c.ANIMATION_DURATION);
+    }, 2000);
   }
   render() {
     const { enemyAnimation, facing, position, stats } = this.props;
