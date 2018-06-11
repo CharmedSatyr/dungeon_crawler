@@ -58,6 +58,11 @@ describe('`setVariety` Loot component function', () => {
     expect(lc.setBGPosition(variety)).toEqual(lc.dragonSpearPosition);
   });
 
+  it('should return a `dagger` position if `variety` has a dagger payload', () => {
+    const variety = { item: l.weapons.dagger };
+    expect(lc.setBGPosition(variety)).toEqual(lc.daggerPosition);
+  });
+
   it('should return a `warningSquare` position in any other case', () => {
     const variety = 'oops!';
     expect(lc.setBGPosition(variety)).toEqual(lc.warningSquarePosition);

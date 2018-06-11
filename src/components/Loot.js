@@ -13,6 +13,7 @@ export const fullBarrelPosition = `${-c.CELL_SIDE}px 0`;
 // Weapons
 export const spearPosition = `0 ${-c.CELL_SIDE}px`;
 export const dragonSpearPosition = `${-c.CELL_SIDE}px ${-c.CELL_SIDE}px`;
+export const daggerPosition = `${-2 * c.CELL_SIDE}px ${-c.CELL_SIDE}px`;
 
 // Gold
 export const goldCoinPosition = `0 ${-3 * c.CELL_SIDE}px`;
@@ -43,6 +44,10 @@ export const setBGPosition = variety => {
 
   if (variety.item && variety.item === l.weapons.dragonSpear) {
     return dragonSpearPosition;
+  }
+
+  if (variety.item && variety.item === l.weapons.dagger) {
+    return daggerPosition;
   }
 
   // Gold

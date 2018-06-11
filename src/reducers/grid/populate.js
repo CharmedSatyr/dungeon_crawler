@@ -179,6 +179,8 @@ export const setLootType = chances => {
     case chances < 0.7:
       return l.gold.stash;
     // Weapons
+    case chances < 0.8:
+      return { item: l.weapons.dagger };
     case chances < 0.9:
       return { item: l.weapons.spear };
     case chances >= 0.9:

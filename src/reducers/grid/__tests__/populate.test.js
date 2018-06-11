@@ -239,9 +239,15 @@ describe('`setLootType` populate grid reducer function', () => {
   });
 
   // Weapons
-  it('should return a spear payload if the argument is >= 0.70 < 0.90', () => {
+  it('should return a dagger payload if the argument is >= 0.70 < 0.80', () => {
+    const dagger = { item: l.weapons.dagger };
+    expect(p.setLootType(0.7)).toMatchObject(dagger);
+    expect(p.setLootType(0.79)).toMatchObject(dagger);
+  });
+
+  it('should return a spear payload if the argument is >= 0.80 < 0.90', () => {
     const spear = { item: l.weapons.spear };
-    expect(p.setLootType(0.7)).toMatchObject(spear);
+    expect(p.setLootType(0.8)).toMatchObject(spear);
     expect(p.setLootType(0.89)).toMatchObject(spear);
   });
 
