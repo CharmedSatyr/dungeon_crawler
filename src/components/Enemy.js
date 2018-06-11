@@ -250,7 +250,7 @@ class Enemy extends Component {
         this.checkAttack(playerPosition, position, gridData, stats.health);
       }
       // This interval should be longer than ANIMATION_DURATION or the animations have trouble clearing
-    }, 1000);
+    }, 2 * c.ANIMATION_DURATION);
   }
   render() {
     const { enemyAnimation, facing, position, stats } = this.props;
