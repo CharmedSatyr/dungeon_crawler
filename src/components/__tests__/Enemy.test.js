@@ -2,7 +2,6 @@ import React from 'react';
 import Enemy from '../Enemy';
 import * as e from '../Enemy';
 import * as l from '../../constants/loot';
-import * as c from '../../constants/settings';
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import tileTypes from '../../constants/tile-types';
@@ -123,7 +122,7 @@ describe('`checkMove` Enemy component function', () => {
   //  });
 
   // CARDINAL DIRECTIONS
-  it('should return a function to move enemies two cells west of the player east', () => {
+  it('should call a function to move enemies two cells west of the player east', () => {
     const gridWidth = 3;
     const gd = [
       { index: 0, payload: { enemy: {} }, type: pathType },
@@ -137,7 +136,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move enemies three cells west of the player east', () => {
+  it('should call a function to move enemies three cells west of the player east', () => {
     const gridWidth = 4;
     const gd = [
       { index: 0, payload: { enemy: {} }, type: pathType },
@@ -152,7 +151,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move enemies two cells east of the player west', () => {
+  it('should call a function to move enemies two cells east of the player west', () => {
     const gridWidth = 3;
     const gd = [
       { index: 0, payload: { player: {} }, type: pathType },
@@ -166,7 +165,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move enemies three cells east of the player west', () => {
+  it('should call a function to move enemies three cells east of the player west', () => {
     const gridWidth = 4;
     const gd = [
       { index: 0, payload: { player: {} }, type: pathType },
@@ -181,7 +180,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move enemies two cells north of the player south', () => {
+  it('should call a function to move enemies two cells north of the player south', () => {
     /*
      * When gridWidth is 1, horizontal tests provide the right answer
      * |---+---|
@@ -208,7 +207,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move enemies three cells north of the player south', () => {
+  it('should call a function to move enemies three cells north of the player south', () => {
     /*
      *  When gridWidth is 1, horizontal tests
      *  might provide the right answer
@@ -241,7 +240,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move enemies two cells south of the player north', () => {
+  it('should call a function to move enemies two cells south of the player north', () => {
     /* 
      * |---+---|
      * | P | 1 |
@@ -267,7 +266,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move enemies three cells south of the player north', () => {
+  it('should call a function to move enemies three cells south of the player north', () => {
     /*
      *|---+---|
      *| P | 1 |
@@ -298,7 +297,7 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // DIAGONALS
-  it('should return a function to move northeast enemies west, if there is no obstacle', () => {
+  it('should call a function to move northeast enemies west, if there is no obstacle', () => {
     /*
      * |---+---|
      * | 0 | E |
@@ -320,7 +319,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move northwest enemies east, if there is no obstacle', () => {
+  it('should call a function to move northwest enemies east, if there is no obstacle', () => {
     /* 
      * Again, need to expand grid to avoid crossover passing
      * |---+---+---|
@@ -346,7 +345,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move southeast enemies west, if there is no obstacle', () => {
+  it('should call a function to move southeast enemies west, if there is no obstacle', () => {
     /* 
      * |---+---+---|
      * | 0 | P | 2 |
@@ -370,7 +369,7 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  it('should return a function to move southwest enemies east, if there is no obstacle', () => {
+  it('should call a function to move southwest enemies east, if there is no obstacle', () => {
     // This is a bit longer to avoid a horizontal function picking it up (NOTE: subtracting indices causes row overlap problems!)
     // TODO: Change all of these functions to use coordinates instead?
     /*
@@ -418,7 +417,7 @@ describe('`checkMove` Enemy component function', () => {
   */
 
   // NNW
-  it('should return a function to move north-northwest enemies east, if there is no obstacle', () => {
+  it('should call a function to move north-northwest enemies east, if there is no obstacle', () => {
     /*
      * |---+---+---|
      * | 0 | E | 2 |
@@ -448,7 +447,7 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // NNE
-  it('should return a function to move north-northeast enemies west, if there is no obstacle', () => {
+  it('should call a function to move north-northeast enemies west, if there is no obstacle', () => {
     /*
      * |---+---+---|
      * | 0 | E | 2 |
@@ -478,7 +477,7 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // WNW
-  it('should return a function to move west-northwest enemies east, if there is no obstacle', () => {
+  it('should call a function to move west-northwest enemies east, if there is no obstacle', () => {
     /*
      * |---+---+---+---|
      * | 0 | E | 2 | 3 |
@@ -505,7 +504,7 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // ENE
-  it('should return a function to move east-northeast enemies west, if there is no obstacle', () => {
+  it('should call a function to move east-northeast enemies west, if there is no obstacle', () => {
     /*    
      * |---+---+---+---+---+----+------|
      * | 0 | 1 | 2 | E  | 4  | 5  | 6  |
@@ -538,7 +537,7 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // WSW
-  it('should return a function to move west-southwest enemies east, if there is no obstacle', () => {
+  it('should call a function to move west-southwest enemies east, if there is no obstacle', () => {
     /*    
      * |---+---+---+---+---+----+------|
      * | 0 | 1 | 2 | P  | 4  | 5  | 6  |
@@ -571,7 +570,7 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // ESE
-  it('should return a function to move east-southeast enemies west, if there is no obstacle', () => {
+  it('should call a function to move east-southeast enemies west, if there is no obstacle', () => {
     /*    
      * |---+---+---+---+---+----+-----|
      * | 0 | 1 | 2 | P  | 4  | 5 | 6  |
@@ -604,7 +603,7 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // SSW
-  it('should return a function to move south-southwest enemies east, if there is no obstacle', () => {
+  it('should call a function to move south-southwest enemies east, if there is no obstacle', () => {
     /* 
      * |---+---+----+----|
      * | 0 | P | 2  | 3  |
@@ -637,7 +636,7 @@ describe('`checkMove` Enemy component function', () => {
   });
 
   // SSE
-  it('should return a function to move south-southeast enemies west, if there is no obstacle', () => {
+  it('should call a function to move south-southeast enemies west, if there is no obstacle', () => {
     /*
      * |---+---+----+---|
      * | 0 | P | 2 | 3  |
@@ -669,145 +668,212 @@ describe('`checkMove` Enemy component function', () => {
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
   });
 
-  // OBSTACLES
-  it('should not call `moveEnemy` if there is an obstacle blocking an enemy in a cardinal direction', () => {
-    /*
-     * |----+----+-----+-----+-----+----+----|
-     * | 0  | 1  | 2   | E   | 4   | 5  | 6  |
-     * |====+====+=====+=====+=====+====+====|
-     * | 7  | 8  | 9   | E   | 11  | 12 | 13 |
-     * |----+----+-----+-----+-----+----+----|
-     * | 14 | 15 | 16  | OBS | 18  | 19 | 20 |
-     * |----+----+-----+-----+-----+----+----|
-     * | E  | E  | OBS | P   | OBS | E  | E  |
-     * |----+----+-----+-----+-----+----+----|
-     * | 28 | 29 | 30  | OBS | 32  | 33 | 34 |
-     * |----+----+-----+-----+-----+----+----|
-     * | 35 | 36 | 37  | E   | 39  | 40 | 41 |
-     * |----+----+-----+-----+-----+----+----|
-     * | 42 | 43 | 44  | E   | 46  | 47 | 48 |
-     * |----+----+-----+-----+-----+----+----|
-     */
-
-    const gridWidth = 7;
+  // OBSTACLES WITH CARDINAL DIRECTIONS
+  it('should not call a function to move enemies two cells west of the player east, if there is an obstacle', () => {
+    const gridWidth = 3;
     const gd = [
-      { index: 0, payload: {}, type: pathType },
-      { index: 1, payload: {}, type: pathType },
-      { index: 2, payload: {}, type: pathType },
-      { index: 3, payload: { enemy: {} }, type: pathType },
-      { index: 4, payload: {}, type: pathType },
-      { index: 5, payload: {}, type: pathType },
-      { index: 6, payload: {}, type: pathType },
-      { index: 7, payload: {}, type: pathType },
-      { index: 8, payload: {}, type: pathType },
-      { index: 9, payload: {}, type: pathType },
-      { index: 10, payload: { enemy: {} }, type: pathType },
-      { index: 11, payload: {}, type: pathType },
-      { index: 12, payload: {}, type: pathType },
-      { index: 13, payload: {}, type: pathType },
-      { index: 14, payload: {}, type: pathType },
-      { index: 15, payload: {}, type: pathType },
-      { index: 16, payload: {}, type: pathType },
-      { index: 17, payload: { portal: {} }, type: pathType },
-      { index: 18, payload: {}, type: pathType },
-      { index: 19, payload: {}, type: pathType },
-      { index: 20, payload: {}, type: pathType },
-      { index: 21, payload: { enemy: {} }, type: pathType },
-      { index: 22, payload: { enemy: {} }, type: pathType },
-      { index: 23, payload: { portal: {} }, type: pathType },
-      { index: 24, payload: { player: {} }, type: pathType },
-      { index: 25, payload: { portal: {} }, type: pathType },
-      { index: 26, payload: { enemy: {} }, type: pathType },
-      { index: 27, payload: { enemy: {} }, type: pathType },
-      { index: 28, payload: {}, type: pathType },
-      { index: 29, payload: {}, type: pathType },
-      { index: 30, payload: {}, type: pathType },
-      { index: 31, payload: { portal: {} }, type: pathType },
-      { index: 32, payload: {}, type: pathType },
-      { index: 33, payload: {}, type: pathType },
-      { index: 34, payload: {}, type: pathType },
-      { index: 35, payload: {}, type: pathType },
-      { index: 36, payload: {}, type: pathType },
-      { index: 37, payload: {}, type: pathType },
-      { index: 38, payload: { enemy: {} }, type: pathType },
-      { index: 39, payload: {}, type: pathType },
-      { index: 40, payload: {}, type: pathType },
-      { index: 41, payload: {}, type: pathType },
-      { index: 42, payload: {}, type: pathType },
-      { index: 43, payload: {}, type: pathType },
-      { index: 44, payload: {}, type: pathType },
-      { index: 45, payload: { enemy: {} }, type: pathType },
-      { index: 46, payload: {}, type: pathType },
-      { index: 47, payload: {}, type: pathType },
-      { index: 48, payload: {}, type: pathType },
+      { index: 0, payload: { enemy: {} }, type: pathType },
+      { index: 1, payload: { portal: {} }, type: pathType },
+      { index: 2, payload: { player: {} }, type: pathType },
     ];
-    const pp = { index: 23 };
-    e.checkMove(pp, gd[3], gd, health, moveEnemy, clearAnimation, gridWidth, level);
-    e.checkMove(pp, gd[10], gd, health, moveEnemy, clearAnimation, gridWidth, level);
-    // e.checkMove(pp, gd[21], gd, health, moveEnemy, clearAnimation, gridWidth, level);
-    // e.checkMove(pp, gd[22], gd, health, moveEnemy, clearAnimation, gridWidth, level);
-    // e.checkMove(pp, gd[26], gd, health, moveEnemy, clearAnimation, gridWidth, level);
-    // e.checkMove(pp, gd[27], gd, health, moveEnemy, clearAnimation, gridWidth, level);
-    // e.checkMove(pp, gd[38], gd, health, moveEnemy, clearAnimation, gridWidth, level);
-    // e.checkMove(pp, gd[45], gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    const ep = { index: 0 };
+    const pp = { index: 2 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
   });
 
+  it('should not call a function to move enemies three cells west of the player east, if there is an obstacle', () => {
+    const gridWidth = 4;
+    const gd = [
+      { index: 0, payload: { enemy: {} }, type: pathType },
+      { index: 1, payload: { portal: {} }, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: { player: {} }, type: pathType },
+    ];
+    const ep = { index: 0 };
+    const pp = { index: 3 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  it('should not call a function to move enemies two cells east of the player west, if there is an obstacle', () => {
+    const gridWidth = 3;
+    const gd = [
+      { index: 0, payload: { player: {} }, type: pathType },
+      { index: 1, payload: { portal: {} }, type: pathType },
+      { index: 2, payload: { enemy: {} }, type: pathType },
+    ];
+    const ep = { index: 2 };
+    const pp = { index: 0 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  it('should not call a function to move enemies three cells east of the player west, if there is an obstacle', () => {
+    const gridWidth = 4;
+    const gd = [
+      { index: 0, payload: { player: {} }, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: { portal: {} }, type: pathType },
+      { index: 3, payload: { enemy: {} }, type: pathType },
+    ];
+    const ep = { index: 3 };
+    const pp = { index: 0 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  it('should not call a function to move enemies two cells north of the player south', () => {
+    /*
+   * When gridWidth is 1, horizontal tests provide the right answer
+   * |---+---|
+   * | E | 1 |
+   * |===+===|
+   * |OBS| 3 |
+   * |---+---|
+   * | P | 5 |
+   * |---+---|
+   */
+    const gridWidth = 2;
+    const gd = [
+      { index: 0, payload: { enemy: {} }, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: { portal: {} }, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: { player: {} }, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+    ];
+    const ep = { index: 0 };
+    const pp = { index: 4 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  it('should not call a function to move enemies three cells north of the player south, if there is an obstacle', () => {
+    /*
+     *  When gridWidth is 1, horizontal tests
+     *  might provide the right answer
+     * |---+---|
+     * | E | 1 |
+     * |===+===|
+     * |OBS| 3 |
+     * |---+---|
+     * | 4 | 5 |
+     * |---+---|
+     * | P | 7 |
+     * |---+---|
+     */
+
+    const gridWidth = 2;
+    const gd = [
+      { index: 0, payload: { enemy: {} }, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: { portal: {} }, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: {}, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: { player: {} }, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+    ];
+    const ep = { index: 0 };
+    const pp = { index: 6 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  it('should not call a function to move enemies two cells south of the player north', () => {
+    /*
+     * |---+---|
+     * | P | 1 |
+     * |===+===|
+     * |OBS| 3 |
+     * |---+---|
+     * | E | 5 |
+     * |---+---|
+     */
+    const gridWidth = 2;
+    const gd = [
+      { index: 0, payload: { player: {} }, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: { portal: {} }, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: { enemy: {} }, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 4 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  it('should not call a function to move enemies three cells south of the player north, if there is an obstacle', () => {
+    /*
+     *|---+---|
+     *| P | 1 |
+     *|===+===|
+     *| 2 | 3 |
+     *|---+---|
+     *|OBS| 5 |
+     *|---+---|
+     *| E | 7 |
+     *|---+---|
+     */
+    const gridWidth = 2;
+    const gd = [
+      { index: 0, payload: { player: {} }, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: { portal: {} }, type: pathType },
+      { index: 5, payload: {}, type: pathType },
+      { index: 6, payload: { enemy: {} }, type: pathType },
+      { index: 7, payload: {}, type: pathType },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 6 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
+
+  // OBSTACLES WITH DIAGONALS
+  it('should handle them appropriately...');
+
   // OTHER REQUIREMENTS
-  //  it('should return `undefined` when enemies are in cells out of range', () => {
-  //    const gd = [
-  //      { index: 0, payload: { player: {} }, type: pathType },
-  //      { index: 1, payload: {}, type: pathType },
-  //      { index: 2, payload: {}, type: pathType },
-  //      { index: 3, payload: {}, type: pathType },
-  //      { index: 4, payload: { enemy: {} }, type: pathType },
-  //    ];
-  //    const pp = { index: 0 };
-  //    const ep = { index: 4 };
-  //    expect(e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation,gridWidth,level)).toBeUndefined();
-  //  });
+  it('should return `undefined` when enemies are in cells out of range', () => {
+    const gridWidth = 5;
+    const gd = [
+      { index: 0, payload: { player: {} }, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: { enemy: {} }, type: pathType },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 4 };
 
-  //  it('should not call `moveEnemy` when enemies are in cells out of range', () => {
-  //    const gd = [
-  //      { index: 0, payload: { player: {} }, type: pathType },
-  //      { index: 1, payload: {}, type: pathType },
-  //      { index: 2, payload: {}, type: pathType },
-  //      { index: 3, payload: {}, type: pathType },
-  //      { index: 4, payload: { enemy: {} }, type: pathType },
-  //    ];
-  //    const pp = { index: 0 };
-  //    const ep = { index: 4 };
-  //    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation,gridWidth,level);
-  //    expect(moveEnemy).not.toHaveBeenCalled();
-  //  });
+    expect(
+      e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level)
+    ).toBeUndefined();
+  });
 
-  //  it('should call `clearAnimation` after a delay if `moveEnemy` has been called');
+  it('should not call `moveEnemy` when enemies are in cells out of range', () => {
+    const gridWidth = 5;
+    const gd = [
+      { index: 0, payload: { player: {} }, type: pathType },
+      { index: 1, payload: {}, type: pathType },
+      { index: 2, payload: {}, type: pathType },
+      { index: 3, payload: {}, type: pathType },
+      { index: 4, payload: { enemy: {} }, type: pathType },
+    ];
+    const pp = { index: 0 };
+    const ep = { index: 4 };
+    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    expect(moveEnemy).not.toHaveBeenCalled();
+  });
 
-  //  it('should not call `clearAnimation` when enemies are in cells out of range', () => {
-  // TODO: Specify timeout
-  //    const gd = [
-  //      { index: 0, payload: { player: {} }, type: pathType },
-  //      { index: 1, payload: {}, type: pathType },
-  //      { index: 2, payload: {}, type: pathType },
-  //      { index: 3, payload: {}, type: pathType },
-  //      { index: 4, payload: { enemy: {} }, type: pathType },
-  //    ];
-  //    const pp = { index: 0 };
-  //    const ep = { index: 4 };
-  //    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation,gridWidth,level);
-  //    expect(clearAnimation).not.toHaveBeenCalled();
-  //  });
+  it('should call `clearAnimation` after a delay if `moveEnemy` has been called');
 
-  //  it('should return `undefined` if `enemyPosition` has no enemy payload', () => {
-  //    const gd = [
-  //      { index: 0, payload: { player: {} }, type: pathType },
-  //      { index: 1, payload: {}, type: pathType },
-  //      { index: 2, payload: {}, type: pathType },
-  //    ];
-  //    const pp = { index: 0 };
-  //    const ep = { index: 2 };
-  //    expect(e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation,gridWidth,level)).toBeUndefined();
-  //  });
+  it('should not call `clearAnimation` if `moveEnemy` has not been called');
 });
 
 describe('`Enemy` component', () => {
