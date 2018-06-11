@@ -6,6 +6,8 @@ import * as l from '../constants/loot';
 import tileTypes from '../constants/tile-types';
 import PropTypes from 'prop-types';
 
+import orcFists from '../resources/enemy/orc-fists.png';
+import orcDagger from '../resources/enemy/orc-dagger.png';
 import orcSpear from '../resources/enemy/orc-spear.png';
 import boss from '../resources/enemy/boss-sprite.png';
 
@@ -37,9 +39,18 @@ export const setBackgroundPosition = (type, health, facing) => {
   return `0 0`;
 };
 
-export const setBackgroundImage = type => {
+export const setBackgroundImage = (type, weaponName) => {
   if (type === 'orc') {
-    return orcSpear;
+    switch (weaponName) {
+      case l.weapons.fists.name:
+        return orcFists;
+      case l.weapons.dagger.name:
+        return orcDagger;
+      case l.weapons.spear.name:
+        return orcSpear;
+      default:
+        return orcFists;
+    }
   }
 
   if (type === 'boss') {
@@ -247,7 +258,7 @@ class Enemy extends Component {
       <div
         className={setAnimationClass(stats.weapon.name, enemyAnimation, facing, position.index)}
         style={{
-          backgroundImage: `url('${setBackgroundImage(stats.type)}')`,
+          backgroundImage: `url('${setBackgroundImage(stats.type, stats.weapon.name)}')`,
           backgroundPosition: setBackgroundPosition(stats.type, stats.health, facing),
           height: c.CELL_SIDE,
           marginTop: -7,

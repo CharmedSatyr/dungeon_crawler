@@ -23,8 +23,16 @@ describe('`setBackgroundPosition` Enemy component function', () => {
 });
 
 describe('`setBackgroundImage` Enemy component function', () => {
-  it('should be defined for `orc` type', () => {
-    expect(e.setBackgroundImage('orc')).toBeDefined();
+  it('should be defined for `orc` type with `Fists` weapon', () => {
+    expect(e.setBackgroundImage('orc', 'Fists')).toBeDefined();
+  });
+
+  it('should be defined for `orc` type with `Dagger` weapon', () => {
+    expect(e.setBackgroundImage('orc', 'Dagger')).toBeDefined();
+  });
+
+  it('should be defined for `orc` type with `Spear` weapon', () => {
+    expect(e.setBackgroundImage('orc', 'Spear')).toBeDefined();
   });
 
   it('should be defined for `boss` type', () => {
