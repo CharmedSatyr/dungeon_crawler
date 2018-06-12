@@ -6,12 +6,10 @@ import * as h from '../actions/index.helpers';
 import PropTypes from 'prop-types';
 
 import CellContainer from './CellContainer';
-import Map from '../components/Map';
-import Messages from '../components/Messages';
-import PlayerPanel from '../components/PlayerPanel';
+import Game from '../components/Game';
 import Start from '../components/Start';
 
-class Game extends Component {
+class GameContainer extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -111,16 +109,8 @@ class Game extends Component {
         );
       });
 
-    const game = (
-      <div>
-        <PlayerPanel stats={player} />
-        <Messages messages={messages} />
-        <Map cells={cells} />
-      </div>
-    );
-
     return this.props.gridData.length ? (
-      game
+      <Game cells={cells} messages={messages} player={player} />
     ) : (
       <Start
         fn={() => {
@@ -163,4 +153,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Game);
+)(GameContainer);

@@ -1,11 +1,11 @@
 import React from 'react';
-import Game from '../Game';
+import GameContainer from '../GameContainer';
 import * as l from '../../constants/loot';
 
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 
-describe('`Game` container', () => {
+describe('`GameContainer` component', () => {
   const initialState = {
     grid: {
       data: [],
@@ -53,25 +53,25 @@ describe('`Game` container', () => {
   it('should render without crashing', () => {
     // Requires full mount to include store since Player
     // is a connected component. Shallow mount won't work
-    const game = mount(<Game store={store} {...props} />);
-    expect(game.find(Game)).toHaveLength(1);
+    const gameContainer = mount(<GameContainer store={store} {...props} />);
+    expect(gameContainer.find(GameContainer)).toHaveLength(1);
   });
 
   it('should have `change_weapon` prop', () => {
-    const game = mount(<Game store={store} {...props} />);
-    expect(game.props().change_weapon).toBe(props.change_weapon);
+    const gameContainer = mount(<GameContainer store={store} {...props} />);
+    expect(gameContainer.props().change_weapon).toBe(props.change_weapon);
   });
 
   it('should invoke `change_weapon` function on spacebar press', () => {
     beforeEach(() => {
-      const game = mount(<Game store={store} {...props} />);
-      game.simulate('keydown', {
+      const gameContainer = mount(<GameContainer store={store} {...props} />);
+      gameContainer.simulate('keydown', {
         preventDefault() {},
         key: ' ',
         keyCode: 32,
         which: 32,
       });
-      expect(game.props().change_weapon).toHaveBeenCalledTimes(1);
+      expect(gameContainer.props().change_weapon).toHaveBeenCalledTimes(1);
     });
   });
 });

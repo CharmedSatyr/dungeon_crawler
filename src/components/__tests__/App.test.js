@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../App';
-import Game from '../../containers/Game';
+import GameContainer from '../../containers/GameContainer';
 import { shallow } from 'enzyme';
 
 describe('`App` component', () => {
@@ -11,6 +11,6 @@ describe('`App` component', () => {
 
   it('should contain one instance of `Game` component', () => {
     const app = shallow(<App />);
-    expect(app.find(Game)).toHaveLength(1);
+    expect(app.find(GameContainer)).toHaveLength(1);
   });
 });

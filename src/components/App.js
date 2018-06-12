@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Game from '../containers/Game';
+import GameContainer from '../containers/GameContainer';
 
 const App = () => (
   <div className="App">
-    <Game />
+    <GameContainer />
   </div>
 );
 
