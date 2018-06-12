@@ -73,47 +73,39 @@ describe('`setAnimationClass` Enemy component function', () => {
 describe('`conditions` Enemy component function', () => {
   const level = 0;
   const pathType = tileTypes(level, 'path');
-  const noHealth = 0;
-  const health = 10;
-
-  it('should return `false` if `health` <= 0', () => {
-    const targetObj = { payload: {}, type: pathType };
-    expect(e.conditions(targetObj, noHealth, level)).toBeFalsy();
-  });
 
   it('should return `false` if the cell `type` is not `pathType`', () => {
     const targetObj = { payload: {}, type: tileTypes(level) };
-    expect(e.conditions(targetObj, health, level)).toBeFalsy();
+    expect(e.conditions(targetObj, level)).toBeFalsy();
   });
 
   it('should return `false` if the `targetObj.payload` is `enemy`', () => {
     const targetObj = { payload: { enemy: {}, type: pathType } };
-    expect(e.conditions(targetObj, health, level)).toBeFalsy();
+    expect(e.conditions(targetObj, level)).toBeFalsy();
   });
 
   it('should return `false` if the `targetObj.payload` is `portal`', () => {
     const targetObj = { payload: { portal: {}, type: pathType } };
-    expect(e.conditions(targetObj, health, level)).toBeFalsy();
+    expect(e.conditions(targetObj, level)).toBeFalsy();
   });
 
   it('should return `false` if the `targetObj.payload` is `loot`', () => {
     const targetObj = { payload: { loot: {}, type: pathType } };
-    expect(e.conditions(targetObj, health, level)).toBeFalsy();
+    expect(e.conditions(targetObj, level)).toBeFalsy();
   });
 
   it('should return `false` if the `targetObj.payload` is `prince`', () => {
     const targetObj = { payload: { prince: {}, type: pathType } };
-    expect(e.conditions(targetObj, health, level)).toBeFalsy();
+    expect(e.conditions(targetObj, level)).toBeFalsy();
   });
 
-  it('should return `true` if `health` > 0, the `targetObj.payload` is empty, and the cell `type` is `pathType`', () => {
+  it('should return `true` if the `targetObj.payload` is empty and the cell `type` is `pathType`', () => {
     const targetObj = { payload: {}, type: pathType };
-    expect(e.conditions(targetObj, health, level)).toBeTruthy();
+    expect(e.conditions(targetObj, level)).toBeTruthy();
   });
 });
 
 describe('`checkMove` Enemy component function', () => {
-  const health = 100;
   const level = 0;
   const pathType = tileTypes(level, 'path');
   let moveEnemy, clearAnimation;
@@ -135,7 +127,7 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 0 };
     const pp = { index: 2 };
     const to = gd[1];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -153,7 +145,7 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 0 };
     const pp = { index: 3 };
     const to = gd[1];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -170,7 +162,7 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 2 };
     const pp = { index: 0 };
     const to = gd[1];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -188,7 +180,7 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 3 };
     const pp = { index: 0 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -218,7 +210,7 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 0 };
     const pp = { index: 4 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -253,7 +245,7 @@ describe('`checkMove` Enemy component function', () => {
     const ep = { index: 0 };
     const pp = { index: 6 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -282,7 +274,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 0 };
     const ep = { index: 4 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -315,7 +307,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 0 };
     const ep = { index: 6 };
     const to = gd[4];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -341,7 +333,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 2 };
     const ep = { index: 1 };
     const to = gd[0];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -370,7 +362,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 5 };
     const ep = { index: 1 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -397,7 +389,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 1 };
     const ep = { index: 5 };
     const to = gd[4];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -432,7 +424,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 2 };
     const ep = { index: 7 };
     const to = gd[8];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -480,7 +472,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 8 };
     const ep = { index: 1 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -513,7 +505,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 6 };
     const ep = { index: 1 };
     const to = gd[0];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -543,7 +535,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 7 };
     const ep = { index: 1 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -579,7 +571,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 8 };
     const ep = { index: 3 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -615,7 +607,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 3 };
     const ep = { index: 8 };
     const to = gd[9];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -651,7 +643,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 3 };
     const ep = { index: 12 };
     const to = gd[11];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -687,7 +679,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 1 };
     const ep = { index: 8 };
     const to = gd[9];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -723,7 +715,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 1 };
     const ep = { index: 10 };
     const to = gd[9];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -740,7 +732,7 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const ep = { index: 0 };
     const pp = { index: 2 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
@@ -757,7 +749,7 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const ep = { index: 0 };
     const pp = { index: 3 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
@@ -773,7 +765,7 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const ep = { index: 2 };
     const pp = { index: 0 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
@@ -790,7 +782,7 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const ep = { index: 3 };
     const pp = { index: 0 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
@@ -819,7 +811,7 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const ep = { index: 0 };
     const pp = { index: 4 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
@@ -854,7 +846,7 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const ep = { index: 0 };
     const pp = { index: 6 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
@@ -882,7 +874,7 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const pp = { index: 0 };
     const ep = { index: 4 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
@@ -914,7 +906,7 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const pp = { index: 0 };
     const ep = { index: 6 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
@@ -940,7 +932,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 2 };
     const ep = { index: 1 };
     const to = gd[3];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -969,7 +961,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 5 };
     const ep = { index: 1 };
     const to = gd[4];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -996,7 +988,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 1 };
     const ep = { index: 5 };
     const to = gd[2];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1029,7 +1021,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 2 };
     const ep = { index: 7 };
     const to = gd[1];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1077,7 +1069,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 8 };
     const ep = { index: 1 };
     const to = gd[4];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1110,7 +1102,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 6 };
     const ep = { index: 1 };
     const to = gd[4];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1140,7 +1132,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 7 };
     const ep = { index: 1 };
     const to = gd[5];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1176,7 +1168,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 8 };
     const ep = { index: 3 };
     const to = gd[10];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1212,7 +1204,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 3 };
     const ep = { index: 8 };
     const to = gd[1];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1248,7 +1240,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 3 };
     const ep = { index: 12 };
     const to = gd[5];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1284,7 +1276,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 1 };
     const ep = { index: 8 };
     const to = gd[4];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1320,7 +1312,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 1 };
     const ep = { index: 10 };
     const to = gd[6];
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).toHaveBeenCalledWith(ep, to);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     jest.runAllTimers();
@@ -1340,9 +1332,7 @@ describe('`checkMove` Enemy component function', () => {
     const pp = { index: 0 };
     const ep = { index: 4 };
 
-    expect(
-      e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level)
-    ).toBeUndefined();
+    expect(e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level)).toBeUndefined();
   });
 
   it('should not call `moveEnemy` or `clearAnimation` when enemies are in cells out of range', () => {
@@ -1356,12 +1346,16 @@ describe('`checkMove` Enemy component function', () => {
     ];
     const pp = { index: 0 };
     const ep = { index: 4 };
-    e.checkMove(pp, ep, gd, health, moveEnemy, clearAnimation, gridWidth, level);
+    e.checkMove(pp, ep, gd, moveEnemy, clearAnimation, gridWidth, level);
     expect(moveEnemy).not.toHaveBeenCalled();
     expect(setTimeout).not.toHaveBeenCalled();
     jest.runAllTimers();
     expect(clearAnimation).not.toHaveBeenCalled();
   });
+});
+
+describe('`checkAttack` Enemy component function', () => {
+  it('should not crash the game');
 });
 
 describe('`Enemy` component', () => {

@@ -77,9 +77,8 @@ export const setAnimationClass = (weaponName, enemyAnimation, facing, index) => 
   }
 };
 
-export const conditions = (targetObj, health, level) => {
+export const conditions = (targetObj, level) => {
   if (
-    health > 0 &&
     targetObj &&
     !targetObj.payload.enemy &&
     !targetObj.payload.portal &&
@@ -97,7 +96,6 @@ export const checkMove = (
   playerPosition,
   enemyPosition,
   gridData,
-  health,
   moveEnemy,
   clearAnimation,
   gridWidth,
@@ -110,7 +108,7 @@ export const checkMove = (
     case enemyPosition.index + 3 === playerPosition.index:
       // Move east
       targetObj = gridData[enemyPosition.index + 1];
-      if (conditions(targetObj, health, level)) {
+      if (conditions(targetObj, level)) {
         // The anonymous wrapper is necessary to avoid Syntax Error in Chromium
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         moveEnemy(enemyPosition, targetObj);
@@ -121,7 +119,7 @@ export const checkMove = (
     case enemyPosition.index - 3 === playerPosition.index:
       // Move west
       targetObj = gridData[enemyPosition.index - 1];
-      if (conditions(targetObj, health, level)) {
+      if (conditions(targetObj, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         moveEnemy(enemyPosition, targetObj);
       }
@@ -131,7 +129,7 @@ export const checkMove = (
     case enemyPosition.index + 3 * gridWidth === playerPosition.index:
       // Move south
       targetObj = gridData[enemyPosition.index + gridWidth];
-      if (conditions(targetObj, health, level)) {
+      if (conditions(targetObj, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         moveEnemy(enemyPosition, targetObj);
       }
@@ -141,7 +139,7 @@ export const checkMove = (
     case enemyPosition.index - 3 * gridWidth === playerPosition.index:
       // Move north
       targetObj = gridData[enemyPosition.index - gridWidth];
-      if (conditions(targetObj, health, level)) {
+      if (conditions(targetObj, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         moveEnemy(enemyPosition, targetObj);
       }
@@ -151,10 +149,10 @@ export const checkMove = (
     case enemyPosition.index - 1 + 2 * gridWidth === playerPosition.index: // NNE
     case enemyPosition.index - 2 + gridWidth === playerPosition.index: // ENE
       // Move west if possible, else south
-      targetObj = conditions(gridData[enemyPosition.index - 1], health, level)
+      targetObj = conditions(gridData[enemyPosition.index - 1], level)
         ? gridData[enemyPosition.index - 1]
         : gridData[enemyPosition.index + gridWidth];
-      if (conditions(targetObj, health, level)) {
+      if (conditions(targetObj, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         moveEnemy(enemyPosition, targetObj);
       }
@@ -164,10 +162,10 @@ export const checkMove = (
     case enemyPosition.index + 1 + 2 * gridWidth === playerPosition.index: // NNW
     case enemyPosition.index + 2 + gridWidth === playerPosition.index: // WNW
       // Move east if possible, else south
-      targetObj = conditions(gridData[enemyPosition.index + 1], health, level)
+      targetObj = conditions(gridData[enemyPosition.index + 1], level)
         ? gridData[enemyPosition.index + 1]
         : gridData[enemyPosition.index + gridWidth];
-      if (conditions(targetObj, health, level)) {
+      if (conditions(targetObj, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         moveEnemy(enemyPosition, targetObj);
       }
@@ -177,10 +175,10 @@ export const checkMove = (
     case enemyPosition.index - 2 - gridWidth === playerPosition.index: // ESE
     case enemyPosition.index - 1 - 2 * gridWidth === playerPosition.index: // SSE
       // Move west if possible, else north
-      targetObj = conditions(gridData[enemyPosition.index - 1], health, level)
+      targetObj = conditions(gridData[enemyPosition.index - 1], level)
         ? gridData[enemyPosition.index - 1]
         : gridData[enemyPosition.index - gridWidth];
-      if (conditions(targetObj, health, level)) {
+      if (conditions(targetObj, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         moveEnemy(enemyPosition, targetObj);
       }
@@ -190,10 +188,10 @@ export const checkMove = (
     case enemyPosition.index + 2 - gridWidth === playerPosition.index: // WSW
     case enemyPosition.index + 1 - 2 * gridWidth === playerPosition.index: // SSW
       // Move east if possible, else north
-      targetObj = conditions(gridData[enemyPosition.index + 1], health, level)
+      targetObj = conditions(gridData[enemyPosition.index + 1], level)
         ? gridData[enemyPosition.index + 1]
         : gridData[enemyPosition.index - gridWidth];
-      if (conditions(targetObj, health, level)) {
+      if (conditions(targetObj, level)) {
         setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
         moveEnemy(enemyPosition, targetObj);
       }
@@ -203,30 +201,32 @@ export const checkMove = (
   }
 };
 
+export const checkAttack = (
+  playerPosition,
+  enemyPosition,
+  gridData,
+  enemyAttack,
+  clearAnimation
+) => {
+  // If the enemy exists and the player is adjacent
+  if (
+    playerPosition.index === enemyPosition.index + 1 ||
+    playerPosition.index === enemyPosition.index - 1 ||
+    playerPosition.index === enemyPosition.index + c.GRID_WIDTH ||
+    playerPosition.index === enemyPosition.index - c.GRID_WIDTH
+  ) {
+    const targetObj = gridData[enemyPosition.index];
+    enemyAttack(targetObj);
+    setTimeout(() => clearAnimation(targetObj), c.ANIMATION_DURATION);
+  }
+};
+
 class Enemy extends Component {
-  constructor(props) {
-    super(props);
-    this.checkAttack = this.checkAttack.bind(this);
-  }
-  checkAttack(playerPosition, enemyPosition, gridData, health) {
-    const { clear_enemy_animation, enemy_attack } = this.props;
-    // If the enemy is alive and the player is adjacent
-    if (
-      health > 0 &&
-      (playerPosition.index === enemyPosition.index + 1 ||
-        playerPosition.index === enemyPosition.index - 1 ||
-        playerPosition.index === enemyPosition.index + c.GRID_WIDTH ||
-        playerPosition.index === enemyPosition.index - c.GRID_WIDTH)
-    ) {
-      const targetObj = gridData[enemyPosition.index];
-      enemy_attack(targetObj);
-      setTimeout(() => clear_enemy_animation(targetObj), c.ANIMATION_DURATION);
-    }
-  }
   componentDidMount() {
     setInterval(() => {
       const {
         clear_enemy_animation,
+        enemy_attack,
         gridData,
         gridLevel,
         move_enemy,
@@ -240,17 +240,17 @@ class Enemy extends Component {
           playerPosition,
           position,
           gridData,
-          stats.health,
           move_enemy,
           clear_enemy_animation,
           c.GRID_WIDTH,
           gridLevel
         );
-
-        this.checkAttack(playerPosition, position, gridData, stats.health);
+        checkAttack(playerPosition, position, gridData, enemy_attack, clear_enemy_animation);
       }
+
       // This interval should be longer than ANIMATION_DURATION or the animations have trouble clearing
     }, 2 * c.ANIMATION_DURATION);
+    // Clear Interval if playerPosition is too far away from Enemy?
   }
   render() {
     const { enemyAnimation, facing, position, stats } = this.props;
