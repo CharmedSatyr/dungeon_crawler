@@ -1,10 +1,10 @@
+add death animation for enemies
+game over when player dies
+game over when Prince Few is rescued
+Add FOG
+
+WISH LIST
 enemies should drop items when they die
-enemies should have random weapons
 add healing spell
 Add more weapons
   - oversize weapons?
-Add FOG
-
-User Story: Much of the map is hidden. When I take a step, all spaces that are within a certain number of spaces from me are revealed.
-User Story: When I find and beat the boss, I win.
-
