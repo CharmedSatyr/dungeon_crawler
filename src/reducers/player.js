@@ -3,7 +3,7 @@ import * as g from '../constants/gameplay';
 import * as l from '../constants/loot';
 import _ from 'lodash';
 
-const initialState = {
+export const initialState = {
   experience: 0,
   gold: 0,
   health: {},
@@ -50,6 +50,8 @@ const player = (state = initialState, action) => {
               : state.health.max,
         },
       });
+    case t.GAME_OVER:
+      return initialState;
     case t.LEVEL_UP:
       const raisedLevel = state.level + 1;
       const raisedHealth = g.healthCalc(raisedLevel);

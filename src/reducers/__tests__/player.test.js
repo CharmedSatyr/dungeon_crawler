@@ -1,4 +1,5 @@
 import player from '../player';
+import { initialState } from '../player';
 import * as t from '../../constants/action-types';
 import * as g from '../../constants/gameplay';
 import * as l from '../../constants/loot';
@@ -113,6 +114,15 @@ describe('`player` reducer', () => {
     };
     expect(player(state0, action)).toEqual(state1);
     expect(player(state2, action)).toEqual(state3);
+  });
+
+  it('should restore the player state defaults when a `GAME_OVER` action is received', () => {
+    const action = { type: t.GAME_OVER };
+    const currentState = {
+      various: 'test',
+    };
+    // initialState imported from player
+    expect(player(currentState, action)).toEqual(initialState);
   });
 
   it('should raise the player state.level by 1 and the player state.health.max by a calculated amount when a `LEVEL_UP` action is received', () => {

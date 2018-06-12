@@ -8,7 +8,7 @@ import move from './move';
 import open from './open';
 import populate from './populate';
 
-const initialState = {
+export const initialState = {
   data: [],
   level: 0,
   playerPosition: {
@@ -41,6 +41,8 @@ const grid = (
       return Object.assign({}, state, {
         data: facing(state.data, state.playerPosition, targetObj, flag),
       });
+    case t.GAME_OVER:
+      return initialState;
     case t.MOVE:
       const updated = move(state.data, state.playerPosition, targetObj);
       return Object.assign({}, state, {

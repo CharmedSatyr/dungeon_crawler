@@ -24,6 +24,13 @@ describe('`animation` reducer', () => {
     expect(animation(initialState, action)).toEqual(updatedState);
   });
 
+  it('should revert animation to initialState on `GAME_OVER` action', () => {
+    const initialState = { player: '', enemy: {} };
+    const action = { type: t.GAME_OVER };
+    const currentState = { player: 'move', enemy: { 0: 'attack' } };
+    expect(animation(currentState, action)).toEqual(initialState);
+  });
+
   it('should change `state.player` to `move` on `MOVE` action', () => {
     const initialState = { player: '' };
     const action = { type: t.MOVE };

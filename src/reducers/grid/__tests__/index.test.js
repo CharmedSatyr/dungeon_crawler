@@ -1,4 +1,5 @@
 import grid from '../index';
+import { initialState } from '../index';
 import * as t from '../../../constants/action-types';
 
 describe('`grid` reducer', () => {
@@ -64,6 +65,16 @@ describe('`grid` reducer', () => {
     const action = { targetObj: expect.any(Object), flag: expect.any(String), type: t.FACING };
     expect.assertions(1);
     expect(grid(undefined, action)).toEqual(expect.objectContaining(expected));
+  });
+
+  it('should restore grid `initialState` on `GAME_OVER` action type', () => {
+    const action = { type: t.GAME_OVER };
+    const currentState = {
+      data: [{ index: 0 }],
+      playerPosition: 'whatever',
+    };
+    // Imported initialState from grid index
+    expect(grid(currentState, action)).toEqual(initialState);
   });
 
   it('should preserve state shape on `MOVE` action type', () => {

@@ -17,6 +17,8 @@ const animation = (state = initialState, action) => {
       enemyUpdate = Object.assign({}, state.enemy);
       delete enemyUpdate[action.targetObj.index];
       return Object.assign({}, state, { enemy: enemyUpdate });
+    case t.GAME_OVER:
+      return initialState;
     case t.MOVE:
       return Object.assign({}, state, { player: 'move' });
     case t.MOVE_ENEMY:
