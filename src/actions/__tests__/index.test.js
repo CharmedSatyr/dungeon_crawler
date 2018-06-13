@@ -197,8 +197,8 @@ describe('`take_damage` action creator', () => {
 });
 
 /*** THUNKS ***/
-// hostile_enemies
-describe('`hostile_enemies` action creator thunk', () => {
+// enemy_attack
+describe('`enemy_attack` action creator thunk', () => {
   it('should trigger batched `facing`, `message`, and `take_damage` action creators', () => {
     const targetObj = {
       coordinates: {},
@@ -220,7 +220,7 @@ describe('`hostile_enemies` action creator thunk', () => {
       ],
       type: 'BATCHING_REDUCER.BATCH',
     };
-    expect(a.hostile_enemies(targetObj)).toMatchObject(batchAction);
+    expect(a.enemy_attack(targetObj)).toMatchObject(batchAction);
   });
 });
 

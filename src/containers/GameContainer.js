@@ -126,7 +126,6 @@ Game.propTypes = {
   change_weapon: PropTypes.func.isRequired,
   clear_animation: PropTypes.func.isRequired,
   gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  hostile_enemies: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
   next_level: PropTypes.func.isRequired,
   player: PropTypes.object.isRequired,
@@ -145,7 +144,6 @@ const mapDispatchToProps = dispatch => ({
   change_weapon: () => dispatch(a.change_weapon()),
   clear_animation: () => dispatch(a.clear_animation()),
   clear_enemy_animation: () => dispatch(a.clear_enemy_animation()),
-  hostile_enemies: targetObj => dispatch(a.hostile_enemies(targetObj)),
   next_level: () => dispatch(a.next_level()),
   player_input: targetObj => dispatch(a.player_input(targetObj)),
 });
