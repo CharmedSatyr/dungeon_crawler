@@ -12,8 +12,8 @@ const Start = ({ fn }) => (
   <div
     className="Start"
     style={{
-      height: c.CELL_SIDE * 9,
-      width: c.CELL_SIDE * 14,
+      height: c.CELL_SIDE * c.VIEW_HEIGHT,
+      width: c.CELL_SIDE * c.VIEW_WIDTH,
     }}
   >
     <header>
