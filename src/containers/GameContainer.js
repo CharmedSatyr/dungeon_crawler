@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
+
 import * as a from '../actions/';
 import * as c from '../constants/settings';
 import * as h from '../actions/index.helpers';
@@ -9,18 +11,32 @@ import CellContainer from './CellContainer';
 import Game from '../components/Game';
 import Start from '../components/Start';
 
-export const clamp = (num, [min, max]) => {
-  if (typeof num === 'number' && typeof min === 'number' && typeof max === 'number') {
-    return Math.min(Math.max(min, num), max);
-  }
-};
+export const viewport = (
+  grid,
+  playerPosition,
+  viewHeight = c.VIEW_HEIGHT,
+  viewWidth = c.VIEW_WIDTH,
+  gridHeight = c.GRID_HEIGHT,
+  gridWidth = c.GRID_WIDTH
+) => {
+  const { x, y } = playerPosition.coordinates;
 
-export const viewport = (grid, playerPosition) => {
-  if (Array.isArray(grid)) {
-    return grid;
-  } else {
-    return [];
-  }
+  // Viewport limits
+  const bottom = Math.max(y + viewHeight / 2, viewHeight);
+  const top = _.clamp(y - viewHeight / 2, 0, gridHeight - viewHeight);
+
+  const left = _.clamp(x - viewWidth / 2, 0, gridWidth - viewWidth);
+  const right = Math.max(x + viewWidth / 2, viewWidth);
+
+  // Display within those limits
+  return grid.filter(c => {
+    const cx = c.coordinates.x;
+    const cy = c.coordinates.y;
+    if (cx >= left && cx < right && cy >= top && cy < bottom) {
+      return c;
+    }
+    return undefined;
+  });
 };
 
 class GameContainer extends Component {
@@ -97,10 +113,11 @@ class GameContainer extends Component {
     window.removeEventListener('keydown', this.placeholderFunc);
   }
   render() {
-    const { gridData, messages, player } = this.props;
+    const { gridData, messages, player, playerPosition } = this.props;
 
     // Create an array of Cells containing data from the store
-    const cells = viewport(gridData).map((item, index) => {
+    const v = viewport(gridData, playerPosition);
+    const cells = v.map((item, index) => {
       const position = {
         coordinates: item.coordinates,
         index: item.index,
