@@ -1,9 +1,30 @@
 import React from 'react';
 import GameContainer from '../GameContainer';
+import * as gc from '../GameContainer';
 import * as l from '../../constants/loot';
 
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
+
+describe('`clamp` component function', () => {
+  it('should return a Number', () => {
+    const num = 0;
+    const [min, max] = [0, 0];
+    expect(typeof gc.clamp(num, [min, max]) === 'number').toBeTruthy();
+  });
+
+  it('should work...');
+});
+
+describe('`viewport` component function', () => {
+  it('should return an array', () => {
+    const grid = [];
+    const playerPosition = {};
+    expect(Array.isArray(gc.viewport(grid, playerPosition))).toBeTruthy();
+  });
+
+  it('should work...');
+});
 
 describe('`GameContainer` component', () => {
   const initialState = {

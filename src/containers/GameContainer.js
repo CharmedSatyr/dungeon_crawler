@@ -9,6 +9,20 @@ import CellContainer from './CellContainer';
 import Game from '../components/Game';
 import Start from '../components/Start';
 
+export const clamp = (num, [min, max]) => {
+  if (typeof num === 'number' && typeof min === 'number' && typeof max === 'number') {
+    return Math.min(Math.max(min, num), max);
+  }
+};
+
+export const viewport = (grid, playerPosition) => {
+  if (Array.isArray(grid)) {
+    return grid;
+  } else {
+    return [];
+  }
+};
+
 class GameContainer extends Component {
   constructor(props) {
     super(props);
@@ -86,28 +100,15 @@ class GameContainer extends Component {
     const { gridData, messages, player } = this.props;
 
     // Create an array of Cells containing data from the store
-    const cells = gridData
-      // .filter(
-      //   (item, index) =>
-      //     index === playerPosition.index ||
-      //     index === playerPosition.index + 1 ||
-      //     index === playerPosition.index - 1 ||
-      //     index === playerPosition.index + 2 ||
-      //     index === playerPosition.index - 2 ||
-      //     index === playerPosition.index + c.GRID_WIDTH ||
-      //     index === playerPosition.index - c.GRID_WIDTH ||
-      //     index === playerPosition.index + c.GRID_WIDTH + 1 ||
-      //     index === playerPosition.index - c.GRID_WIDTH + 1
-      // )
-      .map((item, index) => {
-        const position = {
-          coordinates: item.coordinates,
-          index: item.index,
-        };
-        return (
-          <CellContainer key={index} position={position} payload={item.payload} type={item.type} />
-        );
-      });
+    const cells = viewport(gridData).map((item, index) => {
+      const position = {
+        coordinates: item.coordinates,
+        index: item.index,
+      };
+      return (
+        <CellContainer key={index} position={position} payload={item.payload} type={item.type} />
+      );
+    });
 
     return this.props.gridData.length ? (
       <Game cells={cells} messages={messages} player={player} />
@@ -115,7 +116,6 @@ class GameContainer extends Component {
       <Start
         fn={() => {
           this.props.next_level();
-          // setInterval(() => this.checkAttack(this.props.playerPosition), 1000);
         }}
       />
     );
