@@ -17,6 +17,103 @@ describe('`clamp` component function', () => {
 });
 
 describe('`viewport` component function', () => {
+  /*
+   * |-----+-----+-----+-----+-----+-----+-----+-----+-----+-----|
+   * | 0,0 | 1,0 | 2,0 | 3,0 | 4,0 | 5,0 | 6,0 | 7,0 | 8,0 | 9,0 |
+   * |=====+=====+=====+=====+=====+=====+=====+=====+=====+=====|
+   */
+  const grid = [
+    { coordinates: { x: 0, y: 0 }, index: 0, payload: {} },
+    { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+    { coordinates: { x: 2, y: 0 }, index: 2, payload: {} },
+    { coordinates: { x: 3, y: 0 }, index: 3, payload: {} },
+    { coordinates: { x: 4, y: 0 }, index: 4, payload: {} },
+    { coordinates: { x: 5, y: 0 }, index: 5, payload: {} },
+    { coordinates: { x: 6, y: 0 }, index: 6, payload: {} },
+    { coordinates: { x: 7, y: 0 }, index: 7, payload: {} },
+    { coordinates: { x: 8, y: 0 }, index: 8, payload: {} },
+    { coordinates: { x: 9, y: 0 }, index: 9, payload: {} },
+  ];
+  const vw = 5;
+  it('should return a grid viewWidth cells wide', () => {
+    /*
+   * |-----+-----+-----+-----+-----|
+   * | 0,0 | 1,0 | 2,0 | 3,0 | 4,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+    expect(gc.viewport(grid, null, vw).length).toBe(vw);
+  });
+
+  it('should return viewWidth - 1 cells east of Player, if playerPosition x coordinate is 0', () => {
+    /*
+   * |-----+-----+-----+-----+-----|
+   * |  P  | 1,0 | 2,0 | 3,0 | 4,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+    const playerPosition = {
+      coordinates: {
+        x: 0,
+        y: 0,
+      },
+      index: 0,
+    };
+    const view = [
+      { coordinates: { x: 0, y: 0 }, index: 0, payload: { player: {} } },
+      { coordinates: { x: 1, y: 0 }, index: 1, payload: {} },
+      { coordinates: { x: 2, y: 0 }, index: 2, payload: {} },
+      { coordinates: { x: 3, y: 0 }, index: 3, payload: {} },
+      { coordinates: { x: 4, y: 0 }, index: 4, payload: {} },
+    ];
+    expect(gc.viewport(grid, playerPosition, vw)).toEqual(view);
+  });
+
+  it('should return viewWidth - 2 cells east of Player, if playerPosition x coordinate is 1');
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 0,0 |  P  | 2,0 | 3,0 | 4,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 0,0 | 1,0 |  P  | 3,0 | 4,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 0,0 | 1,0 | 2,0 |  P  | 4,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 1,0 | 2,0 | 3,0 |  P  | 5,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 2,0 | 3,0 | 4,0 |  P  | 6,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 3,0 | 4,0 | 5,0 |  P  | 7,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 4,0 | 5,0 | 6,0 |  P  | 8,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 5,0 | 6,0 | 7,0 |  P  | 9,0 |
+   * |=====+=====+=====+=====+=====|
+   */
+  /*
+   * |-----+-----+-----+-----+-----|
+   * | 5,0 | 6,0 | 7,0 | 8,0 |  P  |
+   * |=====+=====+=====+=====+=====|
+   */
+
   it('should return an array', () => {
     const grid = [];
     const playerPosition = {};
