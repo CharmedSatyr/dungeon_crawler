@@ -148,9 +148,9 @@ export const take_damage = (damage, index) => {
 
 /*** THUNKS ***/
 export const enemy_attack = targetObj => {
-  if (targetObj) {
-    const { enemy } = targetObj.payload;
-    const { index } = targetObj;
+  const { enemy } = targetObj.payload;
+  const { index } = targetObj;
+  if (enemy) {
     const d = g.damageCalc(enemy.level, enemy.weapon.min_damage, enemy.weapon.max_damage);
     const msg = `An enemy assails you and does ${d} damage!`;
     return batchActions([facing(targetObj, 'enemy'), message(msg), take_damage(d, index)]);
