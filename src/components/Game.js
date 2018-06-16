@@ -8,6 +8,7 @@ import Map from './Map';
 
 const Game = ({ cells, messages, player }) => (
   <div
+    className="game"
     style={{
       width: c.CELL_SIDE * c.VIEW_WIDTH,
     }}
