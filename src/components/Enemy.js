@@ -98,8 +98,8 @@ export const checkMove = (
   gridData,
   moveEnemy,
   clearAnimation,
-  gridWidth,
-  level
+  level,
+  gridWidth = c.GRID_WIDTH
 ) => {
   let targetObj;
   switch (true) {
@@ -206,14 +206,15 @@ export const checkAttack = (
   enemyPosition,
   gridData,
   enemyAttack,
-  clearAnimation
+  clearAnimation,
+  gridWidth = c.GRID_WIDTH
 ) => {
   // If the enemy exists and the player is adjacent
   if (
     playerPosition.index === enemyPosition.index + 1 ||
     playerPosition.index === enemyPosition.index - 1 ||
-    playerPosition.index === enemyPosition.index + c.GRID_WIDTH ||
-    playerPosition.index === enemyPosition.index - c.GRID_WIDTH
+    playerPosition.index === enemyPosition.index + gridWidth ||
+    playerPosition.index === enemyPosition.index - gridWidth
   ) {
     const targetObj = gridData[enemyPosition.index];
     enemyAttack(targetObj);
@@ -236,15 +237,7 @@ class Enemy extends Component {
       } = this.props;
 
       if (stats.health > 0) {
-        checkMove(
-          playerPosition,
-          position,
-          gridData,
-          move_enemy,
-          clear_enemy_animation,
-          c.GRID_WIDTH,
-          gridLevel
-        );
+        checkMove(playerPosition, position, gridData, move_enemy, clear_enemy_animation, gridLevel);
         checkAttack(playerPosition, position, gridData, enemy_attack, clear_enemy_animation);
       }
 
