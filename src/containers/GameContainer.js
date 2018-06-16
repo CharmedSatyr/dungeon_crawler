@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import CellContainer from './CellContainer';
 import Game from '../components/Game';
 import Start from '../components/Start';
+import GameOver from '../components/GameOver';
 
 export const viewport = (
   grid,
@@ -99,7 +100,7 @@ class GameContainer extends Component {
   }
   componentDidMount() {
     // Initialize (Only for testing)
-    this.props.next_level();
+    // this.props.next_level();
 
     // Listen for player input
     window.addEventListener('keydown', this.listenFunc);
@@ -113,7 +114,7 @@ class GameContainer extends Component {
     window.removeEventListener('keydown', this.placeholderFunc);
   }
   render() {
-    const { gridData, messages, player, playerPosition } = this.props;
+    const { /* game_over,*/ gridData, messages, next_level, player, playerPosition } = this.props;
 
     // Create an array of Cells containing data from the store
     const v = viewport(gridData, playerPosition);
@@ -127,21 +128,21 @@ class GameContainer extends Component {
       );
     });
 
-    return this.props.gridData.length ? (
-      <Game cells={cells} messages={messages} player={player} />
-    ) : (
-      <Start
-        fn={() => {
-          this.props.next_level();
-        }}
-      />
-    );
+    if (!gridData.length) {
+      return <Start fn={next_level} />;
+    } else if (gridData.length && player.health.current > 0) {
+      return <Game cells={cells} messages={messages} player={player} />;
+    } else {
+      // game_over(); // This can't be implemented until enemy scripts are turned off
+      return <GameOver fn={next_level} win={false} />;
+    }
   }
 }
 
-Game.propTypes = {
+GameContainer.propTypes = {
   change_weapon: PropTypes.func.isRequired,
   clear_animation: PropTypes.func.isRequired,
+  game_over: PropTypes.func.isRequired,
   gridData: PropTypes.arrayOf(PropTypes.object).isRequired,
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
   next_level: PropTypes.func.isRequired,
@@ -161,6 +162,7 @@ const mapDispatchToProps = dispatch => ({
   change_weapon: () => dispatch(a.change_weapon()),
   clear_animation: () => dispatch(a.clear_animation()),
   clear_enemy_animation: () => dispatch(a.clear_enemy_animation()),
+  game_over: () => dispatch(a.game_over()),
   next_level: () => dispatch(a.next_level()),
   player_input: targetObj => dispatch(a.player_input(targetObj)),
 });
