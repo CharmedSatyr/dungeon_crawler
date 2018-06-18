@@ -1,9 +1,10 @@
 add death animation for enemies
-game over when player dies
 game over when Prince Few is rescued
 Add FOG
+Scripts should shut down when game ends to allow restart
 
 WISH LIST
+a different mean taunt every time you die.
 enemies should drop items when they die
 add healing spell
 Add more weapons
