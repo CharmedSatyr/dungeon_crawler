@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as c from '../constants/settings';
 import PropTypes from 'prop-types';
@@ -59,15 +59,19 @@ export const setAnimationClass = (weaponName, playerAnimation, facing) => {
   }
 };
 
-const PlayerContainer = ({ playerAnimation, facing, weaponName }) => (
-  <Player
-    animationClass={setAnimationClass(weaponName, playerAnimation, facing)}
-    spriteSheet={setSpriteSheet(weaponName)}
-    backgroundPositionY={c.CELL_SIDE * faceDirection(facing)}
-    cellSide={c.CELL_SIDE}
-  />
-);
-
+class PlayerContainer extends Component {
+  render() {
+    const { playerAnimation, facing, weaponName } = this.props;
+    return (
+      <Player
+        animationClass={setAnimationClass(weaponName, playerAnimation, facing)}
+        spriteSheet={setSpriteSheet(weaponName)}
+        backgroundPositionY={c.CELL_SIDE * faceDirection(facing)}
+        cellSide={c.CELL_SIDE}
+      />
+    );
+  }
+}
 PlayerContainer.propTypes = {
   facing: PropTypes.string,
   playerAnimation: PropTypes.string,
@@ -79,4 +83,7 @@ const mapStateToProps = ({ animation, player }) => ({
   weaponName: player.weapon.name,
 });
 
-export default connect(mapStateToProps, null)(PlayerContainer);
+export default connect(
+  mapStateToProps,
+  null
+)(PlayerContainer);
