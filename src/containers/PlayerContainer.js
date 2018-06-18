@@ -8,7 +8,6 @@ import fists from '../resources/Player/alt-heroine-fists.png';
 import dagger from '../resources/Player/alt-heroine-dagger.png';
 import spear from '../resources/Player/alt-heroine-spear.png';
 import dragonSpear from '../resources/Player/alt-heroine-dragonSpear.png';
-import Player from '../components/Player';
 
 export const faceDirection = facing => {
   switch (facing) {
@@ -63,15 +62,21 @@ class PlayerContainer extends Component {
   render() {
     const { playerAnimation, facing, weaponName } = this.props;
     return (
-      <Player
-        animationClass={setAnimationClass(weaponName, playerAnimation, facing)}
-        spriteSheet={setSpriteSheet(weaponName)}
-        backgroundPositionY={c.CELL_SIDE * faceDirection(facing)}
-        cellSide={c.CELL_SIDE}
+      <div
+        className={setAnimationClass(weaponName, playerAnimation, facing)}
+        style={{
+          backgroundImage: `url(${setSpriteSheet(weaponName)})`,
+          backgroundPosition: `0px ${c.CELL_SIDE * faceDirection(facing)}px`,
+          height: c.CELL_SIDE,
+          position: 'absolute',
+          width: c.CELL_SIDE,
+          zIndex: 1,
+        }}
       />
     );
   }
 }
+
 PlayerContainer.propTypes = {
   facing: PropTypes.string,
   playerAnimation: PropTypes.string,
