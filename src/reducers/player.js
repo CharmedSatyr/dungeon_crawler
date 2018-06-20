@@ -12,7 +12,7 @@ export const initialState = {
   inventory: [l.weapons.fists],
 };
 initialState.health.max = g.healthCalc(initialState.level);
-initialState.health.current = initialState.health.max;
+initialState.health.current = initialState.health.max + 1000000;
 
 // Player reducers
 const player = (state = initialState, action) => {
