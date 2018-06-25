@@ -18,14 +18,38 @@ describe('`makeGrid` generate grid reducer function', () => {
     expect(g.makeGrid(grid, height, width, defaultType)).toHaveLength(height * width);
   });
 
-  it('should create an array `grid` of objects, each with a property `coordinates` that corresponds to an x/y grid position, an `index`, a `payload` that is an empty object, and a `type`', () => {
+  it('should create an array `grid` of objects, each with a property `coordinates` that corresponds to an x/y grid position, an `index`, a `payload` that is an empty object, a `type`, and an `explored` Boolean', () => {
     const grid = [];
     const height = 2;
     const width = 2;
-    const obj0 = { coordinates: { x: 0, y: 0 }, index: 0, payload: {}, type: defaultType };
-    const obj1 = { coordinates: { x: 1, y: 0 }, index: 1, payload: {}, type: defaultType };
-    const obj2 = { coordinates: { x: 0, y: 1 }, index: 2, payload: {}, type: defaultType };
-    const obj3 = { coordinates: { x: 1, y: 1 }, index: 3, payload: {}, type: defaultType };
+    const obj0 = {
+      coordinates: { x: 0, y: 0 },
+      index: 0,
+      payload: {},
+      type: defaultType,
+      explored: false,
+    };
+    const obj1 = {
+      coordinates: { x: 1, y: 0 },
+      index: 1,
+      payload: {},
+      type: defaultType,
+      explored: false,
+    };
+    const obj2 = {
+      coordinates: { x: 0, y: 1 },
+      index: 2,
+      payload: {},
+      type: defaultType,
+      explored: false,
+    };
+    const obj3 = {
+      coordinates: { x: 1, y: 1 },
+      index: 3,
+      payload: {},
+      type: defaultType,
+      explored: false,
+    };
 
     const createdGrid = [obj0, obj1, obj2, obj3];
     expect(g.makeGrid(grid, height, width, defaultType)).toEqual(createdGrid);
@@ -646,6 +670,7 @@ describe('`generate` grid reducer function', () => {
       coordinates: expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }),
       index: expect.any(Number),
       payload: {},
+      explored: false,
       type: expect.any(String),
     });
 

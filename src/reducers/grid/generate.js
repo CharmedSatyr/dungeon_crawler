@@ -16,6 +16,7 @@ export const makeGrid = (grid, height, width, defaultType) => {
         index,
         payload: {},
         type: defaultType,
+        explored: false,
       });
       index++;
     }
