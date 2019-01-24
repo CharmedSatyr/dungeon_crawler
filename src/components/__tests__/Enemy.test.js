@@ -1319,6 +1319,10 @@ describe('`checkMove` Enemy component function', () => {
     expect(clearAnimation).toHaveBeenCalledWith(to);
   });
 
+  it(
+    'should do nothing if there are obstacles blocking the enemy in two directions, when the enemy is diagonal or far diagonal to the player'
+  ); // TODO
+
   // OTHER REQUIREMENTS
   it('should return `undefined` when enemies are in cells out of range', () => {
     const gridWidth = 5;
